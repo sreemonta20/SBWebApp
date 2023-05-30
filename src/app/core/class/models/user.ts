@@ -5,6 +5,7 @@ export class User {
     Password:  string;
     Email: string;
     UserRole: string;
+    CreatedDate:  Date;
   }
   
   export class SpecificUser {

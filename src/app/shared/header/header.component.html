@@ -135,7 +135,7 @@
     <li class="nav-item dropdown user user-menu">
       <a class="nav-link" data-toggle="dropdown" href="#">
         <img src="assets/img/user2-160x160.jpg" class="img-size-50 user-image mr-3" alt="User Image">
-        <span class="hidden-xs">Alexander Pierce</span>
+        <span class="hidden-xs">{{user.UserName}}</span>
       </a>
       <!-- <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         
@@ -153,8 +153,8 @@
           <img src="assets/img/user2-160x160.jpg" class="img-size-50 img-circle mr-3" alt="User Image">
 
           <p>
-            Alexander Pierce - Web Developer
-            <small>Member since Nov. 2012</small>
+            {{user.FullName}} - Web Developer
+            <small>Member since {{ user.CreatedDate | date: 'MMMM yyyy' }}</small>
           </p>
         </li>
         <li class="user-body">
@@ -176,7 +176,7 @@
               <a href="#" class="btn btn-default btn-flat">Profile</a>
             </div>
             <div class="col-6 text-right">
-              <a href="#" class="btn btn-default btn-flat">Sign out</a>
+              <a href="#" (click)="signOut()" class="btn btn-default btn-flat">Sign out</a>
             </div>
           </div>
           
