@@ -1230,7 +1230,7 @@ exports.default = {
     fallbackPlacement: 'flip'
   },
   /**
-   * If true, loads the 'debugger' extension automatically, which logs the events in the console
+   * If true, loads the '' extension automatically, which logs the events in the console
    * @type {boolean}
    * @default false
    */
@@ -1311,7 +1311,7 @@ exports.default = {
   /**
    *
    * Associative object with the extension class name and its config.
-   * Colorpicker comes with many bundled extensions: debugger, palette, preview and swatches (a superset of palette).
+   * Colorpicker comes with many bundled extensions: , palette, preview and swatches (a superset of palette).
    *
    * @type {Object[]}
    * @example
@@ -2990,7 +2990,7 @@ var Colorpicker = function () {
       }
 
       if (this.options.debug) {
-        this.options.extensions.push({ name: 'debugger' });
+        this.options.extensions.push({ name: '' });
       }
 
       // Register and instantiate extensions
@@ -3286,11 +3286,11 @@ module.exports = exports.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Palette = exports.Swatches = exports.Preview = exports.Debugger = undefined;
+exports.Palette = exports.Swatches = exports.Preview = exports. = undefined;
 
-var _Debugger = __webpack_require__(10);
+var _ = __webpack_require__(10);
 
-var _Debugger2 = _interopRequireDefault(_Debugger);
+var _2 = _interopRequireDefault(_);
 
 var _Preview = __webpack_require__(11);
 
@@ -3306,12 +3306,12 @@ var _Palette2 = _interopRequireDefault(_Palette);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.Debugger = _Debugger2.default;
+exports. = _2.default;
 exports.Preview = _Preview2.default;
 exports.Swatches = _Swatches2.default;
 exports.Palette = _Palette2.default;
 exports.default = {
-  'debugger': _Debugger2.default,
+  '': _2.default,
   'preview': _Preview2.default,
   'swatches': _Swatches2.default,
   'palette': _Palette2.default
@@ -3349,22 +3349,22 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * Debugger extension class
- * @alias DebuggerExtension
+ *  extension class
+ * @alias Extension
  * @ignore
  */
-var Debugger = function (_Extension) {
-  _inherits(Debugger, _Extension);
+var  = function (_Extension) {
+  _inherits(, _Extension);
 
-  function Debugger(colorpicker) {
+  function (colorpicker) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    _classCallCheck(this, Debugger);
+    _classCallCheck(this, );
 
     /**
      * @type {number}
      */
-    var _this = _possibleConstructorReturn(this, (Debugger.__proto__ || Object.getPrototypeOf(Debugger)).call(this, colorpicker, options));
+    var _this = _possibleConstructorReturn(this, (.__proto__ || Object.getPrototypeOf()).call(this, colorpicker, options));
 
     _this.eventCounter = 0;
     if (_this.colorpicker.inputHandler.hasInput()) {
@@ -3374,13 +3374,13 @@ var Debugger = function (_Extension) {
   }
 
   /**
-   * @fires DebuggerExtension#colorpickerDebug
+   * @fires Extension#colorpickerDebug
    * @param {string} eventName
    * @param {*} args
    */
 
 
-  _createClass(Debugger, [{
+  _createClass(, [{
     key: 'log',
     value: function log(eventName) {
       var _console;
@@ -3396,13 +3396,13 @@ var Debugger = function (_Extension) {
       (_console = console).debug.apply(_console, [logMessage].concat(args));
 
       /**
-       * Whenever the debugger logs an event, this other event is emitted.
+       * Whenever the  logs an event, this other event is emitted.
        *
-       * @event DebuggerExtension#colorpickerDebug
+       * @event Extension#colorpickerDebug
        * @type {object} The event object
        * @property {Colorpicker} colorpicker The Colorpicker instance
        * @property {ColorItem} color The color instance
-       * @property {{debugger: DebuggerExtension, eventName: String, logArgs: Array, logMessage: String}} debug
+       * @property {{: Extension, eventName: String, logArgs: Array, logMessage: String}} debug
        *  The debug info
        */
       this.colorpicker.element.trigger({
@@ -3411,7 +3411,7 @@ var Debugger = function (_Extension) {
         color: this.color,
         value: null,
         debug: {
-          debugger: this,
+          : this,
           eventName: eventName,
           logArgs: args,
           logMessage: logMessage
@@ -3430,7 +3430,7 @@ var Debugger = function (_Extension) {
     key: 'onCreate',
     value: function onCreate(event) {
       this.log('colorpickerCreate');
-      return _get(Debugger.prototype.__proto__ || Object.getPrototypeOf(Debugger.prototype), 'onCreate', this).call(this, event);
+      return _get(.prototype.__proto__ || Object.getPrototypeOf(.prototype), 'onCreate', this).call(this, event);
     }
   }, {
     key: 'onDestroy',
@@ -3442,7 +3442,7 @@ var Debugger = function (_Extension) {
         this.colorpicker.inputHandler.input.off('.colorpicker-ext');
       }
 
-      return _get(Debugger.prototype.__proto__ || Object.getPrototypeOf(Debugger.prototype), 'onDestroy', this).call(this, event);
+      return _get(.prototype.__proto__ || Object.getPrototypeOf(.prototype), 'onDestroy', this).call(this, event);
     }
   }, {
     key: 'onUpdate',
@@ -3493,10 +3493,10 @@ var Debugger = function (_Extension) {
     }
   }]);
 
-  return Debugger;
+  return 
 }(_Extension3.default);
 
-exports.default = Debugger;
+exports.default = 
 module.exports = exports.default;
 
 /***/ }),

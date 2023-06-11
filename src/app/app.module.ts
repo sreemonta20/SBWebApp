@@ -28,9 +28,15 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { JwtHelperService, JWT_OPTIONS, JwtModule} from '@auth0/angular-jwt';
+// import { JwtModule } from "@auth0/angular-jwt";
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
 };
+
+export function tokenGetter() { 
+  return sessionStorage.getItem("access_token"); 
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -43,6 +49,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormsModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:5001","localhost:39842","localhost:7101","localhost:5043","localhost:44360"],
+        disallowedRoutes: []
+      }
+    })
   ],
   providers: [
     {
@@ -67,3 +80,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
+
+// { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+//     JwtHelperService,

@@ -30,12 +30,12 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
     private sessionService: SessionStorageService,
     
   ) {
-    debugger;
+    
   }
 
   ngOnInit(): void {
     $('[data-widget="treeview"]').Treeview('init');
-    this.sharedService.castLoggedIn.subscribe(isLoggedIn => (this.isLoggedIn = isLoggedIn));
+    this.sharedService.isLoggedIn$.subscribe(response => (this.isLoggedIn = response));
   }
 
   ngAfterViewInit() {
@@ -45,7 +45,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
   signOut(): void {
     this.sessionService.remove('loggedInUser');
     this.sessionService.remove('isLoggedIn');
-    this.sharedService.editIsLoggedIn(false);
+    this.sharedService.UpdateIsLoggedIn(false);
     this.router.navigate(['/login']);
   }
 

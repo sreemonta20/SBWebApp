@@ -9,6 +9,7 @@ export class AuthReqInterceptor implements HttpInterceptor {
   constructor(public sessionService: SessionStorageService) {}
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     try {
+      debugger
       // const accessToken = JSON.parse(localStorage['loggedInUser']).access_token;
       const accessToken = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER)).access_token;
       return next.handle(req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } }));

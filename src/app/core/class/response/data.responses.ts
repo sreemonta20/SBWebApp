@@ -10,9 +10,10 @@ export class DataResponse {
 
   export class UserResponse {
     access_token: string;
+    refresh_token: string;
+    expires_in:  Date;
+    token_type: string;
     error: string;
     error_description: string;
-    expires_in:  number;
-    token_type: string;
     user: User;
   }

@@ -28,7 +28,7 @@ export class ResetpasswordComponent
     private http: HttpClient,
     private renderer: Renderer2
   ) {
-    debugger;
+    
   }
 
   ngOnInit(): void {}

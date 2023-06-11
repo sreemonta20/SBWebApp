@@ -14,7 +14,7 @@ export class ApiService<T> {
   constructor(private http: HttpClient,private sessionService: SessionStorageService) {}
 
   initializeBaseURL(inputUrl: string) {
-    debugger;
+    
     this.baseUrl = inputUrl;
   }
 
@@ -62,7 +62,7 @@ export class ApiService<T> {
   }
 
   public post(endpoint: string, body: any): Observable<T> {
-    debugger
+    
     const headers = this.getHeaders();
     const url = `${this.baseUrl}${endpoint}`;
     return this.http.post<T>(url, body, { headers });

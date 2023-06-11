@@ -13,6 +13,8 @@ export class EncryptDecryptAuthInterceptor implements HttpInterceptor {
         '/api/User/getUserbyId',
         '/api/User/getAllUsers',
         '/api/User/login',
+        '/api/User/refreshtoken',
+        '/api/User/revoke',
         '/api/User/registerUser',
         '/api/User/deleteUser'
     ];
@@ -31,7 +33,7 @@ export class EncryptDecryptAuthInterceptor implements HttpInterceptor {
                 }
                 return next.handle(req);
             } else if (req.method == "POST") {
-                debugger
+                
                 if (req.body || req.body.length > 0) {
                     const cloneReq = req.clone({
                         body: this.encryptDecryptService.encryptUsingAES256(req.body)

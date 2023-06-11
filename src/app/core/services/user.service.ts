@@ -6,7 +6,7 @@ import { Observable, map } from 'rxjs';
 ////--------------------API method access pattern one end------------------------------------
 import { securityApiUrl } from 'src/environments/environment';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, SaveUpdateRequest, DataResponse } from '@app/core/class/index';
+import { LoginRequest, RefreshTokenRequest, SaveUpdateRequest, DataResponse } from '@app/core/class/index';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -51,6 +51,8 @@ export class UserService {
   getUserByIdUrl: string = '/api/User/getUserbyId';
   getAllUsersUrl: string = '/api/User/getAllUsers';
   userLoginUrl: string = '/api/User/login';
+  refreshTokenUrl: string = '/api/User/refreshtoken';
+  revokeUrl: string = '/api/User/revoke';
   registerUserUrl: string = '/api/User/registerUser';
   deleteUserUrl: string = '/api/User/deleteUser';
 
@@ -85,9 +87,36 @@ export class UserService {
   }
 
   login(user: LoginRequest): Observable<DataResponse|undefined> {
-    debugger
+    
     return this.apiService
     .post(this.userLoginUrl,user)
+    .pipe(
+      map((response: DataResponse) => {
+        if (response) {
+          return response
+        }
+      })
+    );
+  }
+
+  refreshToken(refreshTokenRequest: RefreshTokenRequest): Observable<DataResponse> {
+    debugger
+    return this.apiService
+    .post(this.refreshTokenUrl,refreshTokenRequest)
+    .pipe(
+      map((response: DataResponse) => {
+        if (response) {
+          return response
+        }
+      })
+    );
+  }
+
+  revoke(userToken: string): Observable<DataResponse> {
+    
+    const params = new HttpParams().set('userToken', userToken);
+    return this.apiService
+    .post(this.revokeUrl,{params})
     .pipe(
       map((response: DataResponse) => {
         if (response) {

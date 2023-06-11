@@ -659,7 +659,7 @@
   CodeMirror.registerHelper("wordChars", "soy", /[\w$]/);
 
   CodeMirror.registerHelper("hintWords", "soy", Object.keys(tags).concat(
-      ["css", "debugger"]));
+      ["css", ""]));
 
   CodeMirror.defineMIME("text/x-soy", "soy");
 });

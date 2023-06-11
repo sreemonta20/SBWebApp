@@ -25,7 +25,7 @@ export class ControlSettingsComponent implements OnInit, AfterViewInit, OnDestro
     private http: HttpClient,
     private renderer: Renderer2
   ) {
-    debugger;
+    
   }
 
   ngOnInit(): void {}

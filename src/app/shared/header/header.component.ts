@@ -8,7 +8,8 @@ import {
 } from '@app/core/services';
 import {
   DataResponse,
-  User
+  User,
+  UserResponse
 } from '@app/core/class';
 
 @Component({
@@ -29,21 +30,21 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.sharedService.castLoggedIn.subscribe(
+    this.sharedService.isLoggedIn$.subscribe(
       (isLoggedIn) => (this.isLoggedIn = isLoggedIn)
     );
     // this.authService.castLoggedInUser.subscribe(
     //   (loggedInUser) => (this.loggedInUser = loggedInUser)
     // );
-    debugger;
+    
     // this.authService.castLoggedInUser.subscribe(
     //   (dataResponse) => (
     //     this.dataResponse = dataResponse
     //     )
     // );
-    this.authService.castLoggedInUser.subscribe({
-      next: (response: any) => {
-        debugger
+    this.authService.loggedInUser$.subscribe({
+      next: (response: UserResponse) => {
+        
         this.user = response.user;
         //this.user = this.dataResponse.user;
       }
@@ -53,7 +54,7 @@ export class HeaderComponent implements OnInit {
   signOut(): void {
     this.sessionService.remove('loggedInUser');
     this.sessionService.remove('isLoggedIn');
-    this.sharedService.editIsLoggedIn(false);
+    this.sharedService.UpdateIsLoggedIn(false);
     this.router.navigate(['/auth/login']);
   }
 }

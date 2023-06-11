@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private renderer: Renderer2
   ) {
-    debugger;
+    
   }
 
   ngOnInit(): void {}

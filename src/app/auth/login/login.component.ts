@@ -23,6 +23,7 @@ import {
 } from '@angular/forms';
 import {
   User,
+  UserResponse,
   LoginRequest,
   DataResponse,
 } from '@app/core/class';
@@ -38,8 +39,6 @@ import {
   MessageConstants,
   AuthRoutesConstants,
 } from '@app/core/constants/index';
-
-
 
 @Component({
   selector: 'app-login',
@@ -57,7 +56,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   hide: boolean = true;
   error_message: string = '';
   isLoggedIn: boolean = false;
-  loggedInUser: DataResponse = new DataResponse();
+  loggedInUser: UserResponse = new UserResponse();
   formControls!: string[];
 
   loginModelRequest = new LoginRequest();
@@ -75,7 +74,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private notifyService: NotificationService,
     private validationService: ValidationFormsService
   ) {
-    debugger;
+    
     this.createForm();
   }
 
@@ -87,12 +86,12 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authService.castLoggedIn.subscribe(
-      (isLoggedIn) => (this.isLoggedIn = isLoggedIn)
+    this.authService.isLoggedIn$.subscribe(
+      (response) => (this.isLoggedIn = response)
     );
 
-    this.authService.castLoggedInUser.subscribe(
-      (loggedInUser) => (this.loggedInUser = loggedInUser) 
+    this.authService.loggedInUser$.subscribe(
+      (response) => (this.loggedInUser = response)
     );
   }
 
@@ -105,7 +104,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signIn(): void {
-    debugger;
+    
     this.submitted = true;
     this.isLoading = true;
     if (this.loginForm.invalid) {
@@ -117,22 +116,29 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userService.login(this.loginModelRequest).subscribe({
       next: (response: DataResponse) => {
         if (response.ResponseCode === 200) {
-          debugger;
+          
           this.isLoading = false;
           this.isLoggedIn = true;
           this.loggedInUser = response.Result;
+          // this.sessionService.set(
+          //   SessionConstants.LOGGED_IN_USER,
+          //   JSON.stringify(response.Result)
+          // );
+          // this.sessionService.set(
+          //   SessionConstants.IS_LOGGED_IN,
+          //   JSON.stringify(this.isLoggedIn)
+          // );
           this.sessionService.set(
             SessionConstants.LOGGED_IN_USER,
-            JSON.stringify(response.Result)
+            JSON.stringify(this.loggedInUser)
           );
           this.sessionService.set(
             SessionConstants.IS_LOGGED_IN,
             JSON.stringify(this.isLoggedIn)
           );
 
-
-          this.authService.editIsLoggedIn(this.isLoggedIn);
-          this.authService.editLoggedInUser(this.loggedInUser);
+          this.authService.UpdateIsLoggedIn(this.isLoggedIn);
+          this.authService.UpdateLoggedInUser(this.loggedInUser);
           // this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
           this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
         } else {
@@ -156,8 +162,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  
-
   loadScripts(urls: string[]) {
     for (const url of urls) {
       const script = this.renderer.createElement('script');
@@ -167,7 +171,5 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-
-  }
+  ngOnDestroy(): void {}
 }
