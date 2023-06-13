@@ -74,7 +74,11 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private notifyService: NotificationService,
     private validationService: ValidationFormsService
   ) {
-    
+    debugger
+    // this.isLoggedIn =  JSON.parse(this.sessionService.get(SessionConstants.IS_LOGGED_IN));
+    // if(this.isLoggedIn){
+    //   return;
+    // }
     this.createForm();
   }
 

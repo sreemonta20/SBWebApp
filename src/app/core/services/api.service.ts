@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,lastValueFrom } from 'rxjs';
 import { SessionStorageService } from '../services/session.service';
 import { SessionConstants } from '../constants/common.constants';
 
@@ -66,6 +66,14 @@ export class ApiService<T> {
     const headers = this.getHeaders();
     const url = `${this.baseUrl}${endpoint}`;
     return this.http.post<T>(url, body, { headers });
+  }
+
+
+  public postAsync<T>(endpoint: string, body: T): Promise<any> {
+    const headers = this.getHeaders();
+    const url = `${this.baseUrl}${endpoint}`;
+    const request$ = this.http.post<T>(url, body, { headers });
+    return lastValueFrom(request$);
   }
 
   public put(endpoint: string, body: any, params: HttpParams): Observable<T> {

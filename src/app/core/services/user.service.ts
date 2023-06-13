@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, map,lastValueFrom } from 'rxjs';
 ////--------------------API method access pattern one start------------------------------------
 // import { url } from 'src/environments/environment';
 ////--------------------API method access pattern one end------------------------------------
@@ -8,6 +8,7 @@ import { securityApiUrl } from 'src/environments/environment';
 import { environment } from 'src/environments/environment';
 import { LoginRequest, RefreshTokenRequest, SaveUpdateRequest, DataResponse } from '@app/core/class/index';
 import { ApiService } from './api.service';
+// import { promises } from 'dns';
 
 @Injectable({
   providedIn: 'root',
@@ -110,6 +111,24 @@ export class UserService {
         }
       })
     );
+  }
+
+ 
+
+  // async renewToken(refreshTokenRequest: RefreshTokenRequest){
+    
+  //   try {
+  //     const result = await this.apiService.postAsync<RefreshTokenRequest>(this.refreshTokenUrl, refreshTokenRequest);
+  //     console.log('Post successful:', result);
+  //   } catch (error) {
+  //     console.error('Post failed:', error);
+  //   }
+  // }
+
+  async renewToken(refreshTokenRequest: RefreshTokenRequest): Promise<any>  {
+    debugger
+    const result$ = await this.apiService.postAsync(this.refreshTokenUrl, refreshTokenRequest);
+      return lastValueFrom(result$);
   }
 
   revoke(userToken: string): Observable<DataResponse> {
