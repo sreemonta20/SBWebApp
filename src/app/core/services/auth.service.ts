@@ -12,38 +12,16 @@ import { User, UserResponse, DataResponse } from '@app/core/class';
   providedIn: 'root',
 })
 export class AuthService {
-  // dataResponse = new DataResponse();
+  private loggedInUser = new BehaviorSubject<UserResponse>(new UserResponse());
+  public loggedInUser$: Observable<UserResponse> = this.loggedInUser.asObservable();
+  private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
   constructor(
     private sessionService: SessionStorageService,
     private router: Router
   ) {}
-  // private loggedInUser = new BehaviorSubject<DataResponse>(this.dataResponse);
-  // castLoggedInUser = this.loggedInUser.asObservable();
-  // private isLoggedIn = new BehaviorSubject<boolean>(false);
-  // castLoggedIn = this.isLoggedIn.asObservable();
-
-  // UpdateIsLoggedIn(newIsLoggedInValue: boolean) {
-  //   this.isLoggedIn.next(newIsLoggedInValue);
-  // }
-
-  // UpdateLoggedInUser(dataRes: DataResponse){
-  //   this.loggedInUser.next(dataRes);
-  // }
-
-  // getLoggedInUser(): DataResponse{
-  //   return this.loggedInUser.value;
-  // }
-
-  // isUserLoggedIn(): boolean {
-  //   return this.isLoggedIn.value;
-  // }
-  private loggedInUser = new BehaviorSubject<UserResponse>(new UserResponse());
-  public loggedInUser$: Observable<UserResponse> =
-    this.loggedInUser.asObservable();
-  private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
+  
+  
 
   UpdateLoggedInUser(userResponse: UserResponse) {
     this.loggedInUser.next(userResponse);
@@ -51,6 +29,14 @@ export class AuthService {
 
   UpdateIsLoggedIn(newIsLoggedInValue: boolean) {
     this.isLoggedIn.next(newIsLoggedInValue);
+  }
+
+  GetLoggedInUser(): UserResponse{
+    return this.loggedInUser.value;
+  }
+
+  GetIsUserLoggedIn(): boolean {
+    return this.isLoggedIn.value;
   }
 
   logout() {

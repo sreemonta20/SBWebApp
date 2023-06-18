@@ -46,7 +46,6 @@ export class HeaderComponent implements OnInit {
       next: (response: UserResponse) => {
         
         this.user = response.user;
-        //this.user = this.dataResponse.user;
       }
     });
   }

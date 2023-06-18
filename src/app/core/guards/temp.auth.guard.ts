@@ -26,7 +26,7 @@ import { NotificationService } from '../services/notification.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard {
+export class TempAuthGuard {
   public isLoggedIn: boolean = false;
   public isRefreshSuccess: boolean = false;
   public loggedInUser: UserResponse = new UserResponse();
@@ -42,7 +42,7 @@ export class AuthGuard {
     private sessionService: SessionStorageService,
     private userService: UserService,
     private notifyService: NotificationService
-  ) { }
+  ) {}
   async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -52,85 +52,86 @@ export class AuthGuard {
     | boolean
     | UrlTree
   > {
-    debugger
-    this.authService.isLoggedIn$.subscribe((response) => {
-      this.isLoggedIn = response;
-    });
-    this.authService.loggedInUser$.subscribe((response) => {
-      this.loggedInUser = response;
-    });
-    debugger
-    // const loggedUser = JSON.parse(
-    //   this.sessionService.get(SessionConstants.LOGGED_IN_USER)
+    // this.authService.isLoggedIn$.subscribe(
+    //   (response) => (this.isLoggedIn = response)
     // );
-    // const isLoggedIn = JSON.parse(
-    //   this.sessionService.get(SessionConstants.IS_LOGGED_IN)
+    // this.authService.loggedInUser$.subscribe(
+    //   (response) => (this.loggedInUser = response)
     // );
-    this.isLoggedIn = JSON.parse(
-      this.sessionService.get(SessionConstants.IS_LOGGED_IN)
-    ) as boolean;
-    this.loggedInUser = JSON.parse(
+
+    const loggedUser = JSON.parse(
       this.sessionService.get(SessionConstants.LOGGED_IN_USER)
-    ) as UserResponse;
+    );
+    const isLoggedIn = JSON.parse(
+      this.sessionService.get(SessionConstants.IS_LOGGED_IN)
+    );
 
-    if (this.loggedInUser === null &&
-      state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-      this.router.navigateByUrl(AuthRoutesConstants.LOGIN_USER_URL);
-    } else if (this.loggedInUser === null &&
-      !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+    // if (isLoggedIn && !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+    //   return true;
+    // }else if(isLoggedIn && state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
+    //   return false;
+    // }else{
+    //   if(!state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
+    //     this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url } });
+    //   }else{
+    //     this.router.navigateByUrl(AuthRoutesConstants.LOGIN_USER_URL);
+    //   }
+    //   return false;
+    // }
 
-      this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], {
-        queryParams: { returnUrl: state.url },
-      });
-    } else {
-      if (this.loggedInUser !== null &&
-        this.isLoggedIn &&
-        !this.tokenHelper.isTokenExpired(this.loggedInUser.access_token) &&
-        !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+    debugger;
+    if(loggedUser === null && !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
+      this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url } });
+    }else {
+      if ((loggedUser!== null || loggedUser !== undefined || loggedUser !== '') &&
+        isLoggedIn &&
+        !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
+        !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+      ) {
         return true;
-      } else if (this.loggedInUser !== null &&
-        this.isLoggedIn &&
-        !this.tokenHelper.isTokenExpired(this.loggedInUser.access_token) &&
-        state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-        return false
-      }else {
+      } else if ((loggedUser!== null || loggedUser !== undefined || loggedUser !== '') &&
+      isLoggedIn &&
+      !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
+      state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+    ) {
+        return false;
+      }else{
         debugger
-        this.refreshTokenReq.Access_Token = this.loggedInUser.access_token;
-        this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
-
-        if (
-          !this.refreshTokenReq.Access_Token ||
-          !this.refreshTokenReq.Refresh_Token
-        ) {
-          return false;
-        }
-
-        this.userService
-          .refreshToken(this.refreshTokenReq)
-          .subscribe((response) => {
-            console.log(response);
-            if (response.ResponseCode === 200) {
-              debugger;
-              this.isLoggedIn = true;
-              this.loggedInUser = response.Result;
-              this.sessionService.set(
-                SessionConstants.LOGGED_IN_USER,
-                JSON.stringify(this.loggedInUser)
-              );
-              this.sessionService.set(
-                SessionConstants.IS_LOGGED_IN,
-                JSON.stringify(this.isLoggedIn)
-              );
-
-              this.authService.UpdateIsLoggedIn(this.isLoggedIn);
-              this.authService.UpdateLoggedInUser(this.loggedInUser);
-              return true;
-            } else {
-              debugger;
-              this.isLoading = false;
-              this.userService
-                .revoke(this.loggedInUser.access_token)
-                .subscribe({
+        const loggedUser = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER));
+          this.refreshTokenReq.Access_Token = loggedUser.access_token;
+          this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;
+      
+          if (
+            !this.refreshTokenReq.Access_Token ||
+            !this.refreshTokenReq.Refresh_Token
+          ) {
+            return false;
+          }
+      
+          this.userService
+            .refreshToken(this.refreshTokenReq)
+            .subscribe((response) => {
+              console.log(response);
+              if (response.ResponseCode === 200) {
+                debugger;
+                this.isLoggedIn = true;
+                this.loggedInUser = response.Result;
+                this.sessionService.set(
+                  SessionConstants.LOGGED_IN_USER,
+                  JSON.stringify(this.loggedInUser)
+                );
+                this.sessionService.set(
+                  SessionConstants.IS_LOGGED_IN,
+                  JSON.stringify(this.isLoggedIn)
+                );
+      
+                this.authService.UpdateIsLoggedIn(this.isLoggedIn);
+                this.authService.UpdateLoggedInUser(this.loggedInUser);
+                return true;
+              } else {
+                debugger;
+                this.isLoading = false;
+                this.userService.revoke(this.loggedInUser.access_token).subscribe({
                   next: (response: DataResponse) => {
                     if (response.ResponseCode === 200) {
                       this.notifyService.showWarning(
@@ -146,11 +147,11 @@ export class AuthGuard {
                     return false;
                   },
                 });
-            }
-          });
+              }
+            });
       }
     }
-
+    
 
     // debugger;
     // if (
@@ -176,14 +177,14 @@ export class AuthGuard {
     //   const loggedUser = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER));
     //     this.refreshTokenReq.Access_Token = loggedUser.access_token;
     //     this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;
-
+    
     //     if (
     //       !this.refreshTokenReq.Access_Token ||
     //       !this.refreshTokenReq.Refresh_Token
     //     ) {
     //       return false;
     //     }
-
+    
     //     this.userService
     //       .refreshToken(this.refreshTokenReq)
     //       .subscribe((response) => {
@@ -200,7 +201,7 @@ export class AuthGuard {
     //             SessionConstants.IS_LOGGED_IN,
     //             JSON.stringify(this.isLoggedIn)
     //           );
-
+    
     //           this.authService.UpdateIsLoggedIn(this.isLoggedIn);
     //           this.authService.UpdateLoggedInUser(this.loggedInUser);
     //           return true;
