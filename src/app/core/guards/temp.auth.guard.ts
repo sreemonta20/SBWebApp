@@ -79,7 +79,7 @@ export class TempAuthGuard {
     //   return false;
     // }
 
-    debugger;
+    
     if(loggedUser === null && !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
       this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url } });
     }else {
@@ -113,7 +113,7 @@ export class TempAuthGuard {
             .subscribe((response) => {
               console.log(response);
               if (response.ResponseCode === 200) {
-                debugger;
+                
                 this.isLoggedIn = true;
                 this.loggedInUser = response.Result;
                 this.sessionService.set(
@@ -129,7 +129,7 @@ export class TempAuthGuard {
                 this.authService.UpdateLoggedInUser(this.loggedInUser);
                 return true;
               } else {
-                debugger;
+                
                 this.isLoading = false;
                 this.userService.revoke(this.loggedInUser.access_token).subscribe({
                   next: (response: DataResponse) => {
@@ -153,7 +153,7 @@ export class TempAuthGuard {
     }
     
 
-    // debugger;
+    // 
     // if (
     //   (loggedUser.access_token !== null ||
     //     loggedUser.access_token !== undefined ||
@@ -190,7 +190,7 @@ export class TempAuthGuard {
     //       .subscribe((response) => {
     //         console.log(response);
     //         if (response.ResponseCode === 200) {
-    //           debugger;
+    //           
     //           this.isLoggedIn = true;
     //           this.loggedInUser = response.Result;
     //           this.sessionService.set(
@@ -206,7 +206,7 @@ export class TempAuthGuard {
     //           this.authService.UpdateLoggedInUser(this.loggedInUser);
     //           return true;
     //         } else {
-    //           debugger;
+    //           
     //           this.isLoading = false;
     //           this.userService.revoke(this.loggedInUser.access_token).subscribe({
     //             next: (response: DataResponse) => {
@@ -230,7 +230,7 @@ export class TempAuthGuard {
   }
 
   async renewToken() {
-    debugger;
+    
     const loggedUser = JSON.parse(this.sessionService.get('loggedInUser'));
     this.refreshTokenReq.Access_Token = loggedUser.access_token;
     this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;
@@ -243,7 +243,7 @@ export class TempAuthGuard {
     try {
       const result = await this.userService.renewToken(this.refreshTokenReq);
       if (result.ResponseCode === 200) {
-        debugger;
+        
         this.isLoggedIn = true;
         this.loggedInUser = result.Result;
         this.sessionService.set(
@@ -259,7 +259,7 @@ export class TempAuthGuard {
         this.authService.UpdateLoggedInUser(this.loggedInUser);
         return true;
       } else {
-        debugger;
+        
         this.isLoading = false;
         this.userService.revoke(this.loggedInUser.access_token).subscribe({
           next: (response: DataResponse) => {
@@ -300,7 +300,7 @@ export class TempAuthGuard {
       .subscribe((response) => {
         console.log(response);
         if (response.ResponseCode === 200) {
-          debugger;
+          
           this.isLoggedIn = true;
           this.loggedInUser = response.Result;
           this.sessionService.set(
@@ -316,7 +316,7 @@ export class TempAuthGuard {
           this.authService.UpdateLoggedInUser(this.loggedInUser);
           return true;
         } else {
-          debugger;
+          
           this.isLoading = false;
           this.userService.revoke(this.loggedInUser.access_token).subscribe({
             next: (response: DataResponse) => {

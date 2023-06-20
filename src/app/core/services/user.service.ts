@@ -101,7 +101,7 @@ export class UserService {
   }
 
   refreshToken(refreshTokenRequest: RefreshTokenRequest): Observable<DataResponse> {
-    debugger
+    
     return this.apiService
     .post(this.refreshTokenUrl,refreshTokenRequest)
     .pipe(
@@ -126,7 +126,7 @@ export class UserService {
   // }
 
   async renewToken(refreshTokenRequest: RefreshTokenRequest): Promise<any>  {
-    debugger
+    
     const result$ = await this.apiService.postAsync(this.refreshTokenUrl, refreshTokenRequest);
       return lastValueFrom(result$);
   }

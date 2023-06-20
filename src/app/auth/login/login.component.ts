@@ -74,11 +74,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private notifyService: NotificationService,
     private validationService: ValidationFormsService
   ) {
-    debugger
-    // this.isLoggedIn =  JSON.parse(this.sessionService.get(SessionConstants.IS_LOGGED_IN));
-    // if(this.isLoggedIn){
-    //   return;
-    // }
     this.createForm();
   }
 
@@ -124,14 +119,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isLoading = false;
           this.isLoggedIn = true;
           this.loggedInUser = response.Result;
-          // this.sessionService.set(
-          //   SessionConstants.LOGGED_IN_USER,
-          //   JSON.stringify(response.Result)
-          // );
-          // this.sessionService.set(
-          //   SessionConstants.IS_LOGGED_IN,
-          //   JSON.stringify(this.isLoggedIn)
-          // );
+          
           this.sessionService.set(
             SessionConstants.LOGGED_IN_USER,
             JSON.stringify(this.loggedInUser)
@@ -143,7 +131,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.authService.UpdateIsLoggedIn(this.isLoggedIn);
           this.authService.UpdateLoggedInUser(this.loggedInUser);
-          // this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
           this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
         } else {
           this.isLoading = false;

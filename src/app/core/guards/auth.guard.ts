@@ -4,10 +4,13 @@ import {
   RouterStateSnapshot,
   UrlTree,
   Router,
+  CanActivate,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
+import { SharedService } from '../services/shared.service';
+
 import { map } from 'rxjs/operators';
 import {
   AuthRoutesConstants,
@@ -23,10 +26,16 @@ import {
 import { SessionStorageService } from '../services/session.service';
 import { UserService } from '../services/user.service';
 import { NotificationService } from '../services/notification.service';
+
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
+import jwt_decode from 'jwt-decode';
+import { securityApiUrl } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard {
+  public jwtHelper: JwtHelperService = new JwtHelperService();
   public isLoggedIn: boolean = false;
   public isRefreshSuccess: boolean = false;
   public loggedInUser: UserResponse = new UserResponse();
@@ -41,210 +50,63 @@ export class AuthGuard {
     private tokenHelper: JwtHelperService,
     private sessionService: SessionStorageService,
     private userService: UserService,
-    private notifyService: NotificationService
-  ) { }
-  async canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Promise<
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree
-  > {
-    debugger
-    this.authService.isLoggedIn$.subscribe((response) => {
-      this.isLoggedIn = response;
-    });
-    this.authService.loggedInUser$.subscribe((response) => {
-      this.loggedInUser = response;
-    });
-    debugger
-    // const loggedUser = JSON.parse(
-    //   this.sessionService.get(SessionConstants.LOGGED_IN_USER)
-    // );
-    // const isLoggedIn = JSON.parse(
-    //   this.sessionService.get(SessionConstants.IS_LOGGED_IN)
-    // );
-    this.isLoggedIn = JSON.parse(
-      this.sessionService.get(SessionConstants.IS_LOGGED_IN)
-    ) as boolean;
-    this.loggedInUser = JSON.parse(
-      this.sessionService.get(SessionConstants.LOGGED_IN_USER)
-    ) as UserResponse;
+    private notifyService: NotificationService,
+    private http: HttpClient,
+    private sharedService: SharedService
+  ) {}
 
-    if (this.loggedInUser === null &&
-      state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-      this.router.navigateByUrl(AuthRoutesConstants.LOGIN_USER_URL);
-    } else if (this.loggedInUser === null &&
-      !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    this.loggedInUser = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER)) as UserResponse;
 
-      this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], {
-        queryParams: { returnUrl: state.url },
-      });
-    } else {
-      if (this.loggedInUser !== null &&
-        this.isLoggedIn &&
-        !this.tokenHelper.isTokenExpired(this.loggedInUser.access_token) &&
+    if (this.loggedInUser) {
+      const token = this.loggedInUser.access_token;
+      const tokenPayload = jwt_decode(token) as any;
+      const expirationTimestamp = tokenPayload.exp;
+      const currentTimestamp = new Date().getTime() / 1000; // Convert to seconds
+
+      if (token &&
+        !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
         !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
         return true;
-      } else if (this.loggedInUser !== null &&
-        this.isLoggedIn &&
-        !this.tokenHelper.isTokenExpired(this.loggedInUser.access_token) &&
+      }else if (token &&
+        !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
         state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-        return false
-      }else {
-        debugger
-        this.refreshTokenReq.Access_Token = this.loggedInUser.access_token;
-        this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
-
-        if (
-          !this.refreshTokenReq.Access_Token ||
-          !this.refreshTokenReq.Refresh_Token
-        ) {
-          return false;
-        }
-
-        this.userService
-          .refreshToken(this.refreshTokenReq)
-          .subscribe((response) => {
-            console.log(response);
-            if (response.ResponseCode === 200) {
-              debugger;
-              this.isLoggedIn = true;
-              this.loggedInUser = response.Result;
-              this.sessionService.set(
-                SessionConstants.LOGGED_IN_USER,
-                JSON.stringify(this.loggedInUser)
-              );
-              this.sessionService.set(
-                SessionConstants.IS_LOGGED_IN,
-                JSON.stringify(this.isLoggedIn)
-              );
-
-              this.authService.UpdateIsLoggedIn(this.isLoggedIn);
-              this.authService.UpdateLoggedInUser(this.loggedInUser);
-              return true;
-            } else {
-              debugger;
-              this.isLoading = false;
-              this.userService
-                .revoke(this.loggedInUser.access_token)
-                .subscribe({
-                  next: (response: DataResponse) => {
-                    if (response.ResponseCode === 200) {
-                      this.notifyService.showWarning(
-                        response.Message,
-                        MessageConstants.GENERAL_WARNING_TITLE
-                      );
-                      return false;
-                    } else {
-                      return false;
-                    }
-                  },
-                  error: (error) => {
-                    return false;
-                  },
-                });
-            }
-          });
+        return false;
       }
+
+      
+      this.refreshTokenReq.Access_Token = token;
+      this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
+      const isRefreshSuccess = await this.refreshingTokens(this.refreshTokenReq);
+      if (!isRefreshSuccess) {
+        this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL]);
+      }
+      return isRefreshSuccess;
+
+    } else if (!state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+      this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url },});
+      
+    }else if(state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
+      return true;
     }
-
-
-    // debugger;
-    // if (
-    //   (loggedUser.access_token !== null ||
-    //     loggedUser.access_token !== undefined ||
-    //     loggedUser.access_token !== '') &&
-    //   isLoggedIn &&
-    //   !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
-    //   !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
-    // ) {
-    //   return true;
-    // } else if (
-    //   (loggedUser.access_token !== null ||
-    //     loggedUser.access_token !== undefined ||
-    //     loggedUser.access_token !== '') &&
-    //   isLoggedIn &&
-    //   !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
-    //   state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
-    // ) {
-    //   return false;
-    // }else{
-    //   debugger
-    //   const loggedUser = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER));
-    //     this.refreshTokenReq.Access_Token = loggedUser.access_token;
-    //     this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;
-
-    //     if (
-    //       !this.refreshTokenReq.Access_Token ||
-    //       !this.refreshTokenReq.Refresh_Token
-    //     ) {
-    //       return false;
-    //     }
-
-    //     this.userService
-    //       .refreshToken(this.refreshTokenReq)
-    //       .subscribe((response) => {
-    //         console.log(response);
-    //         if (response.ResponseCode === 200) {
-    //           debugger;
-    //           this.isLoggedIn = true;
-    //           this.loggedInUser = response.Result;
-    //           this.sessionService.set(
-    //             SessionConstants.LOGGED_IN_USER,
-    //             JSON.stringify(this.loggedInUser)
-    //           );
-    //           this.sessionService.set(
-    //             SessionConstants.IS_LOGGED_IN,
-    //             JSON.stringify(this.isLoggedIn)
-    //           );
-
-    //           this.authService.UpdateIsLoggedIn(this.isLoggedIn);
-    //           this.authService.UpdateLoggedInUser(this.loggedInUser);
-    //           return true;
-    //         } else {
-    //           debugger;
-    //           this.isLoading = false;
-    //           this.userService.revoke(this.loggedInUser.access_token).subscribe({
-    //             next: (response: DataResponse) => {
-    //               if (response.ResponseCode === 200) {
-    //                 this.notifyService.showWarning(
-    //                   response.Message,
-    //                   MessageConstants.GENERAL_WARNING_TITLE
-    //                 );
-    //                 return false;
-    //               } else {
-    //                 return false;
-    //               }
-    //             },
-    //             error: (error) => {
-    //               return false;
-    //             },
-    //           });
-    //         }
-    //       });
-    // }
   }
 
-  async renewToken() {
-    debugger;
-    const loggedUser = JSON.parse(this.sessionService.get('loggedInUser'));
-    this.refreshTokenReq.Access_Token = loggedUser.access_token;
-    this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;
-    if (
-      !this.refreshTokenReq.Access_Token ||
-      !this.refreshTokenReq.Refresh_Token
-    ) {
+  private async refreshingTokens(tokenModel: any): Promise<boolean> {
+    if (!tokenModel.Access_Token || !tokenModel.Refresh_Token) {
       return false;
     }
+
+    let isRefreshSuccess: boolean;
     try {
-      const result = await this.userService.renewToken(this.refreshTokenReq);
-      if (result.ResponseCode === 200) {
-        debugger;
+      const response = await lastValueFrom(
+        this.http.post(securityApiUrl + '/api/User/refreshtoken', tokenModel)
+      );
+      debugger;
+      const dataResponse = <DataResponse>response;
+
+      if (dataResponse.ResponseCode === 200) {
         this.isLoggedIn = true;
-        this.loggedInUser = result.Result;
+        this.loggedInUser = dataResponse.Result;
         this.sessionService.set(
           SessionConstants.LOGGED_IN_USER,
           JSON.stringify(this.loggedInUser)
@@ -256,84 +118,11 @@ export class AuthGuard {
 
         this.authService.UpdateIsLoggedIn(this.isLoggedIn);
         this.authService.UpdateLoggedInUser(this.loggedInUser);
-        return true;
-      } else {
-        debugger;
-        this.isLoading = false;
-        this.userService.revoke(this.loggedInUser.access_token).subscribe({
-          next: (response: DataResponse) => {
-            if (response.ResponseCode === 200) {
-              this.notifyService.showWarning(
-                response.Message,
-                MessageConstants.GENERAL_WARNING_TITLE
-              );
-              return false;
-            } else {
-              return false;
-            }
-          },
-          error: (error) => {
-            return false;
-          },
-        });
+        isRefreshSuccess = true;
       }
-    } catch (error) {
-      return false;
+    } catch (ex) {
+      isRefreshSuccess = false;
     }
-  }
-
-  tryRefreshToken() {
-    const loggedUser = JSON.parse(this.sessionService.get('loggedInUser'));
-    this.refreshTokenReq.Access_Token = loggedUser.access_token;
-    this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;
-
-    if (
-      !this.refreshTokenReq.Access_Token ||
-      !this.refreshTokenReq.Refresh_Token
-    ) {
-      return false;
-    }
-
-    this.userService
-      .refreshToken(this.refreshTokenReq)
-      .subscribe((response) => {
-        console.log(response);
-        if (response.ResponseCode === 200) {
-          debugger;
-          this.isLoggedIn = true;
-          this.loggedInUser = response.Result;
-          this.sessionService.set(
-            SessionConstants.LOGGED_IN_USER,
-            JSON.stringify(this.loggedInUser)
-          );
-          this.sessionService.set(
-            SessionConstants.IS_LOGGED_IN,
-            JSON.stringify(this.isLoggedIn)
-          );
-
-          this.authService.UpdateIsLoggedIn(this.isLoggedIn);
-          this.authService.UpdateLoggedInUser(this.loggedInUser);
-          return true;
-        } else {
-          debugger;
-          this.isLoading = false;
-          this.userService.revoke(this.loggedInUser.access_token).subscribe({
-            next: (response: DataResponse) => {
-              if (response.ResponseCode === 200) {
-                this.notifyService.showWarning(
-                  response.Message,
-                  MessageConstants.GENERAL_WARNING_TITLE
-                );
-                return false;
-              } else {
-                return false;
-              }
-            },
-            error: (error) => {
-              return false;
-            },
-          });
-        }
-      });
+    return isRefreshSuccess;
   }
 }
