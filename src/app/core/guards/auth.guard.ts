@@ -77,7 +77,8 @@ export class AuthGuard {
       
       this.refreshTokenReq.Access_Token = token;
       this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
-      const isRefreshSuccess = await this.refreshingTokens(this.refreshTokenReq);
+      //const isRefreshSuccess = await this.refreshingTokens(this.refreshTokenReq);
+      const isRefreshSuccess = await this.renewToken(this.refreshTokenReq);
       if (!isRefreshSuccess) {
         this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL]);
       }
@@ -119,6 +120,43 @@ export class AuthGuard {
         this.authService.UpdateIsLoggedIn(this.isLoggedIn);
         this.authService.UpdateLoggedInUser(this.loggedInUser);
         isRefreshSuccess = true;
+      }else if(dataResponse.ResponseCode === 401){
+
+      }
+    } catch (ex) {
+      isRefreshSuccess = false;
+    }
+    return isRefreshSuccess;
+  }
+
+  private async renewToken(tokenModel: RefreshTokenRequest):Promise<boolean>{
+    if (!tokenModel.Access_Token || !tokenModel.Refresh_Token) {
+      return false;
+    }
+    let isRefreshSuccess: boolean;
+    try {
+      debugger
+      const dataResponse = await this.userService.renewToken<DataResponse>(tokenModel);
+      debugger;
+      // const dataResponse = <DataResponse>response;
+
+      if (dataResponse.ResponseCode === 200) {
+        this.isLoggedIn = true;
+        this.loggedInUser = dataResponse.Result;
+        this.sessionService.set(
+          SessionConstants.LOGGED_IN_USER,
+          JSON.stringify(this.loggedInUser)
+        );
+        this.sessionService.set(
+          SessionConstants.IS_LOGGED_IN,
+          JSON.stringify(this.isLoggedIn)
+        );
+
+        this.authService.UpdateIsLoggedIn(this.isLoggedIn);
+        this.authService.UpdateLoggedInUser(this.loggedInUser);
+        isRefreshSuccess = true;
+      }else if(dataResponse.ResponseCode === 401){
+
       }
     } catch (ex) {
       isRefreshSuccess = false;

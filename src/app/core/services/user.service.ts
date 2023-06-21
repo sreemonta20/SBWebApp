@@ -8,6 +8,7 @@ import { securityApiUrl } from 'src/environments/environment';
 import { environment } from 'src/environments/environment';
 import { LoginRequest, RefreshTokenRequest, SaveUpdateRequest, DataResponse } from '@app/core/class/index';
 import { ApiService } from './api.service';
+import { addAbortSignal } from 'stream';
 // import { promises } from 'dns';
 
 @Injectable({
@@ -125,10 +126,16 @@ export class UserService {
   //   }
   // }
 
-  async renewToken(refreshTokenRequest: RefreshTokenRequest): Promise<any>  {
+  // async renewToken(refreshTokenRequest: RefreshTokenRequest): Promise<boolean>  {
     
-    const result$ = await this.apiService.postAsync(this.refreshTokenUrl, refreshTokenRequest);
-      return lastValueFrom(result$);
+  //   const result$ = await this.apiService.postAsync(this.refreshTokenUrl, refreshTokenRequest);
+  //     return lastValueFrom(result$);
+  // }
+
+  async renewToken<DataResponse>(refreshTokenRequest: RefreshTokenRequest):  Promise<DataResponse>{
+    debugger
+     const result = await this.apiService.postAsync<DataResponse>(this.refreshTokenUrl, refreshTokenRequest);
+    return result;
   }
 
   revoke(userToken: string): Observable<DataResponse> {

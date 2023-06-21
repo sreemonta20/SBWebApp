@@ -69,11 +69,19 @@ export class ApiService<T> {
   }
 
 
-  public postAsync<T>(endpoint: string, body: T): Promise<any> {
+  // public postAsync<T>(endpoint: string, body: T): Promise<any> {
+  //   const headers = this.getHeaders();
+  //   const url = `${this.baseUrl}${endpoint}`;
+  //   const request$ = this.http.post<T>(url, body, { headers });
+  //   return lastValueFrom(request$);
+  // }
+
+  public async postAsync<T>(endpoint: string, body: any): Promise<T> {
+    //const promise = this.http.post<T>(url, data).toPromise();
     const headers = this.getHeaders();
     const url = `${this.baseUrl}${endpoint}`;
-    const request$ = this.http.post<T>(url, body, { headers });
-    return lastValueFrom(request$);
+    const response = await lastValueFrom(this.http.post<T>(url, body, {headers}));
+    return response;
   }
 
   public put(endpoint: string, body: any, params: HttpParams): Observable<T> {
