@@ -57,8 +57,9 @@ export class AuthGuard {
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     this.loggedInUser = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER)) as UserResponse;
-
+    this.isLoggedIn = JSON.parse(this.sessionService.get(SessionConstants.IS_LOGGED_IN)) as boolean;
     if (this.loggedInUser) {
+      debugger
       const token = this.loggedInUser.access_token;
       const tokenPayload = jwt_decode(token) as any;
       const expirationTimestamp = tokenPayload.exp;
@@ -71,7 +72,8 @@ export class AuthGuard {
       }else if (token &&
         !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
         state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-        return false;
+        //return false;
+        this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
       }
 
       
