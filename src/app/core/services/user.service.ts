@@ -1,15 +1,27 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map,lastValueFrom } from 'rxjs';
+import { Observable, map, lastValueFrom } from 'rxjs';
 ////--------------------API method access pattern one start------------------------------------
 // import { url } from 'src/environments/environment';
 ////--------------------API method access pattern one end------------------------------------
 import { securityApiUrl } from 'src/environments/environment';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RefreshTokenRequest, SaveUpdateRequest, DataResponse } from '@app/core/class/index';
+import {
+  LoginRequest,
+  RefreshTokenRequest,
+  SaveUpdateRequest,
+  UserResponse,
+  DataResponse
+} from '@app/core/class/index';
 import { ApiService } from './api.service';
 import { addAbortSignal } from 'stream';
-// import { promises } from 'dns';
+import { SessionStorageService } from '../services/session.service';
+import { AuthService } from '../services/auth.service';
+import {
+  AuthRoutesConstants,
+  MessageConstants,
+  SessionConstants,
+} from '../constants/common.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -57,108 +69,128 @@ export class UserService {
   revokeUrl: string = '/api/User/revoke';
   registerUserUrl: string = '/api/User/registerUser';
   deleteUserUrl: string = '/api/User/deleteUser';
+  public loggedInUser: UserResponse = new UserResponse();
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private apiService: ApiService<DataResponse>,
+    private sessionService: SessionStorageService) {
 
-  constructor(private http: HttpClient, private apiService: ApiService<DataResponse>) {
     this.apiService.initializeBaseURL(securityApiUrl);
   }
 
-  getUserById(id:string): Observable<DataResponse|undefined> {
+  getUserById(id: string): Observable<DataResponse | undefined> {
     const params = new HttpParams().set('id', id);
-    return this.apiService
-      .getById(this.getUserByIdUrl,params)
-      .pipe(
-        map((response: DataResponse) => {
-          if (response) {
-            return response
-          }
-        })
-      );
-  }
-
-  getAllUsers(pageNumber:number, pageSize: number): Observable<DataResponse|undefined> {
-    const params = new HttpParams().set('pageNumber', pageNumber).set('pageSize', pageSize);
-    return this.apiService
-    .getAll(this.getAllUsersUrl,params)
-    .pipe(
+    return this.apiService.getById(this.getUserByIdUrl, params).pipe(
       map((response: DataResponse) => {
         if (response) {
-          return response
+          return response;
         }
       })
     );
   }
 
-  login(user: LoginRequest): Observable<DataResponse|undefined> {
-    
-    return this.apiService
-    .post(this.userLoginUrl,user)
-    .pipe(
+  getAllUsers(
+    pageNumber: number,
+    pageSize: number
+  ): Observable<DataResponse | undefined> {
+    const params = new HttpParams()
+      .set('pageNumber', pageNumber)
+      .set('pageSize', pageSize);
+    return this.apiService.getAll(this.getAllUsersUrl, params).pipe(
       map((response: DataResponse) => {
         if (response) {
-          return response
+          return response;
         }
       })
     );
   }
 
-  refreshToken(refreshTokenRequest: RefreshTokenRequest): Observable<DataResponse> {
-    
-    return this.apiService
-    .post(this.refreshTokenUrl,refreshTokenRequest)
-    .pipe(
+  login(user: LoginRequest): Observable<DataResponse | undefined> {
+    return this.apiService.post(this.userLoginUrl, user).pipe(
       map((response: DataResponse) => {
         if (response) {
-          return response
+          return response;
         }
       })
     );
   }
 
- 
+  renewToken(refreshTokenRequest: RefreshTokenRequest): Observable<DataResponse> {
+    return this.apiService.post(this.refreshTokenUrl, refreshTokenRequest).pipe(
+      map((response: DataResponse) => {
+        if (response) {
+          return response;
+        }
+      })
+    );
+  }
 
-  // async renewToken(refreshTokenRequest: RefreshTokenRequest){
-    
-  //   try {
-  //     const result = await this.apiService.postAsync<RefreshTokenRequest>(this.refreshTokenUrl, refreshTokenRequest);
-  //     console.log('Post successful:', result);
-  //   } catch (error) {
-  //     console.error('Post failed:', error);
-  //   }
-  // }
-
-  // async renewToken(refreshTokenRequest: RefreshTokenRequest): Promise<boolean>  {
-    
-  //   const result$ = await this.apiService.postAsync(this.refreshTokenUrl, refreshTokenRequest);
-  //     return lastValueFrom(result$);
-  // }
-
-  async renewToken<DataResponse>(refreshTokenRequest: RefreshTokenRequest):  Promise<DataResponse>{
-    debugger
-     const result = await this.apiService.postAsync<DataResponse>(this.refreshTokenUrl, refreshTokenRequest);
+  async refreshToken<DataResponse>(refreshTokenRequest: RefreshTokenRequest): Promise<DataResponse> {
+    const result = await this.apiService.postDataAsync<DataResponse>(
+      this.refreshTokenUrl,
+      refreshTokenRequest
+    );
     return result;
   }
 
-  revoke(userToken: string): Observable<DataResponse> {
+
+  async refreshTokenAsync(refreshTokenModelReq: RefreshTokenRequest): Promise<boolean> {
+    if (!refreshTokenModelReq.Access_Token || !refreshTokenModelReq.Refresh_Token) {
+      return false;
+    }
+    let isRefreshSuccess: boolean;
     
+    try {
+      const result = await this.apiService.postAsync(this.refreshTokenUrl,refreshTokenModelReq);
+      if (result.ResponseCode === 200) {
+        this.loggedInUser = result.Result;
+        this.sessionService.set(
+          SessionConstants.LOGGED_IN_USER,
+          JSON.stringify(this.loggedInUser)
+        );
+        this.sessionService.set(
+          SessionConstants.IS_LOGGED_IN,
+          JSON.stringify(true)
+        );
+
+        this.authService.UpdateIsLoggedIn(true);
+        this.authService.UpdateLoggedInUser(this.loggedInUser);
+        isRefreshSuccess = true;
+      } else if(result.ResponseCode === 400 || result.ResponseCode === 500) {
+        isRefreshSuccess = false;
+      }
+    } catch (error) {
+      console.error('An error occurred during refresh token:', error);
+      isRefreshSuccess = false;
+    }
+    return isRefreshSuccess;
+  }
+
+  revoke(userToken: string): Observable<DataResponse> {
     const params = new HttpParams().set('userToken', userToken);
-    return this.apiService
-    .post(this.revokeUrl,{params})
-    .pipe(
+    return this.apiService.get(this.revokeUrl, params).pipe(
       map((response: DataResponse) => {
         if (response) {
-          return response
+          return response;
         }
       })
     );
+  }
+
+  async revokeAsync(userToken: string): Promise<DataResponse> {
+    const params = new HttpParams().set('userToken', userToken);
+    const result = await this.apiService.postAsync(this.revokeUrl, { params });
+    return result;
   }
 
   registerUser(user: SaveUpdateRequest): Observable<DataResponse> {
     return this.http.post<DataResponse>(this.registerUserUrl, user);
   }
 
-  deleteUser(id:string): Observable<DataResponse> {
+  deleteUser(id: string): Observable<DataResponse> {
     const params = new HttpParams().set('id', id);
-    return this.http.delete<DataResponse>(this.deleteUserUrl,{params})
+    return this.http.delete<DataResponse>(this.deleteUserUrl, { params });
   }
 
   ////--------------------API method access pattern two start------------------------------------

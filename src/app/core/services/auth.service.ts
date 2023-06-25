@@ -38,11 +38,4 @@ export class AuthService {
   GetIsUserLoggedIn(): boolean {
     return this.isLoggedIn.value;
   }
-
-  logout() {
-    this.sessionService.remove(SessionConstants.LOGGED_IN_USER);
-    this.sessionService.remove(SessionConstants.IS_LOGGED_IN);
-    this.router.navigateByUrl(AuthRoutesConstants.LOGIN_USER_URL);
-    this.isLoggedIn.next(false);
-  }
 }

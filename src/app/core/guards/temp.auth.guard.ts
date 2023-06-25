@@ -96,7 +96,7 @@ export class TempAuthGuard {
     ) {
         return false;
       }else{
-        debugger
+        
         const loggedUser = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER));
           this.refreshTokenReq.Access_Token = loggedUser.access_token;
           this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;
@@ -173,7 +173,7 @@ export class TempAuthGuard {
     // ) {
     //   return false;
     // }else{
-    //   debugger
+    //   
     //   const loggedUser = JSON.parse(this.sessionService.get(SessionConstants.LOGGED_IN_USER));
     //     this.refreshTokenReq.Access_Token = loggedUser.access_token;
     //     this.refreshTokenReq.Refresh_Token = loggedUser.refresh_token;

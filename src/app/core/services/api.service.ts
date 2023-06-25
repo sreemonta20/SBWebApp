@@ -37,11 +37,11 @@ export class ApiService<T> {
     });
   }
 
-  // public getById(id: number, endpoint: string): Observable<T> {
-  //   const headers = this.getHeaders();
-  //   const url = `${this.baseUrl}/${endpoint}/${id}`;
-  //   return this.http.get<T>(url, { headers });
-  // }
+  public get(endpoint: string, params: HttpParams): Observable<T> {
+    const headers = this.getHeaders();
+    const url = `${this.baseUrl}${endpoint}`;
+    return this.http.get<T>(url, {headers: headers, params: params});
+  }
 
   public getById(endpoint: string, params: HttpParams): Observable<T> {
     const headers = this.getHeaders();
@@ -76,7 +76,15 @@ export class ApiService<T> {
   //   return lastValueFrom(request$);
   // }
 
-  public async postAsync<T>(endpoint: string, body: any): Promise<T> {
+  public async postDataAsync<T>(endpoint: string, body: any): Promise<T> {
+    //const promise = this.http.post<T>(url, data).toPromise();
+    const headers = this.getHeaders();
+    const url = `${this.baseUrl}${endpoint}`;
+    const response = await lastValueFrom(this.http.post<T>(url, body, {headers}));
+    return response;
+  }
+
+  public async postAsync(endpoint: string, body: any): Promise<T> {
     //const promise = this.http.post<T>(url, data).toPromise();
     const headers = this.getHeaders();
     const url = `${this.baseUrl}${endpoint}`;

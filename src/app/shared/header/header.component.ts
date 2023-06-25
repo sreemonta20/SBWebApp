@@ -64,9 +64,6 @@ export class HeaderComponent implements OnInit {
   }
 
   signOut(): void {
-    this.sessionService.remove('loggedInUser');
-    this.sessionService.remove('isLoggedIn');
-    this.authService.UpdateIsLoggedIn(false);
-    this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL]);
+    this.sharedService.RevokeSession();
   }
 }

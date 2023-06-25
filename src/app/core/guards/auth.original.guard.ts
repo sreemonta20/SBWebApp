@@ -52,14 +52,14 @@ export class AuthGuard {
     | boolean
     | UrlTree
   > {
-    debugger
+    
     this.authService.isLoggedIn$.subscribe((response) => {
       this.isLoggedIn = response;
     });
     this.authService.loggedInUser$.subscribe((response) => {
       this.loggedInUser = response;
     });
-    debugger
+    
     
     this.isLoggedIn = JSON.parse(
       this.sessionService.get(SessionConstants.IS_LOGGED_IN)
@@ -89,7 +89,7 @@ export class AuthGuard {
         state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
         return false
       }else {
-        debugger
+        
         this.refreshTokenReq.Access_Token = this.loggedInUser.access_token;
         this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
 
