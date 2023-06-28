@@ -1,44 +1,41 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-  Inject,
-  Renderer2,
-  ElementRef,
-} from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule, DOCUMENT } from '@angular/common';
-declare var $: any;
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 import {
   FormBuilder,
-  FormGroup,
   FormControl,
-  Validators,
-  AbstractControl,
-  FormGroupDirective,
-  NgForm,
-  ValidationErrors,
+  FormGroup,
+  Validators
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
-  User,
-  UserResponse,
-  LoginRequest,
   DataResponse,
+  LoginRequest,
+  UserResponse
 } from '@app/core/class';
 import {
-  UserService,
-  AuthService,
-  SessionStorageService,
-  NotificationService,
-  ValidationFormsService,
-} from '@app/core/services/index';
-import {
-  SessionConstants,
-  MessageConstants,
   AuthRoutesConstants,
+  MessageConstants,
+  SessionConstants,
 } from '@app/core/constants/index';
+import {
+  AuthService,
+  LoaderService,
+  NotificationService,
+  SessionStorageService,
+  UserService,
+  ValidationFormsService
+} from '@app/core/services/index';
+import { NgxSpinnerService } from 'ngx-spinner';
+declare var $: any;
 
 @Component({
   selector: 'app-login',
@@ -50,7 +47,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   // Declaration & initialization
   //host: { class: 'form-v6' },
   loginForm!: FormGroup;
-  isLoading = false;
   submitted = false;
   formErrors: any;
   hide: boolean = true;
@@ -68,11 +64,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private renderer: Renderer2,
     private fb: FormBuilder,
+    private loadingService: LoaderService,
     private userService: UserService,
     private authService: AuthService,
     private sessionService: SessionStorageService,
     private notifyService: NotificationService,
-    private validationService: ValidationFormsService
+    private validationService: ValidationFormsService,
+    private spinnerService: NgxSpinnerService
+    
   ) {
     this.createForm();
   }
@@ -103,9 +102,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signIn(): void {
-    
     this.submitted = true;
-    this.isLoading = true;
+    this.loadingService.setLoading(true);
     if (this.loginForm.invalid) {
       return;
     }
@@ -115,8 +113,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userService.login(this.loginModelRequest).subscribe({
       next: (response: DataResponse) => {
         if (response.ResponseCode === 200) {
-          
-          this.isLoading = false;
+         this.loadingService.setLoading(false);
           this.isLoggedIn = true;
           this.loggedInUser = response.Result;
           
@@ -133,7 +130,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
           this.authService.UpdateLoggedInUser(this.loggedInUser);
           this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
         } else {
-          this.isLoading = false;
+          this.loadingService.setLoading(false);
           this.notifyService.showError(
             response.Message,
             MessageConstants.GENERAL_ERROR_TITLE
@@ -142,7 +139,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (error) => {
-        this.isLoading = false;
+        this.loadingService.setLoading(false);
         this.error_message = error.error;
         this.notifyService.showError(
           this.error_message,
@@ -162,5 +159,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  
   ngOnDestroy(): void {}
 }

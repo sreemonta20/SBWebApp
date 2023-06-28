@@ -1,29 +1,21 @@
+<!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">
+  <p style="color: white">Please Wait. </p>
+</ngx-spinner> -->
+
+<!-- <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="large" color="#fff" type="ball-clip-rotate-pulse" [fullScreen] = "true"></ngx-spinner> -->
+<ngx-spinner  size="medium" type="ball-clip-rotate-pulse"></ngx-spinner>
 <div class="login-box">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="javascript: void(0);" [routerLink]="['/auth/login']" class="h1"
-        ><b>SBWeb</b> Login</a
-      >
+      <a href="javascript: void(0);" [routerLink]="['/auth/login']" class="h1"><b>SBWeb</b> Login</a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <form
-        id="loginForm"
-        [formGroup]="loginForm"
-        novalidate
-        #fb="ngForm"
-        (ngSubmit)="signIn()"
-      >
+      <form id="loginForm" [formGroup]="loginForm" novalidate #fb="ngForm" (ngSubmit)="signIn()">
         <div class="input-group mb-3">
-          <input
-            type="text"
-            class="form-control"
-            id="userName"
-            name="userName"
-            placeholder="User Name"
-            formControlName="userName"
-            class="form-control"
+          <input type="text" class="form-control" id="userName" name="userName" placeholder="User Name"
+            formControlName="userName" class="form-control"
             [ngClass]="{ 'is-invalid': f.userName.errors && f.userName.invalid && (f.userName.dirty || f.userName.touched)  }"
             required autocomplete="off">
           <div class="input-group-append">
@@ -31,24 +23,17 @@
               <span class="fas fa-envelope"></span>
             </div>
           </div>
-          <span
-            class="glyphicon glyphicon-envelope form-control-feedback"
-          ></span>
-          <div *ngIf="f.userName.errors && f.userName.invalid && (f.userName.dirty || f.userName.touched)" class="invalid-feedback">
+          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+          <div *ngIf="f.userName.errors && f.userName.invalid && (f.userName.dirty || f.userName.touched)"
+            class="invalid-feedback">
             <div *ngIf="f.userName.errors.required">User Name is required</div>
             <div *ngIf="f.userName.errors.noWhiteSpace">White and empty spaces
               are not allowed</div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            placeholder="Password"
-            formControlName="password"
-            class="form-control"
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+            formControlName="password" class="form-control"
             [ngClass]="{ 'is-invalid': f.password.errors && f.password.invalid && (f.password.dirty || f.password.touched) }"
             required autocomplete="off">
           <div class="input-group-append">
@@ -57,10 +42,11 @@
             </div>
           </div>
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-          <div *ngIf="f.password.errors && f.password.invalid && (f.password.dirty || f.password.touched)" class="invalid-feedback">
+          <div *ngIf="f.password.errors && f.password.invalid && (f.password.dirty || f.password.touched)"
+            class="invalid-feedback">
             <div *ngIf="f.password.errors.required">Password is required</div>
             <div *ngIf="f.password.errors?.noWhiteSpace"><i>White and empty spaces
-              are not allowed</i></div>
+                are not allowed</i></div>
           </div>
         </div>
         <div class="row">
@@ -88,21 +74,16 @@
       </div>
 
       <p class="mb-1">
-        <a href="javascript: void(0);" [routerLink]="['/auth/resetpassword']"
-          >I forgot my password</a
-        >
+        <a href="javascript: void(0);" [routerLink]="['/auth/resetpassword']">I forgot my password</a>
       </p>
       <p class="mb-0">
-        <a
-          href="javascript: void(0);"
-          [routerLink]="['/auth/register']"
-          class="text-center"
-          >Register a new membership</a
-        >
+        <a href="javascript: void(0);" [routerLink]="['/auth/register']" class="text-center">Register a new
+          membership</a>
       </p>
     </div>
   </div>
 </div>
+<!-- <ngx-spinner  size="medium" type="ball-clip-rotate-pulse"></ngx-spinner> -->
 <!-- -----------------------------------------Alternative login form----------------------------------------------- -->
 <!-- <section class="login-box">
 	<div class="login-box-body">

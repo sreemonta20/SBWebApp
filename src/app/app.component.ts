@@ -1,13 +1,13 @@
+import { DOCUMENT } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import {
   Component,
-  OnInit,
-  Inject,
-  Renderer2,
   ElementRef,
+  Inject,
+  OnInit,
+  Renderer2,
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,7 @@ import { CommonModule, DOCUMENT } from '@angular/common';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  isLoding: boolean = false;
   title = 'Web::SB';
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -26,5 +27,7 @@ export class AppComponent implements OnInit {
     
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  
+  }
 }

@@ -1,27 +1,23 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, lastValueFrom } from 'rxjs';
+import { Observable, map } from 'rxjs';
 ////--------------------API method access pattern one start------------------------------------
 // import { url } from 'src/environments/environment';
 ////--------------------API method access pattern one end------------------------------------
-import { securityApiUrl } from 'src/environments/environment';
-import { environment } from 'src/environments/environment';
 import {
+  DataResponse,
   LoginRequest,
   RefreshTokenRequest,
   SaveUpdateRequest,
-  UserResponse,
-  DataResponse
+  UserResponse
 } from '@app/core/class/index';
-import { ApiService } from './api.service';
-import { addAbortSignal } from 'stream';
-import { SessionStorageService } from '../services/session.service';
-import { AuthService } from '../services/auth.service';
+import { securityApiUrl } from 'src/environments/environment';
 import {
-  AuthRoutesConstants,
-  MessageConstants,
-  SessionConstants,
+  SessionConstants
 } from '../constants/common.constants';
+import { AuthService } from '../services/auth.service';
+import { SessionStorageService } from '../services/session.service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -136,6 +132,7 @@ export class UserService {
 
 
   async refreshTokenAsync(refreshTokenModelReq: RefreshTokenRequest): Promise<boolean> {
+    debugger
     if (!refreshTokenModelReq.Access_Token || !refreshTokenModelReq.Refresh_Token) {
       return false;
     }
