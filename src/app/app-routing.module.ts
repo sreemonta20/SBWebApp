@@ -16,7 +16,9 @@ const routes: Routes = [
     path: 'business',
     loadChildren: () =>
       import('./business/business.module').then((m) => m.BusinessModule),
-  }
+  },
+  { path: '**', redirectTo: 'business' },
+  { path: '**', redirectTo: 'auth' }
 ];
 
 @NgModule({

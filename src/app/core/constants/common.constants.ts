@@ -315,7 +315,7 @@ export const Common = {
       name:"Dashboard",
       isHeader:false,
       class:"nav-item",
-      routeLink:"",
+      routeLink:"/business/home",
       routeLinkClass:"nav-link active",
       icon:"nav-icon fas fa-tachometer-alt",
       remark:"Navigation Item",
