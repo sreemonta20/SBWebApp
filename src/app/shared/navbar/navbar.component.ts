@@ -10,8 +10,9 @@ import {
 import { NavigationEnd, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { AuthRoutesConstants, SessionConstants } from '@app/core/constants';
+import { AuthRoutesConstants, SessionConstants, Common } from '@app/core/constants';
 import { SessionStorageService, AuthService } from '@app/core/services';
+import {MenuItem} from '@app/core/interface'
 declare var $: any;
 
 @Component({
@@ -20,6 +21,7 @@ declare var $: any;
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
+  menuList: MenuItem[];
   isLoggedIn: boolean = false;
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -37,6 +39,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
   ngOnInit(): void {
     $('[data-widget="treeview"]').Treeview('init');
     this.authService.isLoggedIn$.subscribe(response => (this.isLoggedIn = response));
+    this.menuList = Common.Menu;
   }
 
   ngAfterViewInit() {

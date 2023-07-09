@@ -1,2 +1,2 @@
 export * from './logged-in-user.interface';
-// export * from './user.interface';
+export * from './menu.item';

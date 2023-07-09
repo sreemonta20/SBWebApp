@@ -295,7 +295,98 @@ export const Common = {
   DISPLAY_STYLE_BLOCK: 'block',
   DISPLAY_STYLE_NONE: 'none',
   GRANT_TYPE: 'password',
-  ISO_FORMAT: 'ISO'
+  ISO_FORMAT: 'ISO',
+  Menu: [
+    {
+      id:"343523364dfg335",
+      name:"Home",
+      isHeader:true,
+      class:"nav-header",
+      routeLink:"",
+      routeLinkClass:"",
+      icon:"",
+      remark:"Header",
+      parentId:null,
+      dropdownIcon:null,
+      children:[]
+    },
+    {
+      id:"343523364dfg336",
+      name:"Dashboard",
+      isHeader:false,
+      class:"nav-item",
+      routeLink:"",
+      routeLinkClass:"nav-link active",
+      icon:"nav-icon fas fa-tachometer-alt",
+      remark:"Navigation Item",
+      parentId:null,
+      dropdownIcon:null,
+      children:[]
+    },
+    {
+      id:"343523364dfg337",
+      name:"Business",
+      isHeader:true,
+      class:"nav-header",
+      routeLink:"",
+      routeLinkClass:"",
+      icon:"",
+      remark:"Header",
+      parentId:null,
+      dropdownIcon:null,
+      children:[{
+        id:"343523364dfg338",
+        name:"Security",
+        isHeader:false,
+        class:"nav-item",
+        routeLink:"",
+        routeLinkClass:"nav-link active",
+        icon:"nav-icon fas fa-cog",
+        remark:"Navigation Item",
+        parentId:"343523364dfg337",
+        dropdownIcon:"fas fa-angle-left right",
+        children:[{
+          id:"343523364dfg339",
+          name:"User",
+          isHeader:false,
+          class:"nav-item",
+          routeLink:"",
+          routeLinkClass:"nav-link",
+          icon:"far fa-circle nav-icon",
+          remark:"Navigation Item",
+          parentId:"343523364dfg338",
+          dropdownIcon:"",
+          children:[]
+        }]
+      }]
+    },
+    {
+      id:"343523364dfg340",
+      name:"Settings",
+      isHeader:true,
+      class:"nav-header",
+      routeLink:"",
+      routeLinkClass:"",
+      icon:"",
+      remark:"Header",
+      parentId:null,
+      dropdownIcon:null,
+      children:[]
+    },
+    {
+      id:"343523364dfg341",
+      name:"App Settings",
+      isHeader:false,
+      class:"nav-item",
+      routeLink:"",
+      routeLinkClass:"nav-link active",
+      icon:"nav-icon fas fa-cog",
+      remark:"Navigation Item",
+      parentId:null,
+      dropdownIcon:null,
+      children:[]
+    }
+  ]
 };
 
 
