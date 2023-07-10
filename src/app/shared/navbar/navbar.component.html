@@ -678,12 +678,17 @@
                         <p>Informational</p>
                     </a>
                 </li> -->
-                <!-- <li class="{{menu.class}}" *ngFor="let menu of menuList; index as i;">
-                    {{menu.isHeader?menu.name:menu.name}}
-                    <a *ngIf="menu.isHeader === false">
-
+                <li class="{{menu.isHeader?menu.class:menu.class}}" *ngFor="let menu of menuList; index as i;">
+                    <span *ngIf="menu.isHeader">{{ menu.name }}</span>
+                    <a *ngIf="!menu.isHeader && menu.children.length === 0" href="#" [routerLink]="[menu.routeLink]" routerLinkActive="active" class="menu.routeLinkClass">
+                        <i *ngIf="!menu.isHeader" class="menu.icon"></i>
+                        <p *ngIf="!menu.isHeader">
+                            {{menu.name}}
+                        </p>
                     </a>
-                </li> -->
+                    
+
+                </li>
                 <li class="nav-header">Home</li>
                 <li class="nav-item">
                     <a href="#" [routerLink]="['/business/home']" routerLinkActive="active" class="nav-link active">
