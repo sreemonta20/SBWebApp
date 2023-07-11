@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
-export class CommonConstants {}
+export class CommonConstants { }
 
 export const SessionConstants = {
   LOGGED_IN_USER: 'loggedInUser',
@@ -134,7 +134,7 @@ export const CloudScanrAPIURLsConstants = {
   CLOUDABISSCANR_STATUS_API_PATH: '/api/CloudScanr/ClientInfo',
   CLOUDABISSCANR_MULTI_MODAL_MATCHING_API_PATH:
     '/api/CloudScanrMultiModals/Matching',
-    CLOUDABISSCANR_FV_CAPTURE_API_PATH: '/api/CloudABISV10Captures/Fingervein'
+  CLOUDABISSCANR_FV_CAPTURE_API_PATH: '/api/CloudABISV10Captures/Fingervein'
 };
 
 /*
@@ -298,93 +298,94 @@ export const Common = {
   ISO_FORMAT: 'ISO',
   Menu: [
     {
-      id:"343523364dfg335",
-      name:"Home",
-      isHeader:true,
-      class:"nav-header",
-      routeLink:"",
-      routeLinkClass:"",
-      icon:"",
-      remark:"Header",
-      parentId:null,
-      dropdownIcon:null,
-      children:[]
+      id: "343523364dfg335",
+      name: "Home",
+      isHeader: true,
+      class: "nav-header",
+      routeLink: "",
+      routeLinkClass: "",
+      icon: "",
+      remark: "Header",
+      parentId: null,
+      dropdownIcon: null,
+      children: []
     },
     {
-      id:"343523364dfg336",
-      name:"Dashboard",
-      isHeader:false,
-      class:"nav-item",
-      routeLink:"/business/home",
-      routeLinkClass:"nav-link active",
-      icon:"nav-icon fas fa-tachometer-alt",
-      remark:"Navigation Item",
-      parentId:null,
-      dropdownIcon:null,
-      children:[]
+      id: "343523364dfg336",
+      name: "Dashboard",
+      isHeader: false,
+      class: "nav-item",
+      routeLink: "/business/home",
+      routeLinkClass: "nav-link active",
+      icon: "nav-icon fas fa-tachometer-alt",
+      remark: "Navigation Item",
+      parentId: null,
+      dropdownIcon: null,
+      children: []
     },
     {
-      id:"343523364dfg337",
-      name:"Business",
-      isHeader:true,
-      class:"nav-header",
-      routeLink:"",
-      routeLinkClass:"",
-      icon:"",
-      remark:"Header",
-      parentId:null,
-      dropdownIcon:null,
-      children:[{
-        id:"343523364dfg338",
-        name:"Security",
-        isHeader:false,
-        class:"nav-item",
-        routeLink:"",
-        routeLinkClass:"nav-link active",
-        icon:"nav-icon fas fa-cog",
-        remark:"Navigation Item",
-        parentId:"343523364dfg337",
-        dropdownIcon:"fas fa-angle-left right",
-        children:[{
-          id:"343523364dfg339",
-          name:"User",
-          isHeader:false,
-          class:"nav-item",
-          routeLink:"",
-          routeLinkClass:"nav-link",
-          icon:"far fa-circle nav-icon",
-          remark:"Navigation Item",
-          parentId:"343523364dfg338",
-          dropdownIcon:"",
-          children:[]
-        }]
+      id: "343523364dfg337",
+      name: "Business",
+      isHeader: true,
+      class: "nav-header",
+      routeLink: "",
+      routeLinkClass: "",
+      icon: "",
+      remark: "Header",
+      parentId: null,
+      dropdownIcon: null,
+      children: []
+    },
+    {
+      id: "343523364dfg338",
+      name: "Security",
+      isHeader: false,
+      class: "nav-item",
+      routeLink: "",
+      routeLinkClass: "nav-link active",
+      icon: "nav-icon fas fa-cog",
+      remark: "Navigation Item",
+      parentId: "343523364dfg337",
+      dropdownIcon: "fas fa-angle-left right",
+      children: [{
+        id: "343523364dfg339",
+        name: "User",
+        isHeader: false,
+        class: "nav-item",
+        routeLink: "/business/security",
+        routeLinkClass: "nav-link",
+        icon: "far fa-circle nav-icon",
+        remark: "Navigation Item",
+        parentId: "343523364dfg338",
+        dropdownIcon: "",
+        children: []
       }]
     },
     {
-      id:"343523364dfg340",
-      name:"Settings",
-      isHeader:true,
-      class:"nav-header",
-      routeLink:"",
-      routeLinkClass:"",
-      icon:"",
-      remark:"Header",
-      parentId:null,
-      dropdownIcon:null,
-      children:[]
+      id: "343523364dfg340",
+      name: "Settings",
+      isHeader: true,
+      class: "nav-header",
+      routeLink: "",
+      routeLinkClass: "",
+      icon: "",
+      remark: "Header",
+      parentId: null,
+      dropdownIcon: null,
+      children: []
     },
     {
-      id:"343523364dfg341",
-      name:"App Settings",
-      isHeader:false,
-      class:"nav-item",
-      routeLink:"",
-      routeLinkClass:"nav-link active",
-      icon:"nav-icon fas fa-cog",
-      remark:"Navigation Item",
-      parentId:null,
-      dropdownIcon:null,
-      children:[]
+      id: "343523364dfg341",
+      name: "App Settings",
+      isHeader: false,
+      class: "nav-item",
+      routeLink: "/business/appsettings",
+      routeLinkClass: "nav-link active",
+      icon: "nav-icon fas fa-cog",
+      remark: "Navigation Item",
+      parentId: null,
+      dropdownIcon: null,
+      children: []
     }
   ]
 };
@@ -600,7 +601,7 @@ export const ErrorCode = {
   CSC502_MESSAGE: 'Bad gateway',
   CSC503: '503',
   CSC503_MESSAGE: 'Service unavailable',
-  
+
 };
 
 export const AbisConstant = {
@@ -805,11 +806,11 @@ export const AbisConstant = {
   Unsupported_Grant_Type: 'unsupported_grant_type'
 };
 
-export const Advertisements: any[] =[
+export const Advertisements: any[] = [
   {
     ID: 1,
     AD_BACKGROUND_IMG_CLASS: 'card card-ad-01-img',
-    AD_IMG_SRC: '../../assets/images/flag-japan.png', 
+    AD_IMG_SRC: '../../assets/images/flag-japan.png',
     AD_IMG_ALT: 'flag-japan',
     AD_TITLE_PART_1: 'Blood Plasma for',
     AD_TITLE_PART_2: 'Cancer Therapy!',
@@ -823,7 +824,7 @@ export const Advertisements: any[] =[
   {
     ID: 2,
     AD_BACKGROUND_IMG_CLASS: 'card card-ad-02-img',
-    AD_IMG_SRC: '../../assets/images/flag-turkish.png', 
+    AD_IMG_SRC: '../../assets/images/flag-turkish.png',
     AD_IMG_ALT: 'flag-turkish',
     AD_TITLE_PART_1: 'Turkish',
     AD_TITLE_PART_2: 'National ID!',
@@ -837,7 +838,7 @@ export const Advertisements: any[] =[
   {
     ID: 3,
     AD_BACKGROUND_IMG_CLASS: 'card card-img',
-    AD_IMG_SRC: '../../assets/images/CloudABIS_logo_m2sys.png', 
+    AD_IMG_SRC: '../../assets/images/CloudABIS_logo_m2sys.png',
     AD_IMG_ALT: 'identity-cloudabis',
     AD_TITLE_PART_1: 'CloudABIS™',
     AD_TITLE_PART_2: 'Cloud-Based ABIS System',

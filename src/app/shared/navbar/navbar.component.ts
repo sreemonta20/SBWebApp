@@ -1,18 +1,18 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-  Inject,
-  Renderer2,
-  ElementRef,
-} from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { AuthRoutesConstants, SessionConstants, Common } from '@app/core/constants';
-import { SessionStorageService, AuthService } from '@app/core/services';
-import {MenuItem} from '@app/core/interface'
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthRoutesConstants, Common, SessionConstants } from '@app/core/constants';
+import { MenuItem } from '@app/core/interface';
+import { AuthService, SessionStorageService } from '@app/core/services';
 declare var $: any;
 
 @Component({
@@ -39,6 +39,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
   ngOnInit(): void {
     $('[data-widget="treeview"]').Treeview('init');
     this.authService.isLoggedIn$.subscribe(response => (this.isLoggedIn = response));
+    debugger
     this.menuList = Common.Menu;
   }
 
