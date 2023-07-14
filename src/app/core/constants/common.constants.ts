@@ -345,7 +345,7 @@ export const Common = {
       routeLinkClass: "nav-link active",
       icon: "nav-icon fas fa-cog",
       remark: "Navigation Item",
-      parentId: "343523364dfg337",
+      parentId: null,
       dropdownIcon: "fas fa-angle-left right",
       children: [{
         id: "343523364dfg339",
