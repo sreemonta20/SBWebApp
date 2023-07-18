@@ -11,6 +11,7 @@ import {
   SaveUpdateRequest,
   UserResponse
 } from '@app/core/class/index';
+import { MenuItem } from '@app/core/interface';
 import { securityApiUrl } from 'src/environments/environment';
 import {
   SessionConstants
@@ -66,6 +67,7 @@ export class UserService {
   registerUserUrl: string = '/api/User/registerUser';
   deleteUserUrl: string = '/api/User/deleteUser';
   public loggedInUser: UserResponse = new UserResponse();
+  userMenus: MenuItem[];
   constructor(
     private authService: AuthService,
     private http: HttpClient,
@@ -132,7 +134,7 @@ export class UserService {
 
 
   async refreshTokenAsync(refreshTokenModelReq: RefreshTokenRequest): Promise<boolean> {
-    debugger
+    
     if (!refreshTokenModelReq.Access_Token || !refreshTokenModelReq.Refresh_Token) {
       return false;
     }
@@ -142,17 +144,15 @@ export class UserService {
       const result = await this.apiService.postAsync(this.refreshTokenUrl,refreshTokenModelReq);
       if (result.ResponseCode === 200) {
         this.loggedInUser = result.Result;
-        this.sessionService.set(
-          SessionConstants.LOGGED_IN_USER,
-          JSON.stringify(this.loggedInUser)
-        );
-        this.sessionService.set(
-          SessionConstants.IS_LOGGED_IN,
-          JSON.stringify(true)
-        );
+        this.userMenus = JSON.parse(this.loggedInUser.userMenus);
+        this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
+        this.sessionService.set( SessionConstants.IS_LOGGED_IN,true);
+        this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
+
 
         this.authService.UpdateIsLoggedIn(true);
         this.authService.UpdateLoggedInUser(this.loggedInUser);
+        this.authService.UpdateUserMenus(this.userMenus);
         isRefreshSuccess = true;
       } else if(result.ResponseCode === 400 || result.ResponseCode === 500) {
         isRefreshSuccess = false;

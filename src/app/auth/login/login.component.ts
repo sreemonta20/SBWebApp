@@ -26,6 +26,7 @@ import {
   MessageConstants,
   SessionConstants,
 } from '@app/core/constants/index';
+import { MenuItem } from '@app/core/interface';
 import {
   AuthService,
   LoaderService,
@@ -56,6 +57,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   formControls!: string[];
 
   loginModelRequest = new LoginRequest();
+  userMenus: MenuItem[];
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -116,18 +118,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
          this.loadingService.setLoading(false);
           this.isLoggedIn = true;
           this.loggedInUser = response.Result;
-          
-          this.sessionService.set(
-            SessionConstants.LOGGED_IN_USER,
-            JSON.stringify(this.loggedInUser)
-          );
-          this.sessionService.set(
-            SessionConstants.IS_LOGGED_IN,
-            JSON.stringify(this.isLoggedIn)
-          );
+          this.userMenus = JSON.parse(this.loggedInUser.userMenus);
+          this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
+          this.sessionService.set( SessionConstants.IS_LOGGED_IN,this.isLoggedIn);
+          this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
 
           this.authService.UpdateIsLoggedIn(this.isLoggedIn);
           this.authService.UpdateLoggedInUser(this.loggedInUser);
+          this.authService.UpdateUserMenus(this.userMenus);
           this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
         } else {
           this.loadingService.setLoading(false);

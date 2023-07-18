@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
 import {
-  HttpInterceptor,
   HttpEvent,
   HttpHandler,
+  HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SessionStorageService } from '../services/session.service';
 import { SessionConstants } from '../constants/common.constants';
+import { SessionStorageService } from '../services/session.service';
 
 @Injectable()
 export class AuthReqInterceptor implements HttpInterceptor {
@@ -18,10 +18,8 @@ export class AuthReqInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     try {
       
-      // const accessToken = JSON.parse(localStorage['loggedInUser']).access_token;
-      const accessToken = JSON.parse(
-        this.sessionService.get(SessionConstants.LOGGED_IN_USER)
-      ).access_token;
+ 
+      const accessToken = this.sessionService.get(SessionConstants.LOGGED_IN_USER).access_token;
       if (accessToken) {
         return next.handle(
           req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } })

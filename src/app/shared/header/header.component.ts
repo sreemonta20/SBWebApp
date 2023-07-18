@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DataResponse, User, UserResponse } from '@app/core/class';
 import {
-  SessionStorageService,
+  SessionConstants
+} from '@app/core/constants';
+import {
   AuthService,
+  SessionStorageService,
   SharedService
 } from '@app/core/services';
-import {
-  AuthRoutesConstants,
-  MessageConstants,
-  SessionConstants,
-} from '@app/core/constants';
-import { DataResponse, User, UserResponse } from '@app/core/class';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import jwt_decode from 'jwt-decode';
 
@@ -35,22 +33,12 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.authService.isLoggedIn$.subscribe(
-    //   (isLoggedIn) => (this.isLoggedIn = isLoggedIn)
-    // );
-    
-    // this.authService.loggedInUser$.subscribe({
-    //   next: (response: UserResponse) => {
-    //     this.user = response.user;
-    //   },
-    // });
     this.isUserAuthenticated();
   }
 
   isUserAuthenticated() {
-    this.loggedInUser = JSON.parse(
-      this.sessionService.get(SessionConstants.LOGGED_IN_USER)
-    ) as UserResponse;
+    this.loggedInUser = this.sessionService.get(SessionConstants.LOGGED_IN_USER) as UserResponse;
+
     this.user = this.loggedInUser.user;
     const token: string | null = this.loggedInUser.access_token;
     const tokenPayload = jwt_decode(token) as any;

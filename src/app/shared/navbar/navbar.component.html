@@ -680,28 +680,28 @@
                 </li> -->
 
 
-        <li class="{{menu.isHeader?menu.class:menu.class}}" *ngFor="let menu of menuList; index as i;">
-          <span *ngIf="menu.isHeader">{{ menu.name }}</span>
-          <a *ngIf="!menu.isHeader && menu.children.length === 0" href="#" [routerLink]="[menu.routeLink]"
-            routerLinkActive="active" class="{{menu.routeLinkClass}}">
-            <i *ngIf="!menu.isHeader" class="{{menu.icon}}"></i>
-            <p *ngIf="!menu.isHeader">
-              {{menu.name}}
+        <li class="{{menu.IsHeader?menu.CssClass:menu.CssClass}}" *ngFor="let menu of menuList; index as i;">
+          <span *ngIf="menu.IsHeader">{{ menu.Name }}</span>
+          <a *ngIf="!menu.IsHeader && menu.Children.length === 0" href="#" [routerLink]="[menu.RouteLink]"
+            routerLinkActive="active" class="{{menu.RouteLinkClass}}">
+            <i *ngIf="!menu.IsHeader" class="{{menu.Icon}}"></i>
+            <p *ngIf="!menu.IsHeader">
+              {{menu.Name}}
             </p>
           </a>
-          <a *ngIf="!menu.isHeader && menu.children.length > 0" href="#" [routerLink]="[menu.routeLink]"
-            routerLinkActive="active" class="{{menu.routeLinkClass}}">
-            <i *ngIf="!menu.isHeader" class="{{menu.icon}}"></i>
-            <p *ngIf="!menu.isHeader">
-              {{menu.name}}
-              <i *ngIf="!menu.isHeader" class="{{menu.dropdownIcon}}"></i>
+          <a *ngIf="!menu.IsHeader && menu.Children.length > 0" href="#" [routerLink]="[menu.RouteLink]"
+            routerLinkActive="active" class="{{menu.RouteLinkClass}}">
+            <i *ngIf="!menu.IsHeader" class="{{menu.Icon}}"></i>
+            <p *ngIf="!menu.IsHeader">
+              {{menu.Name}}
+              <i *ngIf="!menu.IsHeader" class="{{menu.DropdownIcon}}"></i>
             </p>
           </a>
-          <ul *ngIf="!menu.isHeader && menu.children.length > 0" class="nav nav-treeview">
-            <li class="{{child.class}}" *ngFor="let child of menu.children; index as j;">
-              <a href="#" [routerLink]="[child.routeLink]" routerLinkActive="active" class="{{child.routeLinkClass}}">
-                <i class="{{child.icon}}"></i>
-                <p>{{child.name}}</p>
+          <ul *ngIf="!menu.IsHeader && menu.Children.length > 0" class="nav nav-treeview">
+            <li class="{{child.CssClass}}" *ngFor="let child of menu.Children; index as j;">
+              <a href="#" [routerLink]="[child.RouteLink]" routerLinkActive="active" class="{{child.RouteLinkClass}}">
+                <i class="{{child.Icon}}"></i>
+                <p>{{child.Name}}</p>
               </a>
             </li>
           </ul>

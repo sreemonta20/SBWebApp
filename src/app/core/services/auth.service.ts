@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserResponse } from '@app/core/class';
+import { MenuItem } from '@app/core/interface';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
 import { SessionStorageService } from '../services/session.service';
-import {
-  SessionConstants,
-  AuthRoutesConstants,
-} from '../constants/common.constants';
-import { User, UserResponse, DataResponse } from '@app/core/class';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +13,8 @@ export class AuthService {
   public loggedInUser$: Observable<UserResponse> = this.loggedInUser.asObservable();
   private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
+  private userMenus: BehaviorSubject<MenuItem[]> = new BehaviorSubject<MenuItem[]>([]);
+  public userMenus$: Observable<MenuItem[]> = this.userMenus.asObservable();
   constructor(
     private sessionService: SessionStorageService,
     private router: Router
@@ -38,4 +37,12 @@ export class AuthService {
   GetIsUserLoggedIn(): boolean {
     return this.isLoggedIn.value;
   }
+
+  UpdateUserMenus(userMenus: MenuItem[]){
+   this.userMenus.next(userMenus);
+  }
+
+  GetUserMenus(): MenuItem[]{
+    return this.userMenus.value;
+   }
 }

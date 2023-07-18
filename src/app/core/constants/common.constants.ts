@@ -6,7 +6,8 @@ export const SessionConstants = {
   LOGGED_IN_USER: 'loggedInUser',
   IS_LOGGED_IN: 'isLoggedIn',
   AUTH_TOKEN: 'auth_token',
-  AUTH_REFRESH_TOKEN: 'auth_refresh_token'
+  AUTH_REFRESH_TOKEN: 'auth_refresh_token',
+  USER_MENU:'user_menu'
 };
 
 export const AuthRoutesConstants = {

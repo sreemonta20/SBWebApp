@@ -50,14 +50,11 @@ export class AuthGuard {
   ) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    this.loggedInUser = JSON.parse(
-      this.sessionService.get(SessionConstants.LOGGED_IN_USER)
-    ) as UserResponse;
-    this.isLoggedIn = JSON.parse(
-      this.sessionService.get(SessionConstants.IS_LOGGED_IN)
-    ) as boolean;
+    
+    this.loggedInUser = this.sessionService.get(SessionConstants.LOGGED_IN_USER) as UserResponse;
+    this.isLoggedIn = this.sessionService.get(SessionConstants.IS_LOGGED_IN) as boolean;
 
-    debugger
+    
     if (this.loggedInUser) {
 
       const token = this.loggedInUser.access_token;
@@ -70,7 +67,7 @@ export class AuthGuard {
         !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
         !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
       ) {
-        debugger
+        
         return true;
       } else if (
         token &&
@@ -78,7 +75,7 @@ export class AuthGuard {
         state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
       ) {
         return false;
-        debugger
+        
         //this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
       }
 
@@ -86,7 +83,7 @@ export class AuthGuard {
       this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
       const isRefreshSuccess = await this.userService.refreshTokenAsync(this.refreshTokenReq);
       if (isRefreshSuccess) {
-        debugger
+        
         if(state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
           return !isRefreshSuccess;
         }
@@ -108,12 +105,12 @@ export class AuthGuard {
       }
 
     } else if (!state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-      debugger
+      
       this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], {
         queryParams: { returnUrl: state.url },
       });
     } else if (state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-      debugger
+      
       return true;
     }
   }

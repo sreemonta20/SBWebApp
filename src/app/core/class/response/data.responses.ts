@@ -16,4 +16,5 @@ export class DataResponse {
     error: string;
     error_description: string;
     user: User;
+    userMenus: any
   }

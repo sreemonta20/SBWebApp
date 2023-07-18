@@ -1,20 +1,21 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { securityApiUrl } from 'src/environments/environment';
-import { environment } from 'src/environments/environment';
-import { User, SpecificUser, LoginRequest, SaveUpdateRequest, DataResponse } from '@app/core/class/index';
 @Injectable({
   providedIn: 'root',
 })
 export class SessionStorageService {
   constructor() {}
 
-  public set(key: string, value: string) {
-    sessionStorage.setItem(key, value);
+  // public set(key: string, value: string) {
+  //   sessionStorage.setItem(key, value);
+  // }
+  public set(key: string, value: any) {
+    sessionStorage.setItem(key, JSON.stringify(value));
   }
-  get(key: string): string {
-    return sessionStorage.getItem(key) as string;
+  // get(key: string): string {
+  //   return sessionStorage.getItem(key) as string;
+  // }
+  get(key: string): any {
+    return JSON.parse(sessionStorage.getItem(key));
   }
   remove(key: string) {
     // this.sessionStorgaeModel[key]=null;
