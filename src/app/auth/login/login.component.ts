@@ -32,6 +32,7 @@ import {
   LoaderService,
   NotificationService,
   SessionStorageService,
+  SharedService,
   UserService,
   ValidationFormsService
 } from '@app/core/services/index';
@@ -72,7 +73,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private sessionService: SessionStorageService,
     private notifyService: NotificationService,
     private validationService: ValidationFormsService,
-    private spinnerService: NgxSpinnerService
+    private spinnerService: NgxSpinnerService,
+    private sharedService: SharedService
     
   ) {
     this.createForm();
@@ -122,10 +124,13 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
           this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
           this.sessionService.set( SessionConstants.IS_LOGGED_IN,this.isLoggedIn);
           this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
+          this.sessionService.set( SessionConstants.SERIALIZED_MENU, this.sharedService.serializedUserMenus(this.userMenus));
 
           this.authService.UpdateIsLoggedIn(this.isLoggedIn);
           this.authService.UpdateLoggedInUser(this.loggedInUser);
           this.authService.UpdateUserMenus(this.userMenus);
+          this.authService.UpdateSerializedUserMenus(this.sharedService.serializedUserMenus(this.userMenus))
+
           this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
         } else {
           this.loadingService.setLoading(false);

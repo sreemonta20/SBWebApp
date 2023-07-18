@@ -15,12 +15,14 @@ export class AuthService {
   public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
   private userMenus: BehaviorSubject<MenuItem[]> = new BehaviorSubject<MenuItem[]>([]);
   public userMenus$: Observable<MenuItem[]> = this.userMenus.asObservable();
+  private serializedUserMenus: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  public serializedUserMenus$: Observable<any> = this.serializedUserMenus.asObservable();
   constructor(
     private sessionService: SessionStorageService,
     private router: Router
-  ) {}
-  
-  
+  ) { }
+
+
 
   UpdateLoggedInUser(userResponse: UserResponse) {
     this.loggedInUser.next(userResponse);
@@ -30,7 +32,7 @@ export class AuthService {
     this.isLoggedIn.next(newIsLoggedInValue);
   }
 
-  GetLoggedInUser(): UserResponse{
+  GetLoggedInUser(): UserResponse {
     return this.loggedInUser.value;
   }
 
@@ -38,11 +40,19 @@ export class AuthService {
     return this.isLoggedIn.value;
   }
 
-  UpdateUserMenus(userMenus: MenuItem[]){
-   this.userMenus.next(userMenus);
+  UpdateUserMenus(userMenus: MenuItem[]) {
+    this.userMenus.next(userMenus);
   }
 
-  GetUserMenus(): MenuItem[]{
+  GetUserMenus(): MenuItem[] {
     return this.userMenus.value;
-   }
+  }
+
+  UpdateSerializedUserMenus(serializedUserMenus: any) {
+    this.serializedUserMenus.next(serializedUserMenus);
+  }
+
+  GetSerializedUserMenus(): any {
+    return this.serializedUserMenus.value;
+  }
 }

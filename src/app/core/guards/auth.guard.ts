@@ -67,7 +67,9 @@ export class AuthGuard {
         !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
         !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
       ) {
-        
+        if(!this.sharedService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
+          return false;
+        }
         return true;
       } else if (
         token &&
@@ -85,6 +87,9 @@ export class AuthGuard {
       if (isRefreshSuccess) {
         
         if(state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
+          return !isRefreshSuccess;
+        }
+        if(!this.sharedService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
           return !isRefreshSuccess;
         }
         return isRefreshSuccess;

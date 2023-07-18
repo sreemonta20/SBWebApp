@@ -50,9 +50,11 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
     this.sessionService.remove(SessionConstants.LOGGED_IN_USER);
     this.sessionService.remove(SessionConstants.IS_LOGGED_IN);
     this.sessionService.remove(SessionConstants.USER_MENU);
+    this.sessionService.remove(SessionConstants.SERIALIZED_MENU);
     this.authService.UpdateIsLoggedIn(false);
     this.authService.UpdateLoggedInUser(null);
     this.authService.UpdateUserMenus(null);
+    this.authService.UpdateSerializedUserMenus(null);
     this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL]);
   }
 

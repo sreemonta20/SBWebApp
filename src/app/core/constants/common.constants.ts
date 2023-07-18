@@ -7,7 +7,8 @@ export const SessionConstants = {
   IS_LOGGED_IN: 'isLoggedIn',
   AUTH_TOKEN: 'auth_token',
   AUTH_REFRESH_TOKEN: 'auth_refresh_token',
-  USER_MENU:'user_menu'
+  USER_MENU:'user_menu',
+  SERIALIZED_MENU: 'serialized_menu'
 };
 
 export const AuthRoutesConstants = {
