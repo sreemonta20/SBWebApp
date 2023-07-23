@@ -10,6 +10,18 @@ import {
 import { NavigationEnd, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DOCUMENT } from '@angular/common';
+import {
+  AuthService,
+  LoaderService,
+  NotificationService,
+  SessionStorageService,
+  SharedService,
+  UserService,
+  ValidationFormsService,
+} from '@app/core/services/index';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MenuPermission } from '@app/core/class/models/menu.permission';
+import { SessionConstants } from '@app/core/constants';
 declare var $: any;
 
 @Component({
@@ -18,17 +30,28 @@ declare var $: any;
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
+  currentRoute: string;
+  permission: MenuPermission = null;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
     public router: Router,
     private http: HttpClient,
-    private renderer: Renderer2
-  ) {
-    
-  }
+    private renderer: Renderer2,
+    private loadingService: LoaderService,
+    private userService: UserService,
+    private authService: AuthService,
+    private sessionService: SessionStorageService,
+    private notifyService: NotificationService,
+    private validationService: ValidationFormsService,
+    private spinnerService: NgxSpinnerService,
+    private sharedService: SharedService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    debugger
+    this.permission = this.sharedService.getMenuPermissiomn(this.sessionService.get(SessionConstants.SERIALIZED_MENU), this.router.url);
+  }
 
   ngAfterViewInit() {
     // this.loadScripts([

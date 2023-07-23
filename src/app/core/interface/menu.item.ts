@@ -15,5 +15,9 @@ export interface MenuItem {
     UpdatedBy: string;
     UpdatedDate: Date;
     IsActive: boolean;
+    IsView: boolean;
+    IsCreate: boolean;
+    IsUpdate: boolean;
+    IsDelete: boolean;
     Children?: MenuItem[];
   }

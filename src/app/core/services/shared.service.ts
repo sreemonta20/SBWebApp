@@ -4,10 +4,12 @@ import { AuthRoutesConstants, SessionConstants } from '../constants/common.const
 import { MenuItem } from '../interface/menu.item';
 import { AuthService } from '../services/auth.service';
 import { SessionStorageService } from '../services/session.service';
+import { MenuPermission } from '../class/models/menu.permission';
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
+  permission: MenuPermission = null;
   constructor(private authService: AuthService,private sessionService:SessionStorageService,private router: Router) {}
 
 
@@ -28,7 +30,6 @@ export class SharedService {
   }
 
   public isRouteValid(serializedUserMenus: MenuItem[], url:string){
-    debugger
     // let serializedMenus = this.serializedUserMenus(userMenus);
     for (let index = 0; index < serializedUserMenus.length; index++) {
       if(serializedUserMenus[index].RouteLink.includes(url)){
@@ -50,5 +51,16 @@ export class SharedService {
       }
     });
     return userMenuList;
+  }
+
+  public getMenuPermissiomn(serializedMenus: any, url:any){
+    serializedMenus.forEach((element:any) => {
+      if(element.RouteLink.includes(url)){
+        debugger
+        this.permission = new MenuPermission(element.IsView, element.IsCreate, element.IsUpdate, element.IsDelete);
+        return this.permission;
+      }
+    });
+    return this.permission;
   }
 }
