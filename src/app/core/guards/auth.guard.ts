@@ -15,7 +15,7 @@ import {
 } from '@app/core/class/index';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import {
-  AuthRoutesConstants,
+  RouteConstants,
   MessageConstants,
   SessionConstants,
 } from '../constants/common.constants';
@@ -65,7 +65,7 @@ export class AuthGuard {
       if (
         token &&
         !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
-        !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+        !state.url.includes(RouteConstants.LOGIN_USER_URL)
       ) {
         if(!this.sharedService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
           return false;
@@ -74,11 +74,11 @@ export class AuthGuard {
       } else if (
         token &&
         !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
-        state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+        state.url.includes(RouteConstants.LOGIN_USER_URL)
       ) {
         return false;
         
-        //this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
+        //this.router.navigate([RouteConstants.BUSINESS_HOME_URL]);
       }
 
       this.refreshTokenReq.Access_Token = token;
@@ -86,7 +86,7 @@ export class AuthGuard {
       const isRefreshSuccess = await this.userService.refreshTokenAsync(this.refreshTokenReq);
       if (isRefreshSuccess) {
         
-        if(state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
+        if(state.url.includes(RouteConstants.LOGIN_USER_URL)){
           return !isRefreshSuccess;
         }
         if(!this.sharedService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
@@ -109,12 +109,12 @@ export class AuthGuard {
         });
       }
 
-    } else if (!state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+    } else if (!state.url.includes(RouteConstants.LOGIN_USER_URL)) {
       
-      this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], {
+      this.router.navigate([RouteConstants.LOGIN_USER_URL], {
         queryParams: { returnUrl: state.url },
       });
-    } else if (state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+    } else if (state.url.includes(RouteConstants.LOGIN_USER_URL)) {
       
       return true;
     }

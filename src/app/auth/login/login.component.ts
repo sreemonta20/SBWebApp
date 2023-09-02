@@ -22,7 +22,7 @@ import {
   UserResponse
 } from '@app/core/class';
 import {
-  AuthRoutesConstants,
+  RouteConstants,
   MessageConstants,
   SessionConstants,
 } from '@app/core/constants/index';
@@ -131,7 +131,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
           this.authService.UpdateUserMenus(this.userMenus);
           this.authService.UpdateSerializedUserMenus(this.sharedService.serializedUserMenus(this.userMenus))
 
-          this.router.navigate([AuthRoutesConstants.BUSINESS_HOME_URL]);
+          this.router.navigate([RouteConstants.BUSINESS_HOME_URL]);
         } else {
           this.loadingService.setLoading(false);
           this.notifyService.showError(

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthRoutesConstants, SessionConstants } from '../constants/common.constants';
+import { RouteConstants, SessionConstants } from '../constants/common.constants';
 import { MenuItem } from '../interface/menu.item';
 import { AuthService } from '../services/auth.service';
 import { SessionStorageService } from '../services/session.service';
@@ -26,7 +26,7 @@ export class SharedService {
     this.authService.UpdateLoggedInUser(null);
     this.authService.UpdateUserMenus(null);
     this.authService.UpdateSerializedUserMenus(null);
-    this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL]);
+    this.router.navigate([RouteConstants.LOGIN_USER_URL]);
   }
 
   public isRouteValid(serializedUserMenus: MenuItem[], url:string){

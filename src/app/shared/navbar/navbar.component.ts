@@ -10,7 +10,7 @@ import {
   Renderer2,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthRoutesConstants, SessionConstants } from '@app/core/constants';
+import { RouteConstants, SessionConstants } from '@app/core/constants';
 import { MenuItem } from '@app/core/interface';
 import { AuthService, SessionStorageService } from '@app/core/services';
 declare var $: any;
@@ -55,7 +55,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
     this.authService.UpdateLoggedInUser(null);
     this.authService.UpdateUserMenus(null);
     this.authService.UpdateSerializedUserMenus(null);
-    this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL]);
+    this.router.navigate([RouteConstants.LOGIN_USER_URL]);
   }
 
   loadScripts(urls: string[]) {

@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
 import { map } from 'rxjs/operators';
 import {
-  AuthRoutesConstants,
+  RouteConstants,
   MessageConstants,
   SessionConstants,
 } from '../constants/common.constants';
@@ -66,33 +66,33 @@ export class TempAuthGuard {
       this.sessionService.get(SessionConstants.IS_LOGGED_IN)
     );
 
-    // if (isLoggedIn && !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+    // if (isLoggedIn && !state.url.includes(RouteConstants.LOGIN_USER_URL)) {
     //   return true;
-    // }else if(isLoggedIn && state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
+    // }else if(isLoggedIn && state.url.includes(RouteConstants.LOGIN_USER_URL)){
     //   return false;
     // }else{
-    //   if(!state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
-    //     this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url } });
+    //   if(!state.url.includes(RouteConstants.LOGIN_USER_URL)){
+    //     this.router.navigate([RouteConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url } });
     //   }else{
-    //     this.router.navigateByUrl(AuthRoutesConstants.LOGIN_USER_URL);
+    //     this.router.navigateByUrl(RouteConstants.LOGIN_USER_URL);
     //   }
     //   return false;
     // }
 
     
-    if(loggedUser === null && !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)){
-      this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url } });
+    if(loggedUser === null && !state.url.includes(RouteConstants.LOGIN_USER_URL)){
+      this.router.navigate([RouteConstants.LOGIN_USER_URL], { queryParams: { returnUrl: state.url } });
     }else {
       if ((loggedUser!== null || loggedUser !== undefined || loggedUser !== '') &&
         isLoggedIn &&
         !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
-        !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+        !state.url.includes(RouteConstants.LOGIN_USER_URL)
       ) {
         return true;
       } else if ((loggedUser!== null || loggedUser !== undefined || loggedUser !== '') &&
       isLoggedIn &&
       !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
-      state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+      state.url.includes(RouteConstants.LOGIN_USER_URL)
     ) {
         return false;
       }else{
@@ -160,7 +160,7 @@ export class TempAuthGuard {
     //     loggedUser.access_token !== '') &&
     //   isLoggedIn &&
     //   !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
-    //   !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+    //   !state.url.includes(RouteConstants.LOGIN_USER_URL)
     // ) {
     //   return true;
     // } else if (
@@ -169,7 +169,7 @@ export class TempAuthGuard {
     //     loggedUser.access_token !== '') &&
     //   isLoggedIn &&
     //   !this.tokenHelper.isTokenExpired(loggedUser.access_token) &&
-    //   state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)
+    //   state.url.includes(RouteConstants.LOGIN_USER_URL)
     // ) {
     //   return false;
     // }else{

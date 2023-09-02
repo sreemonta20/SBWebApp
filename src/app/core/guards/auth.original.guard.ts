@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
 import { map } from 'rxjs/operators';
 import {
-  AuthRoutesConstants,
+  RouteConstants,
   MessageConstants,
   SessionConstants,
 } from '../constants/common.constants';
@@ -69,24 +69,24 @@ export class AuthGuard {
     ) as UserResponse;
 
     if (this.loggedInUser === null &&
-      state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
-      this.router.navigateByUrl(AuthRoutesConstants.LOGIN_USER_URL);
+      state.url.includes(RouteConstants.LOGIN_USER_URL)) {
+      this.router.navigateByUrl(RouteConstants.LOGIN_USER_URL);
     } else if (this.loggedInUser === null &&
-      !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+      !state.url.includes(RouteConstants.LOGIN_USER_URL)) {
 
-      this.router.navigate([AuthRoutesConstants.LOGIN_USER_URL], {
+      this.router.navigate([RouteConstants.LOGIN_USER_URL], {
         queryParams: { returnUrl: state.url },
       });
     } else {
       if (this.loggedInUser !== null &&
         this.isLoggedIn &&
         !this.tokenHelper.isTokenExpired(this.loggedInUser.access_token) &&
-        !state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+        !state.url.includes(RouteConstants.LOGIN_USER_URL)) {
         return true;
       } else if (this.loggedInUser !== null &&
         this.isLoggedIn &&
         !this.tokenHelper.isTokenExpired(this.loggedInUser.access_token) &&
-        state.url.includes(AuthRoutesConstants.LOGIN_USER_URL)) {
+        state.url.includes(RouteConstants.LOGIN_USER_URL)) {
         return false
       }else {
         
