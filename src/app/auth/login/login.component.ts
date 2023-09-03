@@ -28,13 +28,13 @@ import {
 } from '@app/core/constants/index';
 import { MenuItem } from '@app/core/interface';
 import {
-  AuthService,
   LoaderService,
   NotificationService,
   SessionStorageService,
-  SharedService,
   UserService,
-  ValidationFormsService
+  ValidationFormsService,
+  AuthService,
+  CommonService
 } from '@app/core/services/index';
 import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private notifyService: NotificationService,
     private validationService: ValidationFormsService,
     private spinnerService: NgxSpinnerService,
-    private sharedService: SharedService
+    private commonService: CommonService
     
   ) {
     this.createForm();
@@ -88,11 +88,11 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authService.isLoggedIn$.subscribe(
+    this.commonService.isLoggedIn$.subscribe(
       (response) => (this.isLoggedIn = response)
     );
 
-    this.authService.loggedInUser$.subscribe(
+    this.commonService.loggedInUser$.subscribe(
       (response) => (this.loggedInUser = response)
     );
   }
@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.loginModelRequest.UserName = this.loginForm.controls['userName'].value;
     this.loginModelRequest.Password = this.loginForm.controls['password'].value;
-    this.userService.login(this.loginModelRequest).subscribe({
+    this.authService.login(this.loginModelRequest).subscribe({
       next: (response: DataResponse) => {
         if (response.ResponseCode === 200) {
          this.loadingService.setLoading(false);
@@ -124,12 +124,12 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
           this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
           this.sessionService.set( SessionConstants.IS_LOGGED_IN,this.isLoggedIn);
           this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
-          this.sessionService.set( SessionConstants.SERIALIZED_MENU, this.sharedService.serializedUserMenus(this.userMenus));
+          this.sessionService.set( SessionConstants.SERIALIZED_MENU, this.commonService.createSerializedUserMenus(this.userMenus));
 
-          this.authService.UpdateIsLoggedIn(this.isLoggedIn);
-          this.authService.UpdateLoggedInUser(this.loggedInUser);
-          this.authService.UpdateUserMenus(this.userMenus);
-          this.authService.UpdateSerializedUserMenus(this.sharedService.serializedUserMenus(this.userMenus))
+          this.commonService.UpdateIsLoggedIn(this.isLoggedIn);
+          this.commonService.UpdateLoggedInUser(this.loggedInUser);
+          this.commonService.UpdateUserMenus(this.userMenus);
+          this.commonService.UpdateSerializedUserMenus(this.commonService.createSerializedUserMenus(this.userMenus))
 
           this.router.navigate([RouteConstants.BUSINESS_HOME_URL]);
         } else {

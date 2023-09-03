@@ -11,13 +11,12 @@ import { NavigationEnd, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import {
-  AuthService,
   LoaderService,
   NotificationService,
   SessionStorageService,
-  SharedService,
   UserService,
   ValidationFormsService,
+  CommonService
 } from '@app/core/services/index';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MenuPermission } from '@app/core/class/models/menu.permission';
@@ -40,17 +39,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private loadingService: LoaderService,
     private userService: UserService,
-    private authService: AuthService,
     private sessionService: SessionStorageService,
     private notifyService: NotificationService,
     private validationService: ValidationFormsService,
     private spinnerService: NgxSpinnerService,
-    private sharedService: SharedService
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
-    debugger
-    this.permission = this.sharedService.getMenuPermissiomn(this.sessionService.get(SessionConstants.SERIALIZED_MENU), this.router.url);
+    this.permission = this.commonService.getMenuPermissiomn(this.sessionService.get(SessionConstants.SERIALIZED_MENU), this.router.url);
   }
 
   ngAfterViewInit() {

@@ -6,9 +6,8 @@ import {
   SessionConstants
 } from '@app/core/constants';
 import {
-  AuthService,
   SessionStorageService,
-  SharedService
+  CommonService
 } from '@app/core/services';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import jwt_decode from 'jwt-decode';
@@ -27,8 +26,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private datePipe: DatePipe,
     public router: Router,
-    private authService: AuthService,
-    private sharedService: SharedService,
+    private commonService: CommonService,
     private sessionService: SessionStorageService
   ) {}
 
@@ -44,7 +42,7 @@ export class HeaderComponent implements OnInit {
     const tokenPayload = jwt_decode(token) as any;
     const expirationTimestamp = tokenPayload.exp;
     const currentTimestamp = new Date().getTime() / 1000; // Convert to seconds
-    if (token && !this.sharedService.IsExpired(expirationTimestamp,currentTimestamp)) {
+    if (token && !this.commonService.IsExpired(expirationTimestamp,currentTimestamp)) {
       return true;
     } else {
       return false;
@@ -52,6 +50,6 @@ export class HeaderComponent implements OnInit {
   }
 
   signOut(): void {
-    this.sharedService.RevokeSession();
+    this.commonService.RevokeSession();
   }
 }

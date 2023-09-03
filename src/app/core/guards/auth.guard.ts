@@ -5,8 +5,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../services/auth.service';
-import { SharedService } from '../services/shared.service';
+import { CommonService } from '../services/common.service';
 
 import {
   DataResponse,
@@ -21,6 +20,7 @@ import {
 } from '../constants/common.constants';
 import { NotificationService } from '../services/notification.service';
 import { SessionStorageService } from '../services/session.service';
+import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 
 import { HttpClient } from '@angular/common/http';
@@ -38,15 +38,15 @@ export class AuthGuard {
   public isLoading = false;
 
   constructor(
-    private authService: AuthService,
     private toastr: ToastrService,
     private router: Router,
     private tokenHelper: JwtHelperService,
     private sessionService: SessionStorageService,
+    private authService: AuthService,
     private userService: UserService,
     private notifyService: NotificationService,
     private http: HttpClient,
-    private sharedService: SharedService
+    private commonService: CommonService
   ) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -64,39 +64,40 @@ export class AuthGuard {
 
       if (
         token &&
-        !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
+        !this.commonService.IsExpired(expirationTimestamp, currentTimestamp) &&
         !state.url.includes(RouteConstants.LOGIN_USER_URL)
       ) {
-        if(!this.sharedService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
+        if(!this.commonService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
           return false;
         }
         return true;
       } else if (
         token &&
-        !this.sharedService.IsExpired(expirationTimestamp, currentTimestamp) &&
+        !this.commonService.IsExpired(expirationTimestamp, currentTimestamp) &&
         state.url.includes(RouteConstants.LOGIN_USER_URL)
       ) {
         return false;
         
-        //this.router.navigate([RouteConstants.BUSINESS_HOME_URL]);
       }
 
       this.refreshTokenReq.Access_Token = token;
       this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
-      const isRefreshSuccess = await this.userService.refreshTokenAsync(this.refreshTokenReq);
+      const isRefreshSuccess = await this.authService.refreshTokenAsync(this.refreshTokenReq);
       if (isRefreshSuccess) {
         
         if(state.url.includes(RouteConstants.LOGIN_USER_URL)){
           return !isRefreshSuccess;
         }
-        if(!this.sharedService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
+        
+        if(!this.commonService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
           return !isRefreshSuccess;
         }
         return isRefreshSuccess;
       } else {
-        this.userService.revoke(this.refreshTokenReq.Access_Token).subscribe({
+        
+        this.authService.revoke(this.refreshTokenReq.Access_Token).subscribe({
           next: (response: DataResponse) => {
-            this.sharedService.RevokeSession();
+            this.commonService.RevokeSession();
           },
           error: (error) => {
             this.error_message = error.error;
@@ -104,7 +105,7 @@ export class AuthGuard {
               this.error_message,
               MessageConstants.GENERAL_ERROR_TITLE
             );
-            this.sharedService.RevokeSession();
+            this.commonService.RevokeSession();
           },
         });
       }

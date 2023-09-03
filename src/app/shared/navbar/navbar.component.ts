@@ -12,7 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { RouteConstants, SessionConstants } from '@app/core/constants';
 import { MenuItem } from '@app/core/interface';
-import { AuthService, SessionStorageService } from '@app/core/services';
+import { CommonService, SessionStorageService } from '@app/core/services';
 declare var $: any;
 
 @Component({
@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
     public router: Router,
     private http: HttpClient,
     private renderer: Renderer2,
-    private authService: AuthService,
+    private commonService: CommonService,
     private sessionService: SessionStorageService,
     
   ) {
@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   ngOnInit(): void {
     $('[data-widget="treeview"]').Treeview('init');
-    this.authService.isLoggedIn$.subscribe(response => (this.isLoggedIn = response));
+    this.commonService.isLoggedIn$.subscribe(response => (this.isLoggedIn = response));
     this.menuList = this.sessionService.get(SessionConstants.USER_MENU);
   }
 
@@ -47,15 +47,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
   }
 
   signOut(): void {
-    this.sessionService.remove(SessionConstants.LOGGED_IN_USER);
-    this.sessionService.remove(SessionConstants.IS_LOGGED_IN);
-    this.sessionService.remove(SessionConstants.USER_MENU);
-    this.sessionService.remove(SessionConstants.SERIALIZED_MENU);
-    this.authService.UpdateIsLoggedIn(false);
-    this.authService.UpdateLoggedInUser(null);
-    this.authService.UpdateUserMenus(null);
-    this.authService.UpdateSerializedUserMenus(null);
-    this.router.navigate([RouteConstants.LOGIN_USER_URL]);
+    this.commonService.RevokeSession();
   }
 
   loadScripts(urls: string[]) {
