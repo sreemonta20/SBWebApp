@@ -10,13 +10,21 @@ import { environment } from 'src/environments/environment';
 export class EncryptDecryptAuthInterceptor implements HttpInterceptor {
     constructor(private encryptDecryptService: EncryptDecryptService, ) {}
     ExcludeURLList = [
-        '/api/User/getUserbyId',
+        '/api/Auth/login',
+        '/api/Auth/refreshtoken',
+        '/api/Auth/revoke',
         '/api/User/getAllUsers',
-        '/api/User/login',
-        '/api/User/refreshtoken',
-        '/api/User/revoke',
+        '/api/User/getUserbyId',
         '/api/User/registerUser',
-        '/api/User/deleteUser'
+        '/api/User/deleteUser',
+        '/api/RoleMenu/getAllRoles',
+        '/api/RoleMenu/getAllRolesPagination',
+        '/api/RoleMenu/getRoleById',
+        '/api/RoleMenu/saveUpdateRole',
+        '/api/RoleMenu/deleteRole',
+        '/api/RoleMenu/getAllUserMenuPagingWithSearch',
+        '/api/RoleMenu/getAllMenuByUserId',
+        '/api/RoleMenu/getAllParentMenus'
     ];
     intercept(req: HttpRequest < any > , next: HttpHandler): Observable < HttpEvent < any >> {
         let exludeFound = this.ExcludeURLList.filter(element => {

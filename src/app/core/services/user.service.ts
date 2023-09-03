@@ -9,14 +9,11 @@ import {
   LoginRequest,
   RefreshTokenRequest,
   SaveUpdateRequest,
-  UserResponse
+  UserResponse,
 } from '@app/core/class/index';
 import { MenuItem } from '@app/core/interface';
 import { securityApiUrl } from 'src/environments/environment';
-import {
-  APIConstants,
-  SessionConstants
-} from '../constants/common.constants';
+import { APIConstants, SessionConstants } from '../constants/common.constants';
 import { AuthService } from '../services/auth.service';
 import { SessionStorageService } from '../services/session.service';
 import { ApiService } from './api.service';
@@ -25,43 +22,15 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class UserService {
-  
   public loggedInUser: UserResponse = new UserResponse();
   userMenus: MenuItem[];
   constructor(
     private authService: AuthService,
     private http: HttpClient,
     private apiService: ApiService<DataResponse>,
-    private sessionService: SessionStorageService) {
-
+    private sessionService: SessionStorageService
+  ) {
     this.apiService.initializeBaseURL(securityApiUrl);
-  }
-
-  getUserById(id: string): Observable<DataResponse | undefined> {
-    const params = new HttpParams().set('id', id);
-    return this.apiService.getById(APIConstants.API_GET_USER_BY_ID_URL, params).pipe(
-      map((response: DataResponse) => {
-        if (response) {
-          return response;
-        }
-      })
-    );
-  }
-
-  getAllUsers(
-    pageNumber: number,
-    pageSize: number
-  ): Observable<DataResponse | undefined> {
-    const params = new HttpParams()
-      .set('pageNumber', pageNumber)
-      .set('pageSize', pageSize);
-    return this.apiService.getAll(APIConstants.API_GET_ALL_USERS_URL, params).pipe(
-      map((response: DataResponse) => {
-        if (response) {
-          return response;
-        }
-      })
-    );
   }
 
   login(user: LoginRequest): Observable<DataResponse | undefined> {
@@ -74,17 +43,23 @@ export class UserService {
     );
   }
 
-  renewToken(refreshTokenRequest: RefreshTokenRequest): Observable<DataResponse> {
-    return this.apiService.post(APIConstants.API_REFRESH_TOKEN_URL, refreshTokenRequest).pipe(
-      map((response: DataResponse) => {
-        if (response) {
-          return response;
-        }
-      })
-    );
+  renewToken(
+    refreshTokenRequest: RefreshTokenRequest
+  ): Observable<DataResponse> {
+    return this.apiService
+      .post(APIConstants.API_REFRESH_TOKEN_URL, refreshTokenRequest)
+      .pipe(
+        map((response: DataResponse) => {
+          if (response) {
+            return response;
+          }
+        })
+      );
   }
 
-  async refreshToken<DataResponse>(refreshTokenRequest: RefreshTokenRequest): Promise<DataResponse> {
+  async refreshToken<DataResponse>(
+    refreshTokenRequest: RefreshTokenRequest
+  ): Promise<DataResponse> {
     const result = await this.apiService.postDataAsync<DataResponse>(
       APIConstants.API_REFRESH_TOKEN_URL,
       refreshTokenRequest
@@ -92,29 +67,37 @@ export class UserService {
     return result;
   }
 
-
-  async refreshTokenAsync(refreshTokenModelReq: RefreshTokenRequest): Promise<boolean> {
-    
-    if (!refreshTokenModelReq.Access_Token || !refreshTokenModelReq.Refresh_Token) {
+  async refreshTokenAsync(
+    refreshTokenModelReq: RefreshTokenRequest
+  ): Promise<boolean> {
+    if (
+      !refreshTokenModelReq.Access_Token ||
+      !refreshTokenModelReq.Refresh_Token
+    ) {
       return false;
     }
     let isRefreshSuccess: boolean;
-    
+
     try {
-      const result = await this.apiService.postAsync(APIConstants.API_REFRESH_TOKEN_URL,refreshTokenModelReq);
+      const result = await this.apiService.postAsync(
+        APIConstants.API_REFRESH_TOKEN_URL,
+        refreshTokenModelReq
+      );
       if (result.ResponseCode === 200) {
         this.loggedInUser = result.Result;
         this.userMenus = JSON.parse(this.loggedInUser.userMenus);
-        this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
-        this.sessionService.set( SessionConstants.IS_LOGGED_IN,true);
-        this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
-
+        this.sessionService.set(
+          SessionConstants.LOGGED_IN_USER,
+          this.loggedInUser
+        );
+        this.sessionService.set(SessionConstants.IS_LOGGED_IN, true);
+        this.sessionService.set(SessionConstants.USER_MENU, this.userMenus);
 
         this.authService.UpdateIsLoggedIn(true);
         this.authService.UpdateLoggedInUser(this.loggedInUser);
         this.authService.UpdateUserMenus(this.userMenus);
         isRefreshSuccess = true;
-      } else if(result.ResponseCode === 400 || result.ResponseCode === 500) {
+      } else if (result.ResponseCode === 400 || result.ResponseCode === 500) {
         isRefreshSuccess = false;
       }
     } catch (error) {
@@ -137,16 +120,55 @@ export class UserService {
 
   async revokeAsync(userToken: string): Promise<DataResponse> {
     const params = new HttpParams().set('userToken', userToken);
-    const result = await this.apiService.postAsync(APIConstants.API_REVOKE_URL, { params });
+    const result = await this.apiService.postAsync(
+      APIConstants.API_REVOKE_URL,
+      { params }
+    );
     return result;
   }
 
+  getAllUsers(
+    pageNumber: number,
+    pageSize: number
+  ): Observable<DataResponse | undefined> {
+    const params = new HttpParams()
+      .set('pageNumber', pageNumber)
+      .set('pageSize', pageSize);
+    return this.apiService
+      .getAll(APIConstants.API_GET_ALL_USERS_URL, params)
+      .pipe(
+        map((response: DataResponse) => {
+          if (response) {
+            return response;
+          }
+        })
+      );
+  }
+
+  getUserById(id: string): Observable<DataResponse | undefined> {
+    const params = new HttpParams().set('id', id);
+    return this.apiService
+      .getById(APIConstants.API_GET_USER_BY_ID_URL, params)
+      .pipe(
+        map((response: DataResponse) => {
+          if (response) {
+            return response;
+          }
+        })
+      );
+  }
+
   registerUser(user: SaveUpdateRequest): Observable<DataResponse> {
-    return this.http.post<DataResponse>(APIConstants.API_REGISTER_USER_URL, user);
+    return this.http.post<DataResponse>(
+      APIConstants.API_REGISTER_USER_URL,
+      user
+    );
   }
 
   deleteUser(id: string): Observable<DataResponse> {
     const params = new HttpParams().set('id', id);
-    return this.http.delete<DataResponse>(APIConstants.API_DELETE_USER_URL, { params });
+    return this.http.delete<DataResponse>(APIConstants.API_DELETE_USER_URL, {
+      params,
+    });
   }
 }

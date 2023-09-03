@@ -27,13 +27,21 @@ export const APIConstants = {
   AUTHORIZATION: 'Authorization',
   BEARER: 'Bearer',
   TOKEN: 'access_token',
-  API_GET_USER_BY_ID_URL: '/api/User/getUserbyId',
+  API_USER_LOGIN_URL: '/api/Auth/login',
+  API_REFRESH_TOKEN_URL: '/api/Auth/refreshtoken',
+  API_REVOKE_URL: '/api/Auth/revoke',
   API_GET_ALL_USERS_URL:'/api/User/getAllUsers',
-  API_USER_LOGIN_URL: '/api/User/login',
-  API_REFRESH_TOKEN_URL: '/api/User/refreshtoken',
-  API_REVOKE_URL: '/api/User/revoke',
+  API_GET_USER_BY_ID_URL: '/api/User/getUserbyId',
   API_REGISTER_USER_URL: '/api/User/registerUser',
-  API_DELETE_USER_URL: '/api/User/deleteUser'
+  API_DELETE_USER_URL: '/api/User/deleteUser',
+  API_GET_ALL_ROLES_URL: '/api/RoleMenu/getAllRoles',
+  API_GET_ALL_ROLES_PAGINATION_URL: '/api/RoleMenu/getAllRolesPagination',
+  API_GET_ROLE_BY_ID_URL: '/api/RoleMenu/getRoleById',
+  API_SAVE_UPDATE_ROLE_URL: '/api/RoleMenu/saveUpdateRole',
+  API_DELETE_ROLE_URL: '/api/RoleMenu/deleteRole',
+  API_GET_ALL_USER_MENU_PAG_SEARCH_URL: '/api/RoleMenu/getAllUserMenuPagingWithSearch',
+  API_GET_ALL_MENU_BY_USER_ID_URL: '/api/RoleMenu/getAllMenuByUserId',
+  API_GET_ALL_PARENT_MENU_URL: '/api/RoleMenu/getAllParentMenus'
 }
 
 export const MessageConstants = {
