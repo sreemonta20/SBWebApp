@@ -10,7 +10,7 @@ import {
   Renderer2,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { RouteConstants, SessionConstants } from '@app/core/constants';
+import { SessionConstants } from '@app/core/constants';
 import { MenuItem } from '@app/core/interface';
 import { CommonService, SessionStorageService } from '@app/core/services';
 declare var $: any;

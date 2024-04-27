@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
+  CanActivate,
   Router,
   RouterStateSnapshot
 } from '@angular/router';
@@ -14,13 +15,13 @@ import {
 } from '@app/core/class/index';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import {
-  RouteConstants,
   MessageConstants,
+  RouteConstants,
   SessionConstants,
 } from '../constants/common.constants';
+import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notification.service';
 import { SessionStorageService } from '../services/session.service';
-import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 
 import { HttpClient } from '@angular/common/http';
@@ -28,7 +29,7 @@ import jwt_decode from 'jwt-decode';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard {
+export class AuthGuard  {
   public jwtHelper: JwtHelperService = new JwtHelperService();
   public isLoggedIn: boolean = false;
   public isRefreshSuccess: boolean = false;
@@ -49,12 +50,12 @@ export class AuthGuard {
     private commonService: CommonService
   ) { }
 
-  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    debugger
     this.loggedInUser = this.sessionService.get(SessionConstants.LOGGED_IN_USER) as UserResponse;
     this.isLoggedIn = this.sessionService.get(SessionConstants.IS_LOGGED_IN) as boolean;
 
-    
+    debugger
     if (this.loggedInUser) {
 
       const token = this.loggedInUser.access_token;
