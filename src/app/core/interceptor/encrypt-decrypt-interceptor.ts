@@ -9,22 +9,44 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class EncryptDecryptAuthInterceptor implements HttpInterceptor {
     constructor(private encryptDecryptService: EncryptDecryptService, ) {}
+    // ExcludeURLList = [
+    //     '/api/Auth/login',
+    //     '/api/Auth/refreshtoken',
+    //     '/api/Auth/revoke',
+    //     '/api/User/getAllUsers',
+    //     '/api/User/getUserbyId',
+    //     '/api/User/registerUser',
+    //     '/api/User/deleteUser',
+    //     '/api/RoleMenu/getAllRoles',
+    //     '/api/RoleMenu/getAllRolesPagination',
+    //     '/api/RoleMenu/getRoleById',
+    //     '/api/RoleMenu/saveUpdateRole',
+    //     '/api/RoleMenu/deleteRole',
+    //     '/api/RoleMenu/getAllUserMenuPagingWithSearch',
+    //     '/api/RoleMenu/getAllMenuByUserId',
+    //     '/api/RoleMenu/getAllParentMenus'
+    // ];
     ExcludeURLList = [
-        '/api/Auth/login',
+        '/api/Auth/authenticateUser',
         '/api/Auth/refreshtoken',
         '/api/Auth/revoke',
-        '/api/User/getAllUsers',
-        '/api/User/getUserbyId',
-        '/api/User/registerUser',
-        '/api/User/deleteUser',
-        '/api/RoleMenu/getAllRoles',
-        '/api/RoleMenu/getAllRolesPagination',
-        '/api/RoleMenu/getRoleById',
-        '/api/RoleMenu/saveUpdateRole',
-        '/api/RoleMenu/deleteRole',
-        '/api/RoleMenu/getAllUserMenuPagingWithSearch',
-        '/api/RoleMenu/getAllMenuByUserId',
-        '/api/RoleMenu/getAllParentMenus'
+        '/api/User/createUpdateAppUser',
+        '/api/User/getAllAppUserProfile',
+        '/api/User/getAppUserProfileById',
+        '/api/User/createUpdateAppUserProfile',
+        '/api/User/deleteAppUserProfile',
+        '/api/RoleMenu/getAllAppUserRoles',
+        '/api/RoleMenu/getAllAppUserRolesPagination',
+        '/api/RoleMenu/getAppUserRolesById',
+        '/api/RoleMenu/createUpdateAppUserRole',
+        '/api/RoleMenu/deleteAppUserRole',
+        '/api/RoleMenu/getAllAppUserMenuPagingWithSearch',
+        '/api/RoleMenu/getAllAppUserMenuByUserId',
+        '/api/RoleMenu/getAllParentMenus',
+        '/api/RoleMenu/createUpdateAppUserMenu',
+        '/api/RoleMenu/deleteAppUserMenu',
+        '/api/RoleMenu/getAppUserRoleMenuInitialData',
+        '/api/RoleMenu/getAllAppUserRoleMenusPagingWithSearch'
     ];
     intercept(req: HttpRequest < any > , next: HttpHandler): Observable < HttpEvent < any >> {
         let exludeFound = this.ExcludeURLList.filter(element => {

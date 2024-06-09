@@ -22,19 +22,19 @@ import {
   UserResponse
 } from '@app/core/class';
 import {
-  RouteConstants,
   MessageConstants,
+  RouteConstants,
   SessionConstants,
 } from '@app/core/constants/index';
 import { MenuItem } from '@app/core/interface';
 import {
+  AuthService,
+  CommonService,
   LoaderService,
   NotificationService,
   SessionStorageService,
   UserService,
-  ValidationFormsService,
-  AuthService,
-  CommonService
+  ValidationFormsService
 } from '@app/core/services/index';
 import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;

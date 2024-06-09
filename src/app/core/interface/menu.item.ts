@@ -2,6 +2,8 @@ export interface MenuItem {
     Id: string;
     Name: string;
     IsHeader: boolean;
+    IsModule: boolean;
+    IsComponent: boolean;
     CssClass: string;
     RouteLink: string;
     RouteLinkClass: string;

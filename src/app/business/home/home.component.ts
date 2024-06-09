@@ -1,26 +1,26 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-  Inject,
-  Renderer2,
-  ElementRef,
-} from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule, DOCUMENT } from '@angular/common';
 import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { MenuPermission } from '@app/core/class/models/menu.permission';
+import { SessionConstants } from '@app/core/constants';
+import {
+  CommonService,
   LoaderService,
   NotificationService,
   SessionStorageService,
   UserService,
-  ValidationFormsService,
-  CommonService
+  ValidationFormsService
 } from '@app/core/services/index';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MenuPermission } from '@app/core/class/models/menu.permission';
-import { SessionConstants } from '@app/core/constants';
 declare var $: any;
 
 @Component({
