@@ -13,11 +13,11 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 declare var $: any;
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css'],
+  selector: 'app-appuserrole',
+  templateUrl: './appuserrole.component.html',
+  styleUrls: ['./appuserrole.component.css'],
 })
-export class UserComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,

@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 
 import { SecurityRoutingModule } from './security-routing.module';
-import { UserComponent } from './user/user.component';
+import { AppUserRoleComponent } from './appuserrole/appuserrole.component';
 
 
 @NgModule({
   declarations: [
-    UserComponent
+    AppUserRoleComponent
   ],
   imports: [
     CommonModule,
