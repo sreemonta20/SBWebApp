@@ -22,7 +22,6 @@ import {
 import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notification.service';
 import { SessionStorageService } from '../services/session.service';
-import { UserService } from '../services/user.service';
 
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
@@ -44,7 +43,6 @@ export class AuthGuard  {
     private tokenHelper: JwtHelperService,
     private sessionService: SessionStorageService,
     private authService: AuthService,
-    private userService: UserService,
     private notifyService: NotificationService,
     private http: HttpClient,
     private commonService: CommonService

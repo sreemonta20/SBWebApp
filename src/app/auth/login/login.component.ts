@@ -33,7 +33,6 @@ import {
   LoaderService,
   NotificationService,
   SessionStorageService,
-  UserService,
   ValidationFormsService
 } from '@app/core/services/index';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -68,7 +67,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private fb: FormBuilder,
     private loadingService: LoaderService,
-    private userService: UserService,
     private authService: AuthService,
     private sessionService: SessionStorageService,
     private notifyService: NotificationService,

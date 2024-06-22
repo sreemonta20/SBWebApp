@@ -28,7 +28,9 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    
+  }
 
   ngAfterViewInit() {
     // this.loadScripts(['assets/js/adminlte.js']);

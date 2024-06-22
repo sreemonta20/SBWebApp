@@ -17,7 +17,6 @@ import {
   LoaderService,
   NotificationService,
   SessionStorageService,
-  UserService,
   ValidationFormsService
 } from '@app/core/services/index';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -38,7 +37,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private renderer: Renderer2,
     private loadingService: LoaderService,
-    private userService: UserService,
     private sessionService: SessionStorageService,
     private notifyService: NotificationService,
     private validationService: ValidationFormsService,
