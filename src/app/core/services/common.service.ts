@@ -5,27 +5,35 @@ import { MenuItem } from '@app/core/interface';
 import { SessionStorageService } from '@app/core/services';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MenuPermission } from '../class/models/menu.permission';
-import { RouteConstants, SessionConstants } from '../constants/common.constants';
+import { RouteConstants, SessionConstants, Common } from '@app/core/constants';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class CommonService {
   private flattenedMenuItems: MenuItem[] = [];
   permission: MenuPermission = null;
   private loggedInUser = new BehaviorSubject<UserResponse>(new UserResponse());
-  public loggedInUser$: Observable<UserResponse> = this.loggedInUser.asObservable();
-  private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public loggedInUser$: Observable<UserResponse> =
+    this.loggedInUser.asObservable();
+  private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
   public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
-  private userMenus: BehaviorSubject<MenuItem[]> = new BehaviorSubject<MenuItem[]>([]);
+  private userMenus: BehaviorSubject<MenuItem[]> = new BehaviorSubject<
+    MenuItem[]
+  >([]);
   public userMenus$: Observable<MenuItem[]> = this.userMenus.asObservable();
-  private serializedUserMenus: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-  public serializedUserMenus$: Observable<any> = this.serializedUserMenus.asObservable();
+  private serializedUserMenus: BehaviorSubject<any> = new BehaviorSubject<any>(
+    []
+  );
+  public serializedUserMenus$: Observable<any> =
+    this.serializedUserMenus.asObservable();
 
-  constructor(private sessionService: SessionStorageService, private router: Router) {
-
-  }
+  constructor(
+    private sessionService: SessionStorageService,
+    private router: Router
+  ) {}
 
   UpdateLoggedInUser(userResponse: UserResponse) {
     this.loggedInUser.next(userResponse);
@@ -63,8 +71,6 @@ export class CommonService {
     return sourceTime < currentTime;
   }
 
-
-
   public RevokeSession() {
     this.sessionService.remove(SessionConstants.LOGGED_IN_USER);
     this.sessionService.remove(SessionConstants.IS_LOGGED_IN);
@@ -78,14 +84,13 @@ export class CommonService {
   }
 
   public isRouteValid(serializedUserMenus: MenuItem[], url: string) {
-    debugger
+    debugger;
     for (let index = 0; index < serializedUserMenus.length; index++) {
       if (serializedUserMenus[index].RouteLink.includes(url)) {
         return true;
       }
     }
     return false;
-
   }
 
   // public createSerializedUserMenus(userMenus: MenuItem[]) {
@@ -106,10 +111,8 @@ export class CommonService {
   //   return userMenuList;
   // }
 
-
-
   createSerializedUserMenus(userMenus: MenuItem[]) {
-    userMenus.forEach(item => {
+    userMenus.forEach((item) => {
       // Push the current menu item
       this.flattenedMenuItems.push(item);
 
@@ -124,10 +127,19 @@ export class CommonService {
   public getMenuPermissiomn(serializedMenus: any, url: any) {
     serializedMenus.forEach((element: any) => {
       if (element.RouteLink.includes(url)) {
-        this.permission = new MenuPermission(element.IsView, element.IsCreate, element.IsUpdate, element.IsDelete);
+        this.permission = new MenuPermission(
+          element.IsView,
+          element.IsCreate,
+          element.IsUpdate,
+          element.IsDelete
+        );
         return this.permission;
       }
     });
     return this.permission;
+  }
+
+  public pageSize() {
+    return Common.PAGE_SIZE_ARRAY;
   }
 }

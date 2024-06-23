@@ -134,20 +134,65 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">All Users</h3>
+              <div class="row">
+                <!-- <div class="col-md-2 col-sm-2 col-lg-2 card-title-col">
+                  <h3 class="card-title">All Users</h3>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2 page-size-col">
+                  <div class="input-group input-group-sm">
+                    <select class="form-control select2">
+                      <option selected="selected" value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                      <option value="40">40</option>
+                    </select>
+                  </div>
 
-              <div class="card-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                </div>
+                <div class="col-md-8 col-sm-8 col-lg-8 search-col d-flex justify-content-end">
+                  <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                      <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                          <i class="fas fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-2 mr-0 pr-0">
+                  <h3 class="card-title" style="width: 100px;">All Users</h3>
+                </div>
+                <div class="col-2">
+                  <div class="input-group input-group-sm">
+                    <select class="form-control select2" style="width: 100px;">
+                      <option selected="selected" value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                      <option value="40">40</option>
+                    </select>
+                  </div>
 
-                  <div class="input-group-append">
-                    <button type="submit" class="btn btn-default">
-                      <i class="fas fa-search"></i>
-                    </button>
+                </div>
+                <div class="col-8 d-flex justify-content-end">
+                  <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                      <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                          <i class="fas fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
+
+
             </div>
+
             <div class="card-body table-responsive p-0">
               <table class="table table-hover text-nowrap">
                 <thead>
@@ -161,32 +206,33 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>183</td>
-                    <td>John Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-success">Approved</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                    <!-- <span style="padding-right: 1%;">183</span> -->
+                    <td data-label="ID">183</td>
+                    <td data-label="User">John Doe</td>
+                    <td data-label="Date">11-7-2014</td>
+                    <td data-label="Status"><span class="tag tag-success">Approved</span></td>
+                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
                   </tr>
                   <tr>
-                    <td>219</td>
-                    <td>Alexander Pierce</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-warning">Pending</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                    <td data-label="ID">219</td>
+                    <td data-label="User">Alexander Pierce</td>
+                    <td data-label="Date">11-7-2014</td>
+                    <td data-label="Status"><span class="tag tag-warning">Pending</span></td>
+                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
                   </tr>
                   <tr>
-                    <td>657</td>
-                    <td>Bob Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-primary">Approved</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                    <td data-label="ID">657</td>
+                    <td data-label="User">Bob Doe</td>
+                    <td data-label="Date">11-7-2014</td>
+                    <td data-label="Status"><span class="tag tag-primary">Approved</span></td>
+                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
                   </tr>
                   <tr>
-                    <td>175</td>
-                    <td>Mike Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-danger">Denied</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                    <td data-label="ID">175</td>
+                    <td data-label="User">Mike Doe</td>
+                    <td data-label="Date">11-7-2014</td>
+                    <td data-label="Status"><span class="tag tag-danger">Denied</span></td>
+                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
                   </tr>
                 </tbody>
               </table>

@@ -10,6 +10,14 @@ import {
 import { NavigationEnd, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DOCUMENT } from '@angular/common';
+import {
+  SecurityService,
+  CommonService,
+  LoaderService,
+  NotificationService,
+  SessionStorageService,
+  ValidationFormsService
+} from '@app/core/services';
 declare var $: any;
 
 @Component({
@@ -18,14 +26,16 @@ declare var $: any;
   styleUrls: ['./appuserrole.component.css'],
 })
 export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
+  public pageSizeList: number[] = [];
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
     public router: Router,
     private http: HttpClient,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private commonService: CommonService
   ) {
-    
+    this.pageSizeList = this.commonService.pageSize();
   }
 
   ngOnInit(): void {

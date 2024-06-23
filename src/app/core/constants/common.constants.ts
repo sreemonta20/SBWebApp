@@ -72,6 +72,7 @@ export const Common = {
   RETURN_URL: 'returnUrl',
   HOME_TEXT: 'Home',
   APPCONFIG_TEXT: 'App Configuration',
+  PAGE_SIZE_ARRAY: [5, 10, 20, 50, 100]
 };
 
 export const ErrorCode = {

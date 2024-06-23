@@ -28788,6 +28788,25 @@ html.maximized-card {
   margin: 0;
 }
 
+.card-title-col {
+  width: 10%; /* Adjust this width as necessary */
+  flex: 0 0 10%; /* Prevent the column from growing larger */
+  max-width: 10%;
+}
+
+.page-size-col {
+  width: 10%; /* Adjust this width as necessary */
+  flex: 0 0 10%; /* Prevent the column from growing larger */
+  max-width: 10%;
+}
+
+.search-col {
+  width: 80%; /* Adjust this width as necessary */
+  flex: 0 0 80%; /* Prevent the column from growing larger */
+  max-width: 80%;
+}
+
+
 .card-text {
   clear: both;
 }
@@ -53010,3 +53029,128 @@ a.text-muted:hover {
   border-color: #4b545c !important;
 }
 /*# sourceMappingURL=adminlte.css.map */
+/* CSS for mobile devices */
+/* @media (max-width: 575.98px) {
+  .card-title-col, .page-size-col {
+    width: 10%;
+    flex: 0 0 10%;
+    max-width: 10%;
+  }
+
+  .search-col {
+    width: 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .card-title-col, .page-size-col {
+    width: 10%;
+    flex: 0 0 10%;
+    max-width: 10%;
+  }
+
+  .search-col {
+    width: 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 576px) {
+  .card-title-col, .page-size-col {
+    width: 10%;
+    flex: 0 0 10%;
+    max-width: 10%;
+  }
+
+  .search-col {
+    width: 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 992px) {
+  .card-title-col, .page-size-col {
+    width: 10%;
+    flex: 0 0 10%;
+    max-width: 10%;
+  }
+
+  .search-col {
+    width: 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .card-title-col, .page-size-col {
+    width: 10%;
+    flex: 0 0 10%;
+    max-width: 10%;
+  }
+
+  .search-col {
+    width: 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+} */
+/* @media (min-width: 767px) {
+  .card-title-col, .page-size-col {
+    width: 10%;
+    flex: 0 0 10%;
+    max-width: 10%;
+  }
+
+  .search-col {
+    width: 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+} */
+
+/* @media (max-width: 576px) {
+  .table-responsive-stack tr {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid #dee2e6;
+  }
+  .table-responsive-stack td,
+  .table-responsive-stack th {
+      width: 100%;
+  }
+} */
+
+@media (max-width: 576px) {
+  .table thead {
+      display: none;
+  }
+  .table tbody, .table tr, .table td {
+      display: block;
+      width: 100%;
+  }
+  .table tr {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #dee2e6;
+  }
+  .table td {
+      /* text-align: right; */
+      padding-left: 30%;
+      position: relative;
+      text-wrap:balance;
+      padding-right: 1%;
+  }
+  .table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      width: 30%;
+      padding-left: 1rem;
+      font-weight: bold;
+      text-align: left;
+  }
+}
