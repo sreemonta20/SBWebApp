@@ -133,7 +133,7 @@
       <div class="row">
         <div class="col-12">
           <div class="card">
-            <div class="card-header">
+            <div class="card-header p-2">
               <div class="row">
                 <!-- <div class="col-md-2 col-sm-2 col-lg-2 card-title-col">
                   <h3 class="card-title">All Users</h3>
@@ -166,11 +166,13 @@
                 </div>
                 <div class="col-2">
                   <div class="input-group input-group-sm">
-                    <select class="form-control select2" style="width: 100px;">
-                      <option selected="selected" value="5">5</option>
+                    <select class="form-control select2" name="pageSize" [(ngModel)]="pageSize"
+                      (change)="setPageSize(1,true)" style="width: 100px;">
+                      <!-- <option selected="selected" value="5">5</option>
                       <option value="10">10</option>
                       <option value="20">20</option>
-                      <option value="40">40</option>
+                      <option value="40">40</option> -->
+                      <option *ngFor="let size of pageSizeList" [value]="size">{{size}}</option>
                     </select>
                   </div>
 
@@ -193,7 +195,7 @@
 
             </div>
 
-            <div class="card-body table-responsive p-0">
+            <div class="card-body table-responsive p-2">
               <table class="table table-hover text-nowrap">
                 <thead>
                   <tr>
@@ -206,7 +208,6 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <!-- <span style="padding-right: 1%;">183</span> -->
                     <td data-label="ID">183</td>
                     <td data-label="User">John Doe</td>
                     <td data-label="Date">11-7-2014</td>
@@ -238,13 +239,24 @@
               </table>
             </div>
             <div class="card-footer clearfix">
-              <ul class="pagination pagination-sm m-0 float-right">
-                <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-              </ul>
+              <div class="row">
+                <div class="col-sm-5">
+                  <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing <span
+                      class="text-success"><b>{{startPage}}</b></span> to <span
+                      class="text-success"><b>{{endPage}}</b></span> of <span
+                      class="text-success"><b>{{totalRows}}</b></span>
+                    entries</div>
+                </div>
+                <div class="col-sm-7">
+                  <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>

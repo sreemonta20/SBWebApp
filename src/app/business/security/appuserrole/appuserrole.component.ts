@@ -16,7 +16,7 @@ import {
   LoaderService,
   NotificationService,
   SessionStorageService,
-  ValidationFormsService
+  ValidationFormsService,
 } from '@app/core/services';
 declare var $: any;
 
@@ -26,6 +26,13 @@ declare var $: any;
   styleUrls: ['./appuserrole.component.css'],
 })
 export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
+  //Pagination
+  public pageNumber: number = 0;
+  public pageSize: number = 5;
+  public startPage: number = 0;
+  public endPage: number = 0;
+  public totalRows: number = 0;
+
   public pageSizeList: number[] = [];
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -38,9 +45,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pageSizeList = this.commonService.pageSize();
   }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     // this.loadScripts(['assets/js/adminlte.js']);
@@ -53,6 +58,21 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       script.type = 'text/javascript';
       this.renderer.appendChild(document.body, script);
     }
+  }
+
+  getAllAppUserRolesPagination(pageNumber: number, pageSize: number) {}
+
+  setPageSize(page: number, isPaging: boolean) {
+    debugger;
+    // this.pager = this.pagerService.getPager(this.totalRows, page, this.pageSize);
+    // if (isPaging) {
+    //     this.getbyPage(page, false);
+    // }
+    // else {
+    //     this.pagedItems = this.listBillCloudUserInvoice;
+    // }
+    let totalPages = Math.ceil(7 / 5);
+    console.log(this.pageSize);
   }
 
   ngOnDestroy(): void {}
