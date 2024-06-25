@@ -1,3 +1,4 @@
+// import { AppUserRole } from './../../../core/class/models/app.user.role';
 import {
   Component,
   OnInit,
@@ -18,6 +19,7 @@ import {
   SessionStorageService,
   ValidationFormsService,
 } from '@app/core/services';
+import {AppUserRole, RoleSaveUpdateRequest} from '@app/core/class'
 declare var $: any;
 
 @Component({
@@ -45,7 +47,9 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pageSizeList = this.commonService.pageSize();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
 
   ngAfterViewInit() {
     // this.loadScripts(['assets/js/adminlte.js']);
@@ -60,7 +64,9 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getAllAppUserRolesPagination(pageNumber: number, pageSize: number) {}
+  getAllAppUserRolesPagination(pageNumber: number, pageSize: number) {
+
+  }
 
   setPageSize(page: number, isPaging: boolean) {
     debugger;
