@@ -6,3 +6,4 @@ export * from './request/user.requests';
 export * from './response/data.responses';
 export * from './models/app.user.role';
 export * from './request/app.user.role.request';
+export * from './response/app.user.role.response';

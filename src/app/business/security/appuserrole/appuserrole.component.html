@@ -1,4 +1,5 @@
 <!-- Content Wrapper. Contains page content -->
+<ngx-spinner size="medium" type="ball-clip-rotate-pulse"></ngx-spinner>
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
@@ -168,10 +169,6 @@
                   <div class="input-group input-group-sm">
                     <select class="form-control select2" name="pageSize" [(ngModel)]="pageSize"
                       (change)="setPageSize(1,true)" style="width: 100px;">
-                      <!-- <option selected="selected" value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                      <option value="40">40</option> -->
                       <option *ngFor="let size of pageSizeList" [value]="size">{{size}}</option>
                     </select>
                   </div>
@@ -190,12 +187,78 @@
                   </div>
                 </div>
               </div>
-
-
-
             </div>
-
             <div class="card-body table-responsive p-2">
+              <table class="table table-hover text-nowrap">
+                <thead>
+                  <tr>
+                    <th>Role Name</th>
+                    <th>Description</th>
+                    <th>Created By</th>
+                    <th>Created Date</th>
+                    <th>Updated By</th>
+                    <th>Updated Date</th>
+                    <th>Active</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let appUserRole of appUserRoleList">
+                    <td data-label="Role Name">{{ appUserRole.roleName }}</td>
+                    <td data-label="Description">{{ appUserRole.description }}</td>
+                    <td data-label="Created By">{{ appUserRole.createdByName }}</td>
+                    <td data-label="Created Date">{{ appUserRole.createdDate | date:'medium'}}</td>
+                    <td data-label="Updated By">{{ appUserRole.updatedByName }}</td>
+                    <td data-label="Updated Date">{{ appUserRole.updatedDate | date:'medium'}} </td>
+                    <td data-label="Active">{{ appUserRole.isActive ? 'Yes' : 'No' }}</td>
+                  </tr>
+                </tbody>
+                <tfoot *ngIf="appUserRoleList.length === 0">
+                  <tr>
+                    <td colspan="7" class="text-center">No data found</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div class="card-footer clearfix">
+              <div class="row">
+                <div class="col-sm-5">
+                  <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing <span
+                      class="text-success"><b>{{startPage}}</b></span> to <span
+                      class="text-success"><b>{{endPage}}</b></span> of <span
+                      class="text-success"><b>{{totalRows}}</b></span>
+                    entries</div>
+                </div>
+                <div class="col-sm-7">
+                  <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                      <a class="page-link" (click)="changePage(1)" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                      <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of [].constructor(pageCount); let i = index"
+                      [class.active]="currentPage === i + 1">
+                      <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === pageCount">
+                      <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === pageCount">
+                      <a class="page-link" (click)="changePage(pageCount)" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="card-body table-responsive p-2">
               <table class="table table-hover text-nowrap">
                 <thead>
                   <tr>
@@ -257,7 +320,7 @@
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

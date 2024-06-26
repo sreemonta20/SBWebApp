@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
-
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { SecurityRoutingModule } from './security-routing.module';
 import { AppUserRoleComponent } from './appuserrole/appuserrole.component';
 
@@ -14,7 +14,8 @@ import { AppUserRoleComponent } from './appuserrole/appuserrole.component';
     CommonModule,
     SecurityRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxSpinnerModule,
   ]
 })
 export class SecurityModule { }
