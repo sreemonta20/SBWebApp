@@ -219,7 +219,7 @@
                 </tfoot>
               </table>
             </div>
-            <div class="card-footer clearfix">
+            <div class="card-footer clearfix p-2">
               <div class="row">
                 <div class="col-sm-5">
                   <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing <span
@@ -231,26 +231,26 @@
                 <div class="col-sm-7">
                   <ul class="pagination pagination-sm m-0 float-right">
                     <li class="page-item" [class.disabled]="currentPage === 1">
-                      <a class="page-link" (click)="changePage(1)" aria-label="First">
+                      <a class="page-link" (click)="changePage(1)" aria-label="First" href="#">
                         <span aria-hidden="true">&laquo;&laquo;</span>
                       </a>
                     </li>
                     <li class="page-item" [class.disabled]="currentPage === 1">
-                      <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
+                      <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous" href="#">
                         <span aria-hidden="true">&laquo;</span>
                       </a>
                     </li>
                     <li class="page-item" *ngFor="let page of [].constructor(pageCount); let i = index"
                       [class.active]="currentPage === i + 1">
-                      <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+                      <a class="page-link" (click)="changePage(i + 1)" href="#">{{ i + 1 }}</a>
                     </li>
                     <li class="page-item" [class.disabled]="currentPage === pageCount">
-                      <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next">
+                      <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next" href="#">
                         <span aria-hidden="true">&raquo;</span>
                       </a>
                     </li>
                     <li class="page-item" [class.disabled]="currentPage === pageCount">
-                      <a class="page-link" (click)="changePage(pageCount)" aria-label="Last">
+                      <a class="page-link" (click)="changePage(pageCount)" aria-label="Last" href="#">
                         <span aria-hidden="true">&raquo;&raquo;</span>
                       </a>
                     </li>

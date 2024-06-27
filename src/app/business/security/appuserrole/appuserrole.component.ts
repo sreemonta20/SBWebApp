@@ -16,7 +16,7 @@ import {
   CommonService,
   LoaderService,
   NotificationService,
-  SecurityService
+  SecurityService,
 } from '@app/core/services';
 declare var $: any;
 
@@ -24,7 +24,7 @@ declare var $: any;
   selector: 'app-appuserrole',
   templateUrl: './appuserrole.component.html',
   styleUrls: ['./appuserrole.component.css'],
-  providers: [DatePipe]
+  providers: [DatePipe],
 })
 export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   //Pagination
@@ -34,11 +34,11 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public pageCount: number = 0;
   public startPage: number = 1;
   public endPage: number = 5;
-  
+
   public pageSizeList: number[] = this.commonService.pageSize();
   // Response related
   public appUserRoleList: AppUserRoleResponse[] = [];
-  error_message: any;
+  public error_message: any;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -62,50 +62,39 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getAllAppUserRolesPagination(pageNumber: number, pageSize: number) {
-    debugger
+    debugger;
     this.loadingService.setLoading(true);
-    this.securityService.getAllAppUserRolesPagination(pageNumber, pageSize).subscribe({
-      next: (response: DataResponse) => {
-        debugger
-        if (response.ResponseCode === 200) {
-         this.loadingService.setLoading(false);
-         this.appUserRoleList = response.Result.Items;
-         this.currentPage = response.Result.CurrentPage;
-         this.pageCount = response.Result.PageCount;
-         this.totalRows = response.Result.RowCount;
-         this.updatePageIndices();
-        } else {
+    this.securityService
+      .getAllAppUserRolesPagination(pageNumber, pageSize)
+      .subscribe({
+        next: (response: DataResponse) => {
+          debugger;
+          if (response.ResponseCode === 200) {
+            this.loadingService.setLoading(false);
+            this.appUserRoleList = response.Result.Items;
+            this.currentPage = response.Result.CurrentPage;
+            this.pageCount = response.Result.PageCount;
+            this.totalRows = response.Result.RowCount;
+            this.updatePageIndices();
+          } else {
+            this.loadingService.setLoading(false);
+            this.notifyService.showError(
+              MessageConstants.APP_USER_ROLE_NOT_FOUND_MEG,
+              MessageConstants.GENERAL_ERROR_TITLE
+            );
+            return;
+          }
+        },
+        error: (error) => {
           this.loadingService.setLoading(false);
+          this.error_message = error.error;
           this.notifyService.showError(
-            MessageConstants.APP_USER_ROLE_NOT_FOUND_MEG,
+            MessageConstants.INTERNAL_ERROR_MEG,
             MessageConstants.GENERAL_ERROR_TITLE
           );
           return;
-        }
-      },
-      error: (error) => {
-        this.loadingService.setLoading(false);
-        this.error_message = error.error;
-        this.notifyService.showError(
-          MessageConstants.INTERNAL_ERROR_MEG,
-          MessageConstants.GENERAL_ERROR_TITLE
-        );
-        return;
-      },
-    });
-  }
-
-  setPageSize(page: number, isPaging: boolean) {
-    debugger;
-    // this.pager = this.pagerService.getPager(this.totalRows, page, this.pageSize);
-    // if (isPaging) {
-    //     this.getbyPage(page, false);
-    // }
-    // else {
-    //     this.pagedItems = this.listBillCloudUserInvoice;
-    // }
-    let totalPages = Math.ceil(7 / 5);
-    console.log(this.pageSize);
+        },
+      });
   }
 
   changePageSize(event: any): void {
@@ -122,7 +111,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   updatePageIndices(): void {
     this.startPage = (this.currentPage - 1) * this.pageSize + 1;
-    this.endPage = Math.min(this.startPage + this.pageSize - 1, this.totalRows);
+    this.endPage = this.startPage - 1 + this.appUserRoleList.length;
   }
 
   loadScripts(urls: string[]) {
