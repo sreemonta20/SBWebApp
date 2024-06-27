@@ -1,13 +1,13 @@
 export class AppUserRoleResponse {
-    id: string;
-    roleName?: string;
-    description?: string;
-    createdBy?: string | null;
-    createdByName?: string | null;
-    createdDate: Date;
-    updatedBy?: string | null;
-    updatedByName?: string | null;
-    updatedDate: Date;
-    isActive?: boolean;
+    Id: string;
+    RoleName?: string;
+    Description?: string;
+    CreatedBy?: string | null;
+    CreatedByName?: string | null;
+    CreatedDate: Date;
+    UpdatedBy?: string | null;
+    UpdatedByName?: string | null;
+    UpdatedDate: Date;
+    IsActive?: boolean;
   }
   

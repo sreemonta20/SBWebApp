@@ -1,26 +1,23 @@
 // import { AppUserRole } from './../../../core/class/models/app.user.role';
+import { DOCUMENT, DatePipe } from '@angular/common';
 import {
-  Component,
-  OnInit,
   AfterViewInit,
-  OnDestroy,
-  Inject,
-  Renderer2,
+  Component,
   ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Renderer2,
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
-import { CommonModule, DOCUMENT, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { AppUserRoleResponse, DataResponse } from '@app/core/class';
+import { MessageConstants } from '@app/core/constants';
 import {
-  SecurityService,
   CommonService,
   LoaderService,
   NotificationService,
-  SessionStorageService,
-  ValidationFormsService,
+  SecurityService
 } from '@app/core/services';
-import {AppUserRole, DataResponse, RoleSaveUpdateRequest,AppUserRoleResponse} from '@app/core/class'
-import { MessageConstants } from '@app/core/constants';
 declare var $: any;
 
 @Component({
@@ -35,8 +32,8 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public currentPage: number = 1;
   public pageSize: number = 5;
   public pageCount: number = 0;
-  public startPage: number = 0;
-  public endPage: number = 0;
+  public startPage: number = 1;
+  public endPage: number = 5;
   
   public pageSizeList: number[] = this.commonService.pageSize();
   // Response related
@@ -72,10 +69,10 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         debugger
         if (response.ResponseCode === 200) {
          this.loadingService.setLoading(false);
-         this.appUserRoleList = response.Result.items;
-         this.currentPage = response.Result.currentPage;
-         this.pageCount = response.Result.pageCount;
-         this.totalRows = response.Result.rowCount;
+         this.appUserRoleList = response.Result.Items;
+         this.currentPage = response.Result.CurrentPage;
+         this.pageCount = response.Result.PageCount;
+         this.totalRows = response.Result.RowCount;
          this.updatePageIndices();
         } else {
           this.loadingService.setLoading(false);

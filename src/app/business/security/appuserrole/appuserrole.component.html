@@ -168,7 +168,7 @@
                 <div class="col-2">
                   <div class="input-group input-group-sm">
                     <select class="form-control select2" name="pageSize" [(ngModel)]="pageSize"
-                      (change)="setPageSize(1,true)" style="width: 100px;">
+                      (change)="changePageSize($event)" style="width: 100px;">
                       <option *ngFor="let size of pageSizeList" [value]="size">{{size}}</option>
                     </select>
                   </div>
@@ -203,13 +203,13 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let appUserRole of appUserRoleList">
-                    <td data-label="Role Name">{{ appUserRole.roleName }}</td>
-                    <td data-label="Description">{{ appUserRole.description }}</td>
-                    <td data-label="Created By">{{ appUserRole.createdByName }}</td>
-                    <td data-label="Created Date">{{ appUserRole.createdDate | date:'medium'}}</td>
-                    <td data-label="Updated By">{{ appUserRole.updatedByName }}</td>
-                    <td data-label="Updated Date">{{ appUserRole.updatedDate | date:'medium'}} </td>
-                    <td data-label="Active">{{ appUserRole.isActive ? 'Yes' : 'No' }}</td>
+                    <td data-label="Role Name">{{ appUserRole.RoleName }}</td>
+                    <td data-label="Description">{{ appUserRole.Description }}</td>
+                    <td data-label="Created By">{{ appUserRole.CreatedByName }}</td>
+                    <td data-label="Created Date">{{ appUserRole.CreatedDate | date:'medium'}}</td>
+                    <td data-label="Updated By">{{ appUserRole.UpdatedByName }}</td>
+                    <td data-label="Updated Date">{{ appUserRole.UpdatedDate | date:'medium'}} </td>
+                    <td data-label="Active">{{ appUserRole.IsActive ? 'Yes' : 'No' }}</td>
                   </tr>
                 </tbody>
                 <tfoot *ngIf="appUserRoleList.length === 0">
