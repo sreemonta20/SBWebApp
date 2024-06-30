@@ -93,7 +93,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         '',
         [Validators.required, CustomValidators.englishText(1, 50)],
       ], // English text validator
-      Description: ['', CustomValidators.englishText(1, 100)], // English text validator
+      Description: ['', [Validators.required, CustomValidators.englishText(1, 100)]], // English text validator
       CreateUpdateBy: this.appUserProfileId,
       IsActive: [true],
     });
@@ -169,7 +169,9 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadingService.setLoading(true);
     if (this.appUserRoleForm.invalid) {
       this.loadingService.setLoading(false);
+      this.appUserRoleForm.markAllAsTouched();
       return;
+      
     }
     if (!this.isEdit) {
       roleRequest.ActionName = 'Save';
@@ -261,10 +263,15 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   deleteAppUserRole(roleId: string): void {
     if (confirm('Are you sure you want to delete this role?')) {
       this.loadingService.setLoading(true);
+      debugger
       this.securityService.deleteAppUserRole(roleId).subscribe({
         next: (response: DataResponse) => {
           this.loadingService.setLoading(false);
           if (response.Success) {
+            this.notifyService.showSuccess(
+              response.Message,
+              MessageConstants.GENERAL_SUCCESS_TITLE
+            );
             this.getAllAppUserRolesPagination(this.currentPage, this.pageSize);
           }else{
             this.notifyService.showError(

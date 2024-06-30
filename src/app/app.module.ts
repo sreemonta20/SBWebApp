@@ -44,7 +44,9 @@ export function tokenGetter() {
     NgxSpinnerModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right', // Change the position as needed
+    }),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

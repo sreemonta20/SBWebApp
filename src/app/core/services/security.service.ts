@@ -110,7 +110,7 @@ export class SecurityService {
 
   deleteAppUserRole(roleId: string): Observable<DataResponse> {
     const params = new HttpParams().set('roleId', roleId);
-    return this.apiService.get(APIConstants.API_DELETE_APP_USER_ROLE_URL, params).pipe(
+    return this.apiService.delete(APIConstants.API_DELETE_APP_USER_ROLE_URL, params).pipe(
       map((response: DataResponse) => {
         if (response) {
           return response;
