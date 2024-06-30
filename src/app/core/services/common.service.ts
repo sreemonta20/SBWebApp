@@ -142,4 +142,34 @@ export class CommonService {
   public pageSize() {
     return Common.PAGE_SIZE_ARRAY;
   }
+
+  isValidGuid(value: string | null | undefined): boolean {
+    // Check if the value is null, undefined, or an empty string
+    if (!value || value.trim() === '') {
+      return false;
+    }
+
+    // Regular expression to match the GUID format
+    const guidPattern =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+    // Test if the value matches the GUID pattern
+    return guidPattern.test(value);
+  }
+
+  isInvalidObject(obj: any): boolean {
+    if (obj === null || obj === undefined) {
+      return true;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.length === 0;
+    }
+
+    if (typeof obj === 'object') {
+      return Object.keys(obj).length === 0;
+    }
+
+    return false;
+  }
 }

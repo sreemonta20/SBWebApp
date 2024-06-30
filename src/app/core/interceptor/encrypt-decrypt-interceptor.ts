@@ -63,23 +63,24 @@ export class EncryptDecryptAuthInterceptor implements HttpInterceptor {
                 }
                 return next.handle(req);
             } else if (req.method == "POST") {
-                
+                debugger
                 if (req.body || req.body.length > 0) {
-                    const cloneReq = req.clone({
-                        body: this.encryptDecryptService.encryptUsingAES256(req.body)
-                    });
-                    //return next.handle(cloneReq);
-                    return next.handle(cloneReq).pipe(
-                        // Decrypt the response body
-                        map((event) => {
-                          if (event instanceof HttpResponse) {
-                            event = event.clone({
-                              body: this.encryptDecryptService.decryptUsingAES256(event),
-                            });
-                          }
-                          return event;
-                        })
-                      );
+                    // const cloneReq = req.clone({
+                    //     body: this.encryptDecryptService.encryptUsingAES256(req.body)
+                    // });
+                    // //return next.handle(cloneReq);
+                    // return next.handle(cloneReq).pipe(
+                    //     // Decrypt the response body
+                    //     map((event) => {
+                    //       if (event instanceof HttpResponse) {
+                    //         event = event.clone({
+                    //           body: this.encryptDecryptService.decryptUsingAES256(event),
+                    //         });
+                    //       }
+                    //       return event;
+                    //     })
+                    //   );
+                    return next.handle(req);
                 }
                 let data = req.body as FormData;
                 return next.handle(req);

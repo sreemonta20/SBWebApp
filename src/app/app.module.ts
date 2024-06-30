@@ -37,13 +37,13 @@ export function tokenGetter() {
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
     FormsModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     ToastrModule.forRoot(),
     JwtModule.forRoot({
       config: {

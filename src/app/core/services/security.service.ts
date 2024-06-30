@@ -7,7 +7,7 @@ import {
   RefreshTokenRequest,
   SaveUpdateRequest,
   UserResponse,
-  RoleSaveUpdateRequest
+  RoleSaveUpdateRequest,
 } from '@app/core/class/index';
 import { MenuItem } from '@app/core/interface';
 import { securityApiUrl } from 'src/environments/environment';
@@ -75,22 +75,47 @@ export class SecurityService {
       );
   }
 
+  // createUpdateAppUserRole(
+  //   roleRequest: RoleSaveUpdateRequest
+  // ): Observable<DataResponse> {
+  //   return this.http.post<DataResponse>(
+  //     APIConstants.API_SAVE_UPDATE_APP_USER_ROLE_URL,
+  //     roleRequest
+  //   );
+  // }
+
   createUpdateAppUserRole(
     roleRequest: RoleSaveUpdateRequest
   ): Observable<DataResponse> {
-    return this.http.post<DataResponse>(
-      APIConstants.API_SAVE_UPDATE_APP_USER_ROLE_URL,
-      roleRequest
-    );
+    return this.apiService
+      .post(APIConstants.API_SAVE_UPDATE_APP_USER_ROLE_URL, roleRequest)
+      .pipe(
+        map((response: DataResponse) => {
+          if (response) {
+            return response;
+          }
+        })
+      );
   }
+
+  // deleteAppUserRole(roleId: string): Observable<DataResponse> {
+  //   const params = new HttpParams().set('roleId', roleId);
+  //   return this.http.delete<DataResponse>(
+  //     APIConstants.API_DELETE_APP_USER_ROLE_URL,
+  //     {
+  //       params,
+  //     }
+  //   );
+  // }
 
   deleteAppUserRole(roleId: string): Observable<DataResponse> {
     const params = new HttpParams().set('roleId', roleId);
-    return this.http.delete<DataResponse>(
-      APIConstants.API_DELETE_APP_USER_ROLE_URL,
-      {
-        params,
-      }
+    return this.apiService.get(APIConstants.API_DELETE_APP_USER_ROLE_URL, params).pipe(
+      map((response: DataResponse) => {
+        if (response) {
+          return response;
+        }
+      })
     );
   }
 

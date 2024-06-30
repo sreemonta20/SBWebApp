@@ -9,15 +9,23 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppUserRoleResponse, DataResponse } from '@app/core/class';
+import { Data, Router } from '@angular/router';
+import {
+  AppUserRoleResponse,
+  CustomValidators,
+  DataResponse,
+  RoleSaveUpdateRequest,
+} from '@app/core/class';
 import { MessageConstants } from '@app/core/constants';
 import {
   CommonService,
   LoaderService,
   NotificationService,
   SecurityService,
+  SessionStorageService,
 } from '@app/core/services';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 declare var $: any;
 
 @Component({
@@ -39,6 +47,15 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   // Response related
   public appUserRoleList: AppUserRoleResponse[] = [];
   public error_message: any;
+  // Permission
+  public isView = false;
+  public isCreate = false;
+  public isUpdate = false;
+  public isDelete = false;
+  // Form Details
+  appUserRoleForm: FormGroup;
+  isEdit: boolean = false;
+  public appUserProfileId: string = '';
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -48,12 +65,19 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     private loadingService: LoaderService,
     private notifyService: NotificationService,
     private commonService: CommonService,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private formBuilder: FormBuilder,
+    private titleService: Title,
+    private sessionService: SessionStorageService
   ) {
-    // this.pageSizeList = this.commonService.pageSize();
+    debugger
+    // this.appUserProfileId = this.commonService.GetLoggedInUser().user.Id;
+    this.appUserProfileId = this.sessionService.get(('loggedInUser')).user.Id;
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle(MessageConstants.APP_USER_ROLE_TITLE);
+    this.createForm();
     this.getAllAppUserRolesPagination(this.currentPage, this.pageSize);
   }
 
@@ -61,6 +85,20 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     // this.loadScripts(['assets/js/adminlte.js']);
   }
 
+  createForm() {
+    //ActionName: ['Save', Validators.required],
+    this.appUserRoleForm = this.formBuilder.group({
+      Id: [null],
+      RoleName: [
+        '',
+        [Validators.required, CustomValidators.englishText(1, 50)],
+      ], // English text validator
+      Description: ['', CustomValidators.englishText(1, 100)], // English text validator
+      CreateUpdateBy: this.appUserProfileId,
+      IsActive: [true],
+    });
+  }
+  ///----------------------------------------------List & Pagination Starts----------------------------------------------
   getAllAppUserRolesPagination(pageNumber: number, pageSize: number) {
     debugger;
     this.loadingService.setLoading(true);
@@ -122,6 +160,143 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.renderer.appendChild(document.body, script);
     }
   }
+  ///----------------------------------------------List & Pagination Ends----------------------------------------------
+
+  ///----------------------------------------------Create, Update, and Delete Starts-----------------------------------
+  createUpdateAppUserRole(appUserRole): void {
+    debugger
+    let roleRequest: RoleSaveUpdateRequest =new RoleSaveUpdateRequest();
+    this.loadingService.setLoading(true);
+    if (this.appUserRoleForm.invalid) {
+      this.loadingService.setLoading(false);
+      return;
+    }
+    if (!this.isEdit) {
+      roleRequest.ActionName = 'Save';
+      roleRequest.Id = null;
+      roleRequest.RoleName = appUserRole['RoleName'];
+      roleRequest.Description = appUserRole['Description'];
+      roleRequest.CreateUpdateBy = appUserRole['CreateUpdateBy'];
+      roleRequest.IsActive = appUserRole['IsActive'];
+      // roleRequest = new RoleSaveUpdateRequest(
+      //   'Save',
+      //   null,
+      //   appUserRole['RoleName'],
+      //   appUserRole['Description'],
+      //   appUserRole['CreateUpdateBy'],
+      //   appUserRole['IsActive']
+      // );
+    } else {
+      roleRequest.ActionName = 'Update';
+      roleRequest.Id = appUserRole['Id'];
+      roleRequest.RoleName = appUserRole['RoleName'];
+      roleRequest.Description = appUserRole['Description'];
+      roleRequest.CreateUpdateBy = appUserRole['CreateUpdateBy'];
+      roleRequest.IsActive = appUserRole['IsActive'];
+      // roleRequest = new RoleSaveUpdateRequest(
+      //   'Update',
+      //   appUserRole['Id'],
+      //   appUserRole['RoleName'],
+      //   appUserRole['Description'],
+      //   appUserRole['CreateUpdateBy'],
+      //   appUserRole['IsActive']
+      // );
+    }
+    debugger
+    // const roleRequest: RoleSaveUpdateRequest = this.appUserRoleForm.value;
+    this.securityService.createUpdateAppUserRole(roleRequest).subscribe({
+      next: (response: DataResponse) => {
+        debugger
+        this.loadingService.setLoading(false);
+        if (response.Success) {
+          this.notifyService.showSuccess(
+            response.Message,
+            MessageConstants.GENERAL_SUCCESS_TITLE
+          );
+          this.getAllAppUserRolesPagination(this.currentPage, this.pageSize);
+          this.resetForm();
+        } else {
+          this.loadingService.setLoading(false);
+          this.notifyService.showError(
+            response.Message,
+            MessageConstants.GENERAL_ERROR_TITLE
+          );
+        }
+      },
+      error: (error) => {
+        this.loadingService.setLoading(false);
+        this.error_message = error.error;
+        this.notifyService.showError(
+          MessageConstants.INTERNAL_ERROR_MEG,
+          MessageConstants.GENERAL_ERROR_TITLE
+        );
+      },
+    });
+  }
+
+  editAppUserRole(role: AppUserRoleResponse): void {
+    debugger
+    this.isEdit = true;
+    if (!this.commonService.isInvalidObject(role)) {
+      // this.appUserRoleForm.controls['Id'].setValue(role.Id);
+      // this.appUserRoleForm.controls['RoleName'].setValue(role.RoleName);
+      // this.appUserRoleForm.controls['Description'].setValue(role.Description);
+      // this.appUserRoleForm.controls['CreateUpdateBy'].setValue(this.appUserProfileId);
+      // this.appUserRoleForm.controls['IsActive'].setValue(role.IsActive);
+      this.appUserRoleForm.patchValue({
+        Id: role.Id,
+        RoleName: role.RoleName,
+        Description: role.Description,
+        CreateUpdateBy: this.appUserProfileId,
+        IsActive: role.IsActive,
+      });
+    } else {
+      this.notifyService.showError(
+        MessageConstants.APP_USER_ROLE_NOT_FOUND_TO_UPDATE_MEG,
+        MessageConstants.GENERAL_ERROR_TITLE
+      );
+    }
+  }
+
+  deleteAppUserRole(roleId: string): void {
+    if (confirm('Are you sure you want to delete this role?')) {
+      this.loadingService.setLoading(true);
+      this.securityService.deleteAppUserRole(roleId).subscribe({
+        next: (response: DataResponse) => {
+          this.loadingService.setLoading(false);
+          if (response.Success) {
+            this.getAllAppUserRolesPagination(this.currentPage, this.pageSize);
+          }else{
+            this.notifyService.showError(
+              response.Message,
+              MessageConstants.GENERAL_ERROR_TITLE
+            );
+          }
+        },
+        error: (error) => {
+          this.loadingService.setLoading(false);
+          this.error_message = error.error;
+          this.notifyService.showError(
+            MessageConstants.INTERNAL_ERROR_MEG,
+            MessageConstants.GENERAL_ERROR_TITLE
+          );
+        },
+      });
+    }
+  }
+
+  resetForm(): void {
+    this.isEdit = false;
+    // ActionName: 'Save',
+    this.appUserRoleForm.reset({
+      Id: null,
+      RoleName: '',
+      Description: '',
+      CreateUpdateBy: this.appUserProfileId,
+      IsActive: true,
+    });
+  }
+  ///----------------------------------------------Create, Update, and Delete Ends-----------------------------------
 
   ngOnDestroy(): void {}
 }
