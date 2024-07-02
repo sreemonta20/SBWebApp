@@ -1,10 +1,8 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { EncryptDecryptService } from '../services/encrypt-decrypt.service';
-import { Observable, map } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
 
-import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class EncryptDecryptAuthInterceptor implements HttpInterceptor {
@@ -63,7 +61,7 @@ export class EncryptDecryptAuthInterceptor implements HttpInterceptor {
                 }
                 return next.handle(req);
             } else if (req.method == "POST") {
-                debugger
+                
                 if (req.body || req.body.length > 0) {
                     // const cloneReq = req.clone({
                     //     body: this.encryptDecryptService.encryptUsingAES256(req.body)

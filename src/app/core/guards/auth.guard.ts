@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
   Router,
   RouterStateSnapshot
 } from '@angular/router';
@@ -49,18 +48,18 @@ export class AuthGuard  {
   ) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    debugger
+    
     this.loggedInUser = this.sessionService.get(SessionConstants.LOGGED_IN_USER) as UserResponse;
     this.isLoggedIn = this.sessionService.get(SessionConstants.IS_LOGGED_IN) as boolean;
 
-    debugger
+    
     if (this.loggedInUser) {
 
       const token = this.loggedInUser.access_token;
       const tokenPayload = jwt_decode(token) as any;
       const expirationTimestamp = tokenPayload.exp;
       const currentTimestamp = new Date().getTime() / 1000; // Convert to seconds
-
+      
       if (
         token &&
         !this.commonService.IsExpired(expirationTimestamp, currentTimestamp) &&

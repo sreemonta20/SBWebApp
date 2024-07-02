@@ -1,31 +1,31 @@
 // import { AppUserRole } from './../../../core/class/models/app.user.role';
 import { DOCUMENT, DatePipe } from '@angular/common';
 import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Renderer2,
+    AfterViewInit,
+    Component,
+    ElementRef,
+    Inject,
+    OnDestroy,
+    OnInit,
+    Renderer2,
 } from '@angular/core';
-import { Data, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import {
-  AppUserRoleResponse,
-  CustomValidators,
-  DataResponse,
-  RoleSaveUpdateRequest,
+    AppUserRoleResponse,
+    CustomValidators,
+    DataResponse,
+    RoleSaveUpdateRequest,
 } from '@app/core/class';
 import { MessageConstants } from '@app/core/constants';
 import {
-  CommonService,
-  LoaderService,
-  NotificationService,
-  SecurityService,
-  SessionStorageService,
+    CommonService,
+    LoaderService,
+    NotificationService,
+    SecurityService,
+    SessionStorageService,
 } from '@app/core/services';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 declare var $: any;
 
 @Component({
@@ -70,7 +70,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     private titleService: Title,
     private sessionService: SessionStorageService
   ) {
-    debugger
+    
     // this.appUserProfileId = this.commonService.GetLoggedInUser().user.Id;
     this.appUserProfileId = this.sessionService.get(('loggedInUser')).user.Id;
   }
@@ -100,13 +100,13 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ///----------------------------------------------List & Pagination Starts----------------------------------------------
   getAllAppUserRolesPagination(pageNumber: number, pageSize: number) {
-    debugger;
+    ;
     this.loadingService.setLoading(true);
     this.securityService
       .getAllAppUserRolesPagination(pageNumber, pageSize)
       .subscribe({
         next: (response: DataResponse) => {
-          debugger;
+          ;
           if (response.ResponseCode === 200) {
             this.loadingService.setLoading(false);
             this.appUserRoleList = response.Result.Items;
@@ -164,7 +164,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ///----------------------------------------------Create, Update, and Delete Starts-----------------------------------
   createUpdateAppUserRole(appUserRole): void {
-    debugger
+    
     let roleRequest: RoleSaveUpdateRequest =new RoleSaveUpdateRequest();
     this.loadingService.setLoading(true);
     if (this.appUserRoleForm.invalid) {
@@ -204,11 +204,11 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       //   appUserRole['IsActive']
       // );
     }
-    debugger
+    
     // const roleRequest: RoleSaveUpdateRequest = this.appUserRoleForm.value;
     this.securityService.createUpdateAppUserRole(roleRequest).subscribe({
       next: (response: DataResponse) => {
-        debugger
+        
         this.loadingService.setLoading(false);
         if (response.Success) {
           this.notifyService.showSuccess(
@@ -237,7 +237,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editAppUserRole(role: AppUserRoleResponse): void {
-    debugger
+    
     this.isEdit = true;
     if (!this.commonService.isInvalidObject(role)) {
       // this.appUserRoleForm.controls['Id'].setValue(role.Id);
@@ -263,7 +263,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   deleteAppUserRole(roleId: string): void {
     if (confirm('Are you sure you want to delete this role?')) {
       this.loadingService.setLoading(true);
-      debugger
+      
       this.securityService.deleteAppUserRole(roleId).subscribe({
         next: (response: DataResponse) => {
           this.loadingService.setLoading(false);

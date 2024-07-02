@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserResponse } from '@app/core/class';
+import { Common, RouteConstants, SessionConstants } from '@app/core/constants';
 import { MenuItem } from '@app/core/interface';
 import { SessionStorageService } from '@app/core/services';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MenuPermission } from '../class/models/menu.permission';
-import { RouteConstants, SessionConstants, Common } from '@app/core/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -84,7 +84,7 @@ export class CommonService {
   }
 
   public isRouteValid(serializedUserMenus: MenuItem[], url: string) {
-    debugger;
+    ;
     for (let index = 0; index < serializedUserMenus.length; index++) {
       if (serializedUserMenus[index].RouteLink.includes(url)) {
         return true;
