@@ -18,7 +18,9 @@ import {
     DataResponse,
     RoleSaveUpdateRequest,
 } from '@app/core/class';
+import { MenuPermission } from '@app/core/class/models/menu.permission';
 import { MessageConstants } from '@app/core/constants';
+import { MenuItem } from '@app/core/interface';
 import {
     CommonService,
     LoaderService,
@@ -27,6 +29,7 @@ import {
     SessionStorageService,
 } from '@app/core/services';
 declare var $: any;
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-appuserrole',
@@ -56,7 +59,8 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   appUserRoleForm: FormGroup;
   isEdit: boolean = false;
   public appUserProfileId: string = '';
-
+  public menuPermission: MenuItem[];
+  private menuSubscription: Subscription;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
@@ -70,9 +74,8 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     private titleService: Title,
     private sessionService: SessionStorageService
   ) {
-    
-    // this.appUserProfileId = this.commonService.GetLoggedInUser().user.Id;
-    this.appUserProfileId = this.sessionService.get(('loggedInUser')).user.Id;
+    this.appUserProfileId = this.commonService.GetLoggedInUser().user.Id;
+    this.loadPermission(this.router.url);
   }
 
   ngOnInit(): void {
@@ -83,6 +86,15 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     // this.loadScripts(['assets/js/adminlte.js']);
+  }
+
+  loadPermission(url:any):void{
+    debugger
+    const permissionModel = this.commonService.getMenuPermission(url);
+    this.isView = permissionModel.IsView;
+    this.isCreate = permissionModel.IsCreate;
+    this.isUpdate = permissionModel.IsUpdate;
+    this.isDelete = permissionModel.IsDelete;
   }
 
   createForm() {
@@ -305,5 +317,9 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ///----------------------------------------------Create, Update, and Delete Ends-----------------------------------
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    if (this.menuSubscription) {
+      this.menuSubscription.unsubscribe();
+    }
+  }
 }

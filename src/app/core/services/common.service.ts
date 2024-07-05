@@ -13,58 +13,94 @@ import { MenuPermission } from '../class/models/menu.permission';
 export class CommonService {
   private flattenedMenuItems: MenuItem[] = [];
   permission: MenuPermission = null;
-  private loggedInUser = new BehaviorSubject<UserResponse>(new UserResponse());
-  public loggedInUser$: Observable<UserResponse> =
-    this.loggedInUser.asObservable();
-  private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
-  private userMenus: BehaviorSubject<MenuItem[]> = new BehaviorSubject<
-    MenuItem[]
-  >([]);
-  public userMenus$: Observable<MenuItem[]> = this.userMenus.asObservable();
-  private serializedUserMenus: BehaviorSubject<any> = new BehaviorSubject<any>(
-    []
-  );
-  public serializedUserMenus$: Observable<any> =
-    this.serializedUserMenus.asObservable();
+
+  // private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  // public isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
+  private isLoggedIn: BehaviorSubject<boolean>;
+  public isLoggedIn$: Observable<boolean>;
+
+  // private loggedInUser = new BehaviorSubject<UserResponse>(new UserResponse());
+  // public loggedInUser$: Observable<UserResponse> = this.loggedInUser.asObservable();
+  private loggedInUser: BehaviorSubject<UserResponse>;
+  public loggedInUser$: Observable<UserResponse>;
+
+  // private userMenus: BehaviorSubject<MenuItem[]> = new BehaviorSubject<MenuItem[]>([]);
+  // public userMenus$: Observable<MenuItem[]> = this.userMenus.asObservable();
+  private userMenus: BehaviorSubject<MenuItem[]>;
+  public userMenus$: Observable<MenuItem[]>;
+
+  private serializedUserMenus: BehaviorSubject<MenuItem[]>;
+  public serializedUserMenus$: Observable<MenuItem[]>;
 
   constructor(
     private sessionService: SessionStorageService,
     private router: Router
-  ) {}
+  ) {
+    const sessionIsLoggedIn = this.sessionService.get(
+      SessionConstants.IS_LOGGED_IN
+    );
+    const sessionLoggedInUser = this.sessionService.get(
+      SessionConstants.LOGGED_IN_USER
+    );
+    const sessionUserMenus = this.sessionService.get(
+      SessionConstants.USER_MENU
+    );
+    const sessionSerializedMenus = this.sessionService.get(
+      SessionConstants.SERIALIZED_MENU
+    );
+
+    this.isLoggedIn = new BehaviorSubject<boolean>(sessionIsLoggedIn);
+    this.isLoggedIn$ = this.isLoggedIn.asObservable();
+
+    this.loggedInUser = new BehaviorSubject<UserResponse>(sessionLoggedInUser);
+    this.loggedInUser$ = this.loggedInUser.asObservable();
+
+    this.userMenus = new BehaviorSubject<MenuItem[]>(sessionUserMenus);
+    this.userMenus$ = this.userMenus.asObservable();
+
+    this.serializedUserMenus = new BehaviorSubject<MenuItem[]>(
+      sessionSerializedMenus
+    );
+    this.serializedUserMenus$ = this.serializedUserMenus.asObservable();
+  }
+
+  UpdateIsLoggedIn(isLoggedIn: boolean) {
+    this.sessionService.set(SessionConstants.IS_LOGGED_IN, isLoggedIn);
+    this.isLoggedIn.next(isLoggedIn);
+  }
 
   UpdateLoggedInUser(userResponse: UserResponse) {
+    this.sessionService.set(SessionConstants.LOGGED_IN_USER, userResponse);
     this.loggedInUser.next(userResponse);
   }
 
-  UpdateIsLoggedIn(newIsLoggedInValue: boolean) {
-    this.isLoggedIn.next(newIsLoggedInValue);
+  UpdateUserMenus(userMenus: MenuItem[]) {
+    this.sessionService.set(SessionConstants.USER_MENU, userMenus);
+    this.userMenus.next(userMenus);
   }
 
-  GetLoggedInUser(): UserResponse {
-    return this.loggedInUser.value;
+  UpdateSerializedUserMenus(userMenus: MenuItem[]) {
+    let serializedMenu = this.createSerializedUserMenus(userMenus);
+    this.sessionService.set(SessionConstants.SERIALIZED_MENU, serializedMenu);
+    this.serializedUserMenus.next(userMenus);
   }
 
   GetIsUserLoggedIn(): boolean {
     return this.isLoggedIn.value;
   }
 
-  UpdateUserMenus(userMenus: MenuItem[]) {
-    this.userMenus.next(userMenus);
+  GetLoggedInUser(): UserResponse {
+    return this.loggedInUser.value;
   }
 
   GetUserMenus(): MenuItem[] {
     return this.userMenus.value;
   }
 
-  UpdateSerializedUserMenus(serializedUserMenus: any) {
-    this.serializedUserMenus.next(serializedUserMenus);
-  }
-
-  GetSerializedUserMenus(): any {
-    return this.serializedUserMenus.value;
+  GetSerializedUserMenus(): MenuItem[] {
+    const serializedMenus = this.serializedUserMenus.value;
+    console.log('Retrieved Serialized User Menus:', serializedMenus);
+    return serializedMenus;
   }
 
   public IsExpired(sourceTime: any, currentTime) {
@@ -84,7 +120,6 @@ export class CommonService {
   }
 
   public isRouteValid(serializedUserMenus: MenuItem[], url: string) {
-    ;
     for (let index = 0; index < serializedUserMenus.length; index++) {
       if (serializedUserMenus[index].RouteLink.includes(url)) {
         return true;
@@ -92,24 +127,6 @@ export class CommonService {
     }
     return false;
   }
-
-  // public createSerializedUserMenus(userMenus: MenuItem[]) {
-  //   let userMenuList: any = []
-  //   userMenus.forEach(element => {
-  //     userMenuList.push(element);
-  //     if (element.Children.length > 0) {
-  //       element.Children.forEach(elementChild => {
-  //         userMenuList.push(elementChild);
-  //         if(elementChild.Children.length > 0){
-  //           elementChild.Children.forEach(elementLast =>{
-  //             userMenuList.push(elementLast);
-  //           });
-  //         }
-  //       });
-  //     }
-  //   });
-  //   return userMenuList;
-  // }
 
   createSerializedUserMenus(userMenus: MenuItem[]) {
     userMenus.forEach((item) => {
@@ -126,6 +143,22 @@ export class CommonService {
 
   public getMenuPermissiomn(serializedMenus: any, url: any) {
     serializedMenus.forEach((element: any) => {
+      if (element.RouteLink.includes(url)) {
+        this.permission = new MenuPermission(
+          element.IsView,
+          element.IsCreate,
+          element.IsUpdate,
+          element.IsDelete
+        );
+        return this.permission;
+      }
+    });
+    return this.permission;
+  }
+
+  public getMenuPermission(url:any){
+    const serializedMenus = this.GetSerializedUserMenus();
+    serializedMenus.forEach((element: MenuItem) => {
       if (element.RouteLink.includes(url)) {
         this.permission = new MenuPermission(
           element.IsView,

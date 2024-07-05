@@ -42,11 +42,6 @@
                 <div class="form-group">
                   <label for="txtRoleName">Application User Role<label style="color: red;">*</label></label>
                   <input type="text" id="txtRoleName" name="RoleName" formControlName="RoleName" class="form-control" />
-                  <!-- <div
-                    *ngIf="appUserRoleForm.controls.RoleName.invalid && (appUserRoleForm.controls.RoleName.dirty || appUserRoleForm.controls.RoleName.touched)"
-                    class="text-danger">
-                    Role Name is required and should contain only English text, numbers, and hyphens.
-                  </div> -->
                   <div *ngIf="appUserRoleForm.get('RoleName').touched && appUserRoleForm.get('RoleName').invalid"
                     class="error-message">
                     <div *ngIf="appUserRoleForm.get('RoleName').errors?.required" class="text-danger">Role Name is
@@ -62,40 +57,15 @@
                     class="form-check-input" />
                   <label for="chkIsActive" class="form-check-label" style="font-weight: bold;">Is Active</label>
                 </div>
-                <!-- <div class="form-group">
-                  <label for="chkIsActive">
-                    <input type="checkbox" class="flat-red"  id="chkIsActive" name="IsActive" formControlName="IsActive">
-                    Is Active
-                  </label>
-                </div> -->
-                <!-- <div class="form-group">
-                  <label class="">
-                    <div class="icheckbox_flat-green checked" aria-checked="false" aria-disabled="false" style="position: relative;">
-                      <input type="checkbox" class="flat-red" id="chkIsActive" name="IsActive" formControlName="IsActive" checked="" style="position: absolute; opacity: 100%;"><ins
-                        class="iCheck-helper"
-                        style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                    </div>
-                  </label>
-                
-                  <label for="chkIsActive">
-                    Is Active
-                  </label>
-                </div> -->
               </div>
             </div>
 
-            <!-- <h5>Actual description of Application User Role</h5> -->
             <div class="row">
               <div class="col-12  col-sm-12 col-lg-12">
                 <div class="form-group">
                   <label for="txtAreaDescription">Description<label style="color: red;">*</label></label>
                   <textarea id="txtAreaDescription" name="Description" formControlName="Description"
                     class="form-control" rows="5" resize="false"></textarea>
-                  <!-- <div
-                    *ngIf="appUserRoleForm.controls.Description.invalid && (appUserRoleForm.controls.Description.dirty || appUserRoleForm.controls.Description.touched)"
-                    class="text-danger">
-                    Description should contain only English text, numbers, and hyphens.
-                  </div> -->
                   <div *ngIf="appUserRoleForm.get('Description').touched && appUserRoleForm.get('Description').invalid"
                     class="error-message">
                     <div *ngIf="appUserRoleForm.get('Description').errors?.required" class="text-danger">Role Name is
@@ -108,105 +78,9 @@
             </div>
           </div>
           <div class="card-footer text-right">
-            <button type="submit" class="btn btn-sm btn-primary mr-1">{{isEdit? 'Update':'Save'}}</button>
+            <button type="submit" [disabled]="isEdit? isUpdate:isCreate" class="btn btn-sm btn-primary mr-1">{{isEdit? 'Update':'Save'}}</button>
             <button type="button" class="btn btn-sm btn-warning" (click)="resetForm();">Clear</button>
           </div>
-          <!-- <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Minimal</label>
-                  <select class="form-control select2" style="width: 100%;">
-                    <option selected="selected">Alabama</option>
-                    <option>Alaska</option>
-                    <option>California</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Disabled</label>
-                  <select class="form-control select2" disabled="disabled" style="width: 100%;">
-                    <option selected="selected">Alabama</option>
-                    <option>Alaska</option>
-                    <option>California</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Multiple</label>
-                  <select class="select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
-                    <option>Alabama</option>
-                    <option>Alaska</option>
-                    <option>California</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Disabled Result</label>
-                  <select class="form-control select2" style="width: 100%;">
-                    <option selected="selected">Alabama</option>
-                    <option>Alaska</option>
-                    <option disabled="disabled">California (disabled)</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <h5>Custom Color Variants</h5>
-            <div class="row">
-              <div class="col-12 col-sm-6">
-                <div class="form-group">
-                  <label>Minimal (.select2-danger)</label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger"
-                    style="width: 100%;">
-                    <option selected="selected">Alabama</option>
-                    <option>Alaska</option>
-                    <option>California</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6">
-                <div class="form-group">
-                  <label>Multiple (.select2-purple)</label>
-                  <div class="select2-purple">
-                    <select class="select2" multiple="multiple" data-placeholder="Select a State"
-                      data-dropdown-css-class="select2-purple" style="width: 100%;">
-                      <option>Alabama</option>
-                      <option>Alaska</option>
-                      <option>California</option>
-                      <option>Delaware</option>
-                      <option>Tennessee</option>
-                      <option>Texas</option>
-                      <option>Washington</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer text-right">
-            <button type="submit" class="btn btn-sm btn-primary mr-1">Save</button>
-            <button type="submit" class="btn btn-sm btn-warning">Clear</button>
-          </div> -->
         </form>
 
       </div>
@@ -215,32 +89,6 @@
           <div class="card">
             <div class="card-header p-2">
               <div class="row">
-                <!-- <div class="col-md-2 col-sm-2 col-lg-2 card-title-col">
-                  <h3 class="card-title">All Users</h3>
-                </div>
-                <div class="col-md-2 col-sm-2 col-lg-2 page-size-col">
-                  <div class="input-group input-group-sm">
-                    <select class="form-control select2">
-                      <option selected="selected" value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                      <option value="40">40</option>
-                    </select>
-                  </div>
-
-                </div>
-                <div class="col-md-8 col-sm-8 col-lg-8 search-col d-flex justify-content-end">
-                  <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                      <div class="input-group-append">
-                        <button type="submit" class="btn btn-default">
-                          <i class="fas fa-search"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
                 <div class="col-2 mr-0 pr-0">
                   <h3 class="card-title" style="width: 100px;">All Users</h3>
                 </div>
@@ -283,26 +131,19 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let appUserRole of appUserRoleList">
-                    <td  data-label="Role Name">{{ appUserRole.RoleName }}</td>
-                    <td  data-label="Description">{{ appUserRole.Description }}</td>
-                    <td  data-label="Created By">{{ appUserRole.CreatedByName }}</td>
-                    <td  data-label="Created Date">{{ appUserRole.CreatedDate | date:'medium'}}</td>
-                    <td  data-label="Updated By">{{ appUserRole.UpdatedByName }}</td>
-                    <td  data-label="Updated Date">{{ appUserRole.UpdatedDate | date:'medium'}} </td>
-                    <td  data-label="Active">{{ appUserRole.IsActive ? 'Yes' : 'No' }}</td>
-                    <td  data-label="Action">
-                      <!-- Call to action buttons -->
+                    <td data-label="Role Name">{{ appUserRole.RoleName }}</td>
+                    <td data-label="Description">{{ appUserRole.Description }}</td>
+                    <td data-label="Created By">{{ appUserRole.CreatedByName }}</td>
+                    <td data-label="Created Date">{{ appUserRole.CreatedDate | date:'medium'}}</td>
+                    <td data-label="Updated By">{{ appUserRole.UpdatedByName }}</td>
+                    <td data-label="Updated Date">{{ appUserRole.UpdatedDate | date:'medium'}} </td>
+                    <td data-label="Active">{{ appUserRole.IsActive ? 'Yes' : 'No' }}</td>
+                    <td data-label="Action">
                       <ul class="list-inline m-0">
                         <li class="list-inline-item">
-                          <!-- <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip"
-                            data-placement="top" title="Edit" (click)="editAppUserRole(appUserRole)"><i
-                              class="fa fa-edit"></i></button> -->
                           <i class="fa fa-edit" (click)="editAppUserRole(appUserRole)"></i>
                         </li>
                         <li class="list-inline-item">
-                          <!-- <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip"
-                            data-placement="top" title="Delete" (click)="deleteAppUserRole(appUserRole.Id)"><i
-                              class="fa fa-trash"></i></button> -->
                           <i class="fa fa-trash" (click)="deleteAppUserRole(appUserRole.Id)"></i>
                         </li>
                       </ul>
@@ -355,69 +196,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="card-body table-responsive p-2">
-              <table class="table table-hover text-nowrap">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td data-label="ID">183</td>
-                    <td data-label="User">John Doe</td>
-                    <td data-label="Date">11-7-2014</td>
-                    <td data-label="Status"><span class="tag tag-success">Approved</span></td>
-                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td data-label="ID">219</td>
-                    <td data-label="User">Alexander Pierce</td>
-                    <td data-label="Date">11-7-2014</td>
-                    <td data-label="Status"><span class="tag tag-warning">Pending</span></td>
-                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td data-label="ID">657</td>
-                    <td data-label="User">Bob Doe</td>
-                    <td data-label="Date">11-7-2014</td>
-                    <td data-label="Status"><span class="tag tag-primary">Approved</span></td>
-                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td data-label="ID">175</td>
-                    <td data-label="User">Mike Doe</td>
-                    <td data-label="Date">11-7-2014</td>
-                    <td data-label="Status"><span class="tag tag-danger">Denied</span></td>
-                    <td data-label="Reason">Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="card-footer clearfix">
-              <div class="row">
-                <div class="col-sm-5">
-                  <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing <span
-                      class="text-success"><b>{{startPage}}</b></span> to <span
-                      class="text-success"><b>{{endPage}}</b></span> of <span
-                      class="text-success"><b>{{totalRows}}</b></span>
-                    entries</div>
-                </div>
-                <div class="col-sm-7">
-                  <ul class="pagination pagination-sm m-0 float-right">
-                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div> -->
           </div>
         </div>
       </div>

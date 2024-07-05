@@ -13,14 +13,10 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  DataResponse,
-  LoginRequest,
-  UserResponse
-} from '@app/core/class';
+import { DataResponse, LoginRequest, UserResponse } from '@app/core/class';
 import {
   MessageConstants,
   RouteConstants,
@@ -33,7 +29,7 @@ import {
   LoaderService,
   NotificationService,
   SessionStorageService,
-  ValidationFormsService
+  ValidationFormsService,
 } from '@app/core/services/index';
 import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
@@ -73,7 +69,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private validationService: ValidationFormsService,
     private spinnerService: NgxSpinnerService,
     private commonService: CommonService
-    
   ) {
     this.createForm();
   }
@@ -115,20 +110,21 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.login(this.loginModelRequest).subscribe({
       next: (response: DataResponse) => {
         if (response.ResponseCode === 200) {
-         this.loadingService.setLoading(false);
+          this.loadingService.setLoading(false);
           this.isLoggedIn = true;
           this.loggedInUser = response.Result;
           this.userMenus = JSON.parse(this.loggedInUser.userMenus);
-          this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
-          this.sessionService.set( SessionConstants.IS_LOGGED_IN,this.isLoggedIn);
-          this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
-          this.sessionService.set( SessionConstants.SERIALIZED_MENU, this.commonService.createSerializedUserMenus(this.userMenus));
+
+          // this.sessionService.set( SessionConstants.IS_LOGGED_IN,this.isLoggedIn);
+          // this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
+          // this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
+          // this.sessionService.set( SessionConstants.SERIALIZED_MENU, this.commonService.createSerializedUserMenus(this.userMenus));
 
           this.commonService.UpdateIsLoggedIn(this.isLoggedIn);
           this.commonService.UpdateLoggedInUser(this.loggedInUser);
           this.commonService.UpdateUserMenus(this.userMenus);
-          this.commonService.UpdateSerializedUserMenus(this.commonService.createSerializedUserMenus(this.userMenus))
-
+          this.commonService.UpdateSerializedUserMenus(this.userMenus);
+          
           this.router.navigate([RouteConstants.BUSINESS_HOME_URL]);
         } else {
           this.loadingService.setLoading(false);
@@ -160,6 +156,5 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  
   ngOnDestroy(): void {}
 }

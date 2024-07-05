@@ -5,7 +5,6 @@ import {
   DataResponse,
   LoginRequest,
   RefreshTokenRequest,
-  SaveUpdateRequest,
   UserResponse,
 } from '@app/core/class/index';
 import { MenuItem } from '@app/core/interface';
@@ -20,10 +19,9 @@ import { ApiService } from './api.service';
 })
 export class AuthService {
   public loggedInUser: UserResponse = new UserResponse();
-  userMenus: MenuItem[];
+  public userMenus: MenuItem[];
   constructor(
     private commonService: CommonService,
-    private http: HttpClient,
     private apiService: ApiService<DataResponse>,
     private sessionService: SessionStorageService
   ) {
