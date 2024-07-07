@@ -78,8 +78,10 @@
             </div>
           </div>
           <div class="card-footer text-right">
-            <button type="submit" [disabled]="isEdit? isUpdate:isCreate" class="btn btn-sm btn-primary mr-1">{{isEdit? 'Update':'Save'}}</button>
-            <button type="button" class="btn btn-sm btn-warning" (click)="resetForm();">Clear</button>
+            <button type="submit" [disabled]="isEdit? !isUpdate:!isCreate" class="btn btn-sm btn-primary mr-1">{{isEdit?
+              'Update':'Save'}}</button>
+            <button type="button" [disabled]="isEdit? !isUpdate:!isCreate" class="btn btn-sm btn-warning"
+              (click)="resetForm();">Clear</button>
           </div>
         </form>
 
@@ -139,12 +141,20 @@
                     <td data-label="Updated Date">{{ appUserRole.UpdatedDate | date:'medium'}} </td>
                     <td data-label="Active">{{ appUserRole.IsActive ? 'Yes' : 'No' }}</td>
                     <td data-label="Action">
+                      <!-- <ul class="list-inline m-0">
+                                            <li class="list-inline-item">
+                                              <i class="fa fa-edit" (click)="editAppUserRole(appUserRole)"></i>
+                                            </li>
+                                            <li class="list-inline-item">
+                                              <i class="fa fa-trash" (click)="deleteAppUserRole(appUserRole.Id)"></i>
+                                            </li>
+                                          </ul> -->
                       <ul class="list-inline m-0">
-                        <li class="list-inline-item">
-                          <i class="fa fa-edit" (click)="editAppUserRole(appUserRole)"></i>
+                        <li class="list-inline-item" [class.disabled]="!isUpdate" (click)="isUpdate && editAppUserRole(appUserRole)">
+                          <i class="fa fa-edit"></i>
                         </li>
-                        <li class="list-inline-item">
-                          <i class="fa fa-trash" (click)="deleteAppUserRole(appUserRole.Id)"></i>
+                        <li class="list-inline-item" [class.disabled]="!isDelete" (click)="isDelete && deleteAppUserRole(appUserRole.Id)">
+                          <i class="fa fa-trash"></i>
                         </li>
                       </ul>
                     </td>

@@ -9,9 +9,10 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { MenuPermission } from '@app/core/class/models/menu.permission';
-import { SessionConstants } from '@app/core/constants';
+import { MessageConstants, SessionConstants } from '@app/core/constants';
 import {
   CommonService,
   LoaderService,
@@ -28,40 +29,46 @@ declare var $: any;
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
-  currentRoute: string;
-  permission: MenuPermission = null;
+  // Current User
+  public appUserProfileId: string = '';
+
+  // Permission
+  public isView = false;
+  public isCreate = false;
+  public isUpdate = false;
+  public isDelete = false;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
     public router: Router,
-    private http: HttpClient,
     private renderer: Renderer2,
     private loadingService: LoaderService,
     private sessionService: SessionStorageService,
     private notifyService: NotificationService,
     private validationService: ValidationFormsService,
     private spinnerService: NgxSpinnerService,
-    private commonService: CommonService
-  ) {}
+    private commonService: CommonService,
+    private titleService: Title
+  ) {
+    this.appUserProfileId = this.commonService.GetLoggedInUser().user.Id;
+    this.loadPermission(this.router.url);
+  }
 
   ngOnInit(): void {
-    this.permission = this.commonService.getMenuPermissiomn(this.sessionService.get(SessionConstants.SERIALIZED_MENU), this.router.url);
+    this.titleService.setTitle(MessageConstants.HOME_DASHBOARD_TITLE);
   }
 
   ngAfterViewInit() {
-    // this.loadScripts([
-    //   'assets/plugins/jquery/jquery.min.js',
-    //   'assets/plugins/bootstrap/js/bootstrap.bundle.min.js',
-    //   'assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
-    //   'assets/js/adminlte.js',
-    //   'assets/plugins/jquery-mousewheel/jquery.mousewheel.js',
-    //   'assets/plugins/raphael/raphael.min.js',
-    //   'assets/plugins/jquery-mapael/jquery.mapael.min.js',
-    //   'assets/plugins/jquery-mapael/maps/usa_states.min.js',
-    //   'assets/plugins/chart.js/Chart.min.js',
-    //   'assets/js/pages/dashboard2.js',
-    // ]);
     this.loadScripts(['assets/js/pages/dashboard2.js']);
+  }
+
+  loadPermission(url:any):void{
+    console.log("Execution from Home");
+    const permissionModel  = this.commonService.getMenuPermission(url);
+    this.isView = permissionModel.IsView;
+    this.isCreate = permissionModel.IsCreate;
+    this.isUpdate = permissionModel.IsUpdate;
+    this.isDelete = permissionModel.IsDelete;
   }
 
   loadScripts(urls: string[]) {
@@ -73,5 +80,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    
+  }
 }

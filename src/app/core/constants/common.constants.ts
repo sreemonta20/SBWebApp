@@ -58,11 +58,16 @@ export const MessageConstants = {
   GENERAL_ERROR_MSG: 'Error!!',
   ///--------------------Common Error-------------------------------------------------
   INTERNAL_ERROR_MEG: 'We are experiencing an internal error! Please try again later.',
+
+  ///--------------------Home---------------------------------------------------------
+  HOME_DASHBOARD_TITLE: "Dashboard:Home",
+
   ///--------------------App User Role------------------------------------------------
   APP_USER_ROLE_TITLE: "App User Role",
   APP_USER_ROLE_FOUND_MEG: 'User role found',
   APP_USER_ROLE_NOT_FOUND_MEG: 'There is no user role found.',
   APP_USER_ROLE_NOT_FOUND_TO_UPDATE_MEG: 'There is no user role to update.',
+
   
 };
 

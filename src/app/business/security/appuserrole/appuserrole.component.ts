@@ -1,32 +1,30 @@
 // import { AppUserRole } from './../../../core/class/models/app.user.role';
 import { DOCUMENT, DatePipe } from '@angular/common';
 import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    Inject,
-    OnDestroy,
-    OnInit,
-    Renderer2,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Renderer2,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import {
-    AppUserRoleResponse,
-    CustomValidators,
-    DataResponse,
-    RoleSaveUpdateRequest,
+  AppUserRoleResponse,
+  CustomValidators,
+  DataResponse,
+  RoleSaveUpdateRequest,
 } from '@app/core/class';
-import { MenuPermission } from '@app/core/class/models/menu.permission';
 import { MessageConstants } from '@app/core/constants';
 import { MenuItem } from '@app/core/interface';
 import {
-    CommonService,
-    LoaderService,
-    NotificationService,
-    SecurityService,
-    SessionStorageService,
+  CommonService,
+  LoaderService,
+  NotificationService,
+  SecurityService,
 } from '@app/core/services';
 declare var $: any;
 import { Subscription } from 'rxjs';
@@ -38,6 +36,15 @@ import { Subscription } from 'rxjs';
   providers: [DatePipe],
 })
 export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
+  // Current User
+  public appUserProfileId: string = '';
+
+  // Permission
+  public isView = false;
+  public isCreate = false;
+  public isUpdate = false;
+  public isDelete = false;
+
   //Pagination
   public totalRows: number = 0;
   public currentPage: number = 1;
@@ -45,22 +52,17 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public pageCount: number = 0;
   public startPage: number = 1;
   public endPage: number = 5;
-
   public pageSizeList: number[] = this.commonService.pageSize();
+
+  // Form Details
+  public appUserRoleForm: FormGroup;
+  public isEdit: boolean = false;
+  public menuSubscription: Subscription;
+
   // Response related
   public appUserRoleList: AppUserRoleResponse[] = [];
   public error_message: any;
-  // Permission
-  public isView = false;
-  public isCreate = false;
-  public isUpdate = false;
-  public isDelete = false;
-  // Form Details
-  appUserRoleForm: FormGroup;
-  isEdit: boolean = false;
-  public appUserProfileId: string = '';
-  public menuPermission: MenuItem[];
-  private menuSubscription: Subscription;
+  
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
@@ -71,8 +73,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     private commonService: CommonService,
     private securityService: SecurityService,
     private formBuilder: FormBuilder,
-    private titleService: Title,
-    private sessionService: SessionStorageService
+    private titleService: Title
   ) {
     this.appUserProfileId = this.commonService.GetLoggedInUser().user.Id;
     this.loadPermission(this.router.url);
@@ -88,8 +89,8 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     // this.loadScripts(['assets/js/adminlte.js']);
   }
 
-  loadPermission(url:any):void{
-    debugger
+  loadPermission(url: any): void {
+    console.log("Execution from Home");
     const permissionModel = this.commonService.getMenuPermission(url);
     this.isView = permissionModel.IsView;
     this.isCreate = permissionModel.IsCreate;
@@ -105,20 +106,21 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         '',
         [Validators.required, CustomValidators.englishText(1, 50)],
       ], // English text validator
-      Description: ['', [Validators.required, CustomValidators.englishText(1, 100)]], // English text validator
+      Description: [
+        '',
+        [Validators.required, CustomValidators.englishText(1, 100)],
+      ], // English text validator
       CreateUpdateBy: this.appUserProfileId,
       IsActive: [true],
     });
   }
   ///----------------------------------------------List & Pagination Starts----------------------------------------------
   getAllAppUserRolesPagination(pageNumber: number, pageSize: number) {
-    ;
     this.loadingService.setLoading(true);
     this.securityService
       .getAllAppUserRolesPagination(pageNumber, pageSize)
       .subscribe({
         next: (response: DataResponse) => {
-          ;
           if (response.ResponseCode === 200) {
             this.loadingService.setLoading(false);
             this.appUserRoleList = response.Result.Items;
@@ -176,14 +178,12 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ///----------------------------------------------Create, Update, and Delete Starts-----------------------------------
   createUpdateAppUserRole(appUserRole): void {
-    
-    let roleRequest: RoleSaveUpdateRequest =new RoleSaveUpdateRequest();
+    let roleRequest: RoleSaveUpdateRequest = new RoleSaveUpdateRequest();
     this.loadingService.setLoading(true);
     if (this.appUserRoleForm.invalid) {
       this.loadingService.setLoading(false);
       this.appUserRoleForm.markAllAsTouched();
       return;
-      
     }
     if (!this.isEdit) {
       roleRequest.ActionName = 'Save';
@@ -216,11 +216,10 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       //   appUserRole['IsActive']
       // );
     }
-    
+
     // const roleRequest: RoleSaveUpdateRequest = this.appUserRoleForm.value;
     this.securityService.createUpdateAppUserRole(roleRequest).subscribe({
       next: (response: DataResponse) => {
-        
         this.loadingService.setLoading(false);
         if (response.Success) {
           this.notifyService.showSuccess(
@@ -249,7 +248,6 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editAppUserRole(role: AppUserRoleResponse): void {
-    
     this.isEdit = true;
     if (!this.commonService.isInvalidObject(role)) {
       // this.appUserRoleForm.controls['Id'].setValue(role.Id);
@@ -275,7 +273,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   deleteAppUserRole(roleId: string): void {
     if (confirm('Are you sure you want to delete this role?')) {
       this.loadingService.setLoading(true);
-      
+
       this.securityService.deleteAppUserRole(roleId).subscribe({
         next: (response: DataResponse) => {
           this.loadingService.setLoading(false);
@@ -285,7 +283,7 @@ export class AppUserRoleComponent implements OnInit, AfterViewInit, OnDestroy {
               MessageConstants.GENERAL_SUCCESS_TITLE
             );
             this.getAllAppUserRolesPagination(this.currentPage, this.pageSize);
-          }else{
+          } else {
             this.notifyService.showError(
               response.Message,
               MessageConstants.GENERAL_ERROR_TITLE

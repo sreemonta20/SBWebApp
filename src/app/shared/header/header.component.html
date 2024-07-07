@@ -177,8 +177,11 @@
             <div class="col-6 text-left">
               <a href="#" class="btn btn-default btn-flat">Profile</a>
             </div>
-            <div class="col-6 text-right">
+            <!-- <div class="col-6 text-right">
               <a href="#" *ngIf="isUserAuthenticated()" (click)="signOut()" class="btn btn-default btn-flat">Sign out</a>
+            </div> -->
+            <div class="col-6 text-right">
+              <a href="#" *ngIf="isLoggedIn" (click)="signOut()" class="btn btn-default btn-flat">Sign out</a>
             </div>
           </div>
           

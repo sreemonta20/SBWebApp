@@ -81,13 +81,13 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.commonService.isLoggedIn$.subscribe(
-      (response) => (this.isLoggedIn = response)
-    );
+    // this.commonService.isLoggedIn$.subscribe(
+    //   (response) => (this.isLoggedIn = response)
+    // );
 
-    this.commonService.loggedInUser$.subscribe(
-      (response) => (this.loggedInUser = response)
-    );
+    // this.commonService.loggedInUser$.subscribe(
+    //   (response) => (this.loggedInUser = response)
+    // );
   }
 
   ngAfterViewInit() {
@@ -114,11 +114,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isLoggedIn = true;
           this.loggedInUser = response.Result;
           this.userMenus = JSON.parse(this.loggedInUser.userMenus);
-
-          // this.sessionService.set( SessionConstants.IS_LOGGED_IN,this.isLoggedIn);
-          // this.sessionService.set( SessionConstants.LOGGED_IN_USER,this.loggedInUser);
-          // this.sessionService.set( SessionConstants.USER_MENU,this.userMenus);
-          // this.sessionService.set( SessionConstants.SERIALIZED_MENU, this.commonService.createSerializedUserMenus(this.userMenus));
 
           this.commonService.UpdateIsLoggedIn(this.isLoggedIn);
           this.commonService.UpdateLoggedInUser(this.loggedInUser);

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   Router,
-  RouterStateSnapshot
+  RouterStateSnapshot,
 } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../services/common.service';
@@ -27,7 +27,7 @@ import jwt_decode from 'jwt-decode';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard  {
+export class AuthGuard {
   public jwtHelper: JwtHelperService = new JwtHelperService();
   public isLoggedIn: boolean = false;
   public isRefreshSuccess: boolean = false;
@@ -45,27 +45,29 @@ export class AuthGuard  {
     private notifyService: NotificationService,
     private http: HttpClient,
     private commonService: CommonService
-  ) { }
-
-  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+  ) {
     
-    this.loggedInUser = this.sessionService.get(SessionConstants.LOGGED_IN_USER) as UserResponse;
-    this.isLoggedIn = this.sessionService.get(SessionConstants.IS_LOGGED_IN) as boolean;
+    // this.loadSession();
+  }
 
+  async canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Promise<boolean> {
     
-    if (this.loggedInUser) {
-
+    await this.loadSession(); // Wait for session to load
+    if (this.loggedInUser && !this.commonService.isInvalidObject(this.loggedInUser)) {
       const token = this.loggedInUser.access_token;
       const tokenPayload = jwt_decode(token) as any;
       const expirationTimestamp = tokenPayload.exp;
       const currentTimestamp = new Date().getTime() / 1000; // Convert to seconds
-      
+
       if (
         token &&
         !this.commonService.IsExpired(expirationTimestamp, currentTimestamp) &&
         !state.url.includes(RouteConstants.LOGIN_USER_URL)
       ) {
-        if(!this.commonService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
+        if (!this.commonService.isRouteValid(state.url)) {
           return false;
         }
         return true;
@@ -75,24 +77,23 @@ export class AuthGuard  {
         state.url.includes(RouteConstants.LOGIN_USER_URL)
       ) {
         return false;
-        
       }
 
       this.refreshTokenReq.Access_Token = token;
       this.refreshTokenReq.Refresh_Token = this.loggedInUser.refresh_token;
-      const isRefreshSuccess = await this.authService.refreshTokenAsync(this.refreshTokenReq);
+      const isRefreshSuccess = await this.authService.refreshTokenAsync(
+        this.refreshTokenReq
+      );
       if (isRefreshSuccess) {
-        
-        if(state.url.includes(RouteConstants.LOGIN_USER_URL)){
+        if (state.url.includes(RouteConstants.LOGIN_USER_URL)) {
           return !isRefreshSuccess;
         }
-        
-        if(!this.commonService.isRouteValid(this.sessionService.get(SessionConstants.SERIALIZED_MENU), state.url)){
+
+        if (!this.commonService.isRouteValid(state.url)) {
           return !isRefreshSuccess;
         }
         return isRefreshSuccess;
       } else {
-        
         this.authService.revoke(this.refreshTokenReq.Access_Token).subscribe({
           next: (response: DataResponse) => {
             this.commonService.RevokeSession();
@@ -107,16 +108,24 @@ export class AuthGuard  {
           },
         });
       }
-
     } else if (!state.url.includes(RouteConstants.LOGIN_USER_URL)) {
-      
       this.router.navigate([RouteConstants.LOGIN_USER_URL], {
         queryParams: { returnUrl: state.url },
       });
     } else if (state.url.includes(RouteConstants.LOGIN_USER_URL)) {
-      
       return true;
     }
   }
 
+  loadSession(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.commonService.isLoggedIn$.subscribe((isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+        this.commonService.loggedInUser$.subscribe((loggedInUser) => {
+          this.loggedInUser = this.commonService.GetLoggedInUser();
+          resolve(); // Resolve the promise when data is available
+        });
+      });
+    });
+  }
 }

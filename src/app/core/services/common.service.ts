@@ -47,7 +47,7 @@ export class CommonService {
     );
     const sessionSerializedMenus = this.sessionService.get(
       SessionConstants.SERIALIZED_MENU
-    );
+    ) as MenuItem[];
 
     this.isLoggedIn = new BehaviorSubject<boolean>(sessionIsLoggedIn);
     this.isLoggedIn$ = this.isLoggedIn.asObservable();
@@ -70,6 +70,7 @@ export class CommonService {
   }
 
   UpdateLoggedInUser(userResponse: UserResponse) {
+    
     this.sessionService.set(SessionConstants.LOGGED_IN_USER, userResponse);
     this.loggedInUser.next(userResponse);
   }
@@ -80,9 +81,14 @@ export class CommonService {
   }
 
   UpdateSerializedUserMenus(userMenus: MenuItem[]) {
-    let serializedMenu = this.createSerializedUserMenus(userMenus);
+    let serializedMenu = null;
+
+    if (userMenus) {
+      serializedMenu = this.createSerializedUserMenus(userMenus);
+    }
+
     this.sessionService.set(SessionConstants.SERIALIZED_MENU, serializedMenu);
-    this.serializedUserMenus.next(userMenus);
+    this.serializedUserMenus.next(serializedMenu);
   }
 
   GetIsUserLoggedIn(): boolean {
@@ -108,24 +114,35 @@ export class CommonService {
   }
 
   public RevokeSession() {
-    this.sessionService.remove(SessionConstants.LOGGED_IN_USER);
-    this.sessionService.remove(SessionConstants.IS_LOGGED_IN);
-    this.sessionService.remove(SessionConstants.USER_MENU);
-    this.sessionService.remove(SessionConstants.SERIALIZED_MENU);
+    
     this.UpdateIsLoggedIn(false);
     this.UpdateLoggedInUser(null);
     this.UpdateUserMenus(null);
     this.UpdateSerializedUserMenus(null);
+    this.sessionService.remove(SessionConstants.LOGGED_IN_USER);
+    this.sessionService.remove(SessionConstants.IS_LOGGED_IN);
+    this.sessionService.remove(SessionConstants.USER_MENU);
+    this.sessionService.remove(SessionConstants.SERIALIZED_MENU);
+    this.sessionService.clear();
     this.router.navigate([RouteConstants.LOGIN_USER_URL]);
   }
 
-  public isRouteValid(serializedUserMenus: MenuItem[], url: string) {
-    for (let index = 0; index < serializedUserMenus.length; index++) {
-      if (serializedUserMenus[index].RouteLink.includes(url)) {
-        return true;
+  isRouteValid(url: any): boolean {
+    
+    let isRouteValid = false;
+    this.serializedUserMenus$.subscribe((serializedMenus) => {
+      if(!this.isInvalidObject(serializedMenus)){
+        const matchedMenu = serializedMenus.find((element: MenuItem) =>
+          element.RouteLink.includes(url)
+        );
+        if (matchedMenu) {
+          isRouteValid = true;
+          return isRouteValid;
+        }
       }
-    }
-    return false;
+      return isRouteValid;
+    });
+    return isRouteValid;
   }
 
   createSerializedUserMenus(userMenus: MenuItem[]) {
@@ -141,35 +158,27 @@ export class CommonService {
     return this.flattenedMenuItems;
   }
 
-  public getMenuPermissiomn(serializedMenus: any, url: any) {
-    serializedMenus.forEach((element: any) => {
-      if (element.RouteLink.includes(url)) {
-        this.permission = new MenuPermission(
-          element.IsView,
-          element.IsCreate,
-          element.IsUpdate,
-          element.IsDelete
+  public getMenuPermission(url: any): MenuPermission {
+    
+    let menuPermission = new MenuPermission();
+    this.serializedUserMenus$.subscribe((serializedMenus) => {
+      if(!this.isInvalidObject(serializedMenus)){
+        const matchedMenu = serializedMenus.find((element: MenuItem) =>
+          element.RouteLink.includes(url)
         );
-        return this.permission;
+  
+        if (matchedMenu) {
+          menuPermission.IsView = matchedMenu.IsView;
+          menuPermission.IsCreate = matchedMenu.IsCreate;
+          menuPermission.IsUpdate = matchedMenu.IsUpdate;
+          menuPermission.IsDelete = matchedMenu.IsDelete;
+        }
+      }else{
+        return null;
       }
+      
     });
-    return this.permission;
-  }
-
-  public getMenuPermission(url:any){
-    const serializedMenus = this.GetSerializedUserMenus();
-    serializedMenus.forEach((element: MenuItem) => {
-      if (element.RouteLink.includes(url)) {
-        this.permission = new MenuPermission(
-          element.IsView,
-          element.IsCreate,
-          element.IsUpdate,
-          element.IsDelete
-        );
-        return this.permission;
-      }
-    });
-    return this.permission;
+    return menuPermission;
   }
 
   public pageSize() {
@@ -191,7 +200,7 @@ export class CommonService {
   }
 
   isInvalidObject(obj: any): boolean {
-    if (obj === null || obj === undefined) {
+    if (obj === null || obj === undefined || typeof obj === 'undefined') {
       return true;
     }
 
@@ -204,5 +213,14 @@ export class CommonService {
     }
 
     return false;
+  }
+
+  isValid(value: any): boolean {
+    return (
+      value !== null ||
+      value !== 'undefined' ||
+      value !== undefined ||
+      typeof value !== 'undefined'
+    );
   }
 }

@@ -18,11 +18,13 @@ declare var $: any;
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
-  menuList: MenuItem[];
+export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
+  //Menu Related
   isLoggedIn: boolean = false;
+  menuList: MenuItem[];
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
@@ -30,24 +32,15 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
     private http: HttpClient,
     private renderer: Renderer2,
     private commonService: CommonService,
-    private sessionService: SessionStorageService,
-    
-  ) {
-    
-  }
+    private sessionService: SessionStorageService
+  ) {}
 
   ngOnInit(): void {
-    $('[data-widget="treeview"]').Treeview('init');
-    this.commonService.isLoggedIn$.subscribe(response => (this.isLoggedIn = response));
-    this.menuList = this.sessionService.get(SessionConstants.USER_MENU);
+    this.initializeMenu();
   }
 
   ngAfterViewInit() {
     // this.loadScripts(['assets/js/menu.js']);
-  }
-
-  signOut(): void {
-    this.commonService.RevokeSession();
   }
 
   loadScripts(urls: string[]) {
@@ -59,9 +52,23 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy  {
     }
   }
 
-  TestClick() {
-    this.router.navigate(['/business/home']);
-  } 
+  initializeMenu() {
+    $('[data-widget="treeview"]').Treeview('init');
+    // this.commonService.isLoggedIn$.subscribe(
+    //   (isLoggedIn) => (this.isLoggedIn = isLoggedIn)
+    // );
+    this.commonService.userMenus$.subscribe((userMenus) => {
+      this.menuList = userMenus;
+    });
+  }
+
+  signOut(): void {
+    this.commonService.RevokeSession();
+  }
+
+  // TestClick() {
+  //   this.router.navigate(['/business/home']);
+  // }
 
   ngOnDestroy(): void {}
 }
